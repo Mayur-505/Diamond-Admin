@@ -2,7 +2,7 @@ import React from "react";
 import { DataTableDemo } from "@/components/Common/DataTable";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { Button } from "@/components/ui/button";
-import { getSubCategory } from "@/services/subcategoryService";
+import { getInnerCategory } from "@/services/innercateGoryService";
 import { useQuery } from "@tanstack/react-query";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 interface Customer {
   id: number;
   name: string;
-  parentCategory: string;
+  subCategory: string;
   metatitle: string;
   metakeyword: string;
   description: string;
@@ -23,7 +23,7 @@ interface Customer {
 //   {
 //     id: 1,
 //     name: "Category 1",
-//     parentCategory: "Parent Category 1",
+//     subCategory: "Parent Category 1",
 //     metatitle: "Meta Title 1",
 //     metakeyword: "Meta Keyword 1",
 //     description: "Description 1",
@@ -32,7 +32,7 @@ interface Customer {
 //   {
 //     id: 2,
 //     name: "Category 2",
-//     parentCategory: "Parent Category 2",
+//     subCategory: "Parent Category 2",
 //     metatitle: "Meta Title 2",
 //     metakeyword: "Meta Keyword 2",
 //     description: "Description 2",
@@ -41,7 +41,7 @@ interface Customer {
 //   {
 //     id: 3,
 //     name: "Category 3",
-//     parentCategory: "Parent Category 3",
+//     subCategory: "Parent Category 3",
 //     metatitle: "Meta Title 3",
 //     metakeyword: "Meta Keyword 3",
 //     description: "Description 3",
@@ -56,7 +56,7 @@ interface Column<T> {
   enableSorting?: boolean;
 }
 
-const List = () => {
+const InnerCategoryList = () => {
   const navigate = useNavigate();
   // const statusBodyTemplate = (rowData) => {
   //   return (
@@ -88,9 +88,9 @@ const List = () => {
   //     </div>
   //   );
   // };
-  const { data: subcategoryData } = useQuery({
-    queryKey: ["GET_SUBCATEGORY"],
-    queryFn: getSubCategory,
+  const { data: InnercategoryData } = useQuery({
+    queryKey: ["GET_INNERCATEGORY"],
+    queryFn: getInnerCategory,
   });
 
   const columns: Column<Customer>[] = [
@@ -111,7 +111,7 @@ const List = () => {
       cell: ({ row }) => <div className="capitalize">{row?.original.name}</div>,
     },
     {
-      accessorKey: "parentCategory",
+      accessorKey: "subCategory",
       header: ({ column }) => {
         return (
           <Button
@@ -119,13 +119,13 @@ const List = () => {
             className="p-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Parent Category
+            Sub Category
             <RiArrowUpDownFill className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row?.original?.categoryid?.name}</div>
+        <div className="capitalize">{row?.original?.subcategoryid?.name}</div>
       ),
     },
     {
@@ -210,7 +210,7 @@ const List = () => {
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        data={subcategoryData?.data || []}
+        data={InnercategoryData?.data || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         columns={columns}
@@ -225,7 +225,7 @@ const List = () => {
               Add
             </Button>
             <ExportExcelButton
-              data={subcategoryData?.data || []}
+              data={InnercategoryData?.data || []}
               filename="CategoryData.xlsx"
               className="text-[14px] font-[600] text-[#343a40] border px-4 py-2 rounded"
             />
@@ -236,4 +236,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default InnerCategoryList;

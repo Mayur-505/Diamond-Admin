@@ -117,7 +117,7 @@ const Index = () => {
               Sub Category
             </Link>
             <Link
-              to={""}
+              to={"/category/inner-category"}
               className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
             >
               <FaPlus />

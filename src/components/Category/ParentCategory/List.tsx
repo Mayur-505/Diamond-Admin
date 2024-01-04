@@ -7,7 +7,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { useQuery } from "@tanstack/react-query";
-import { getClarity } from "@/services/clarityService";
+import { getCategory } from "@/services/categoryService";
 
 interface Customer {
   id: number;
@@ -23,32 +23,32 @@ interface Column<T> {
   enableSorting?: boolean;
 }
 
-const data: Customer[] = [
-  {
-    id: 1,
-    name: "Category 1",
-    description: "Description 1",
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Category 2",
-    description: "Description 2",
-    status: "Inactive",
-  },
-  {
-    id: 3,
-    name: "Category 3",
-    description: "Description 3",
-    status: "Active",
-  },
-  {
-    id: 4,
-    name: "Category 4",
-    description: "Description 4",
-    status: "Inactive",
-  },
-];
+// const data: Customer[] = [
+//   {
+//     id: 1,
+//     name: "Category 1",
+//     description: "Description 1",
+//     status: "Active",
+//   },
+//   {
+//     id: 2,
+//     name: "Category 2",
+//     description: "Description 2",
+//     status: "Inactive",
+//   },
+//   {
+//     id: 3,
+//     name: "Category 3",
+//     description: "Description 3",
+//     status: "Active",
+//   },
+//   {
+//     id: 4,
+//     name: "Category 4",
+//     description: "Description 4",
+//     status: "Inactive",
+//   },
+// ];
 
 const List = () => {
   const navigate = useNavigate();
@@ -83,7 +83,7 @@ const List = () => {
                 : "bg-[#dc3545]"
             }`}
           >
-            {row?.original?.status}
+            {row?.original?.status == "0" ? "Inactive" : "Active"}
           </span>
         );
       },
@@ -112,12 +112,17 @@ const List = () => {
     },
   ];
 
+  const { data: categoryData } = useQuery({
+    queryKey: ["GET_CATEGORY"],
+    queryFn: getCategory,
+  });
+
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        data={data}
+        data={categoryData?.data || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         columns={columns}
@@ -132,7 +137,7 @@ const List = () => {
               Add
             </Button>
             <ExportExcelButton
-              data={data}
+              data={categoryData?.data || []}
               filename="CategoryData.xlsx"
               className="text-[14px] font-[600] text-[#343a40] border px-4 py-2 rounded"
             />
