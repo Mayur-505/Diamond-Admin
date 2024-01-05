@@ -1,9 +1,9 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
+import { ErrorType } from "@/lib/types";
 import { AddCategory } from "@/services/categoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
 
 const AddParentCategory = () => {
   const navigate = useNavigate();
@@ -23,11 +23,10 @@ const AddParentCategory = () => {
   const { mutate: createCategory } = useMutation({
     mutationFn: AddCategory,
     onSuccess: () => {
-      toast.success("Successfully add category!");
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
-    onError: () => {
-      toast.error("Something went wrong.");
+    onError: (error: ErrorType) => {
+      console.log("error");
     },
   });
 
@@ -84,7 +83,6 @@ const AddParentCategory = () => {
           >
             Add
           </button>
-          <Toaster />
         </div>
       </div>
     </div>
