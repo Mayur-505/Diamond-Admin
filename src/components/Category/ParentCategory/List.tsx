@@ -122,7 +122,7 @@ const List = () => {
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        data={categoryData?.data || []}
+        data={categoryData?.data?.modifiedCategories || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         columns={columns}
@@ -137,7 +137,7 @@ const List = () => {
               Add
             </Button>
             <ExportExcelButton
-              data={categoryData?.data || []}
+              data={categoryData?.data?.modifiedCategories || []}
               filename="CategoryData.xlsx"
               className="text-[14px] font-[600] text-[#343a40] border px-4 py-2 rounded"
             />

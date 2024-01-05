@@ -18,9 +18,43 @@ import CategoryList from "./components/Category/Category/List";
 import Clarity from "./components/Clarity";
 import InnerCategoryList from "./components/Category/InnerCategory/InnerCategoryList";
 import AddInnerCategory from "./components/Category/InnerCategory/AddInnerCategory";
+import AuthLayout from "./components/Layout/AuthLayout";
+import Login from "./components/LoginPage/Login";
+import SignUp from "./components/LoginPage/SignUp";
+import ForgotPassword from "./components/LoginPage/ForgotPassword";
+import NewPassword from "./components/LoginPage/NewPassword";
+import Verification from "./components/LoginPage/Verification";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Shape from "./components/Shape";
+import { Toaster } from "./components/ui/toaster";
 
 const router = createBrowserRouter([
+  {
+    path: "/auth",
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "signup",
+        element: <SignUp />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "new-password",
+        element: <NewPassword />,
+      },
+      {
+        path: "verification",
+        element: <Verification />,
+      },
+    ],
+  },
   {
     path: "/",
     element: <RootLayout />,
@@ -121,11 +155,14 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
+const queryClient = new QueryClient();
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <Toaster />
+      </QueryClientProvider>
     </>
   );
 }
