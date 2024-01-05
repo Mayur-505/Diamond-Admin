@@ -8,17 +8,17 @@ type InputWithLabelProps = InputProps & {
   error?: string;
   className?: string;
   id?: number | string;
+  name?: string;
 };
 
 const InputWithLabel = forwardRef<HTMLInputElement, InputWithLabelProps>(
-  ({ label, className, error, ...rest }, ref) => {
-    console.log("🚀 ~ file: InputWithLabel.tsx:15 ~ rest:", rest);
+  ({ label, className, id, name, error, ...rest }, ref) => {
     return (
       <>
         {label && (
           <Label
             className={` text-xs font-[500] font-Nunito md:text-sm`}
-            htmlFor={rest?.id}
+            htmlFor={id}
           >
             {label}
           </Label>
@@ -26,9 +26,9 @@ const InputWithLabel = forwardRef<HTMLInputElement, InputWithLabelProps>(
         <div
           className={`grid w-full items-center gap-1 overflow-hidden ${className}`}
         >
-          <Input {...rest} ref={ref} />
-          {error && <FormError message={error} />}
+          <Input {...rest} id={id} name={name} ref={ref} />
         </div>
+        {error && <FormError message={error} />}
       </>
     );
   }

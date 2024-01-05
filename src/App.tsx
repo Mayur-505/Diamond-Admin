@@ -18,6 +18,7 @@ import CategoryList from "./components/Category/Category/List";
 import Clarity from "./components/Clarity";
 import InnerCategoryList from "./components/Category/InnerCategory/InnerCategoryList";
 import AddInnerCategory from "./components/Category/InnerCategory/AddInnerCategory";
+import Shape from "./components/Shape";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "clarity",
         element: <Clarity />,
+      },
+      {
+        path: "shape",
+        element: <Shape />,
       },
       {
         path: "product-overview",

@@ -17,3 +17,12 @@ export type Clarity = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Shape = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  description: string;
+  image: string;
+};

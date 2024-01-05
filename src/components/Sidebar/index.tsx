@@ -10,9 +10,13 @@ import { FaPlus } from "react-icons/fa6";
 import { LuHistory } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
-const Index = () => {
+const Index = ({ collapsed }: { collapsed: boolean }) => {
   return (
-    <div className="max-w-[224px] lg:block hidden w-full bg-[#343a40] p-[14px] h-[100vh]">
+    <div
+      className={`max-w-[224px] fixed ${
+        !collapsed ? "left-[-224px]" : "left-0"
+      } transition-all duration-[0.5s] lg:block hidden w-full bg-[#343a40] p-[14px] h-[100vh] z-50`}
+    >
       <div className="flex gap-[7px] justify-center items-center border-b-[1px] mb-[14px] pb-[14px] border-solid border-[#ffffff33]">
         <img src={WhiteLogo} alt="WhiteLogo" className="max-w-[28px]" />
         <h1 className="text-[#FFF] font-Nunito font-normal text-[21px]">
@@ -45,6 +49,13 @@ const Index = () => {
             >
               <CiImageOn />
               Clarity
+            </Link>
+            <Link
+              to={"/gems/shape"}
+              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
+            >
+              <CiImageOn />
+              Shape
             </Link>
             <Link
               to={"/gems/product-overview"}
