@@ -7,3 +7,9 @@ export const getCategory = async (): Promise<[]> => {
   const res = await api({ url, method });
   return res.data;
 };
+
+export const AddCategory = async (data: any) => {
+  const url = "/category/create";
+  const method = "post";
+  return api({ url, method, data, isFormData: true });
+};
