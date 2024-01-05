@@ -33,7 +33,6 @@ const AddParentCategory = () => {
 
   const handleSubmit = () => {
     const payload = new FormData();
-    // payload.append("name", category.name);
     if (category.name) {
       payload.append("name", category.name);
     }
