@@ -219,7 +219,9 @@ const InnerCategoryList = () => {
           <div className="flex justify-end gap-4">
             <Button
               variant={"outline"}
-              onClick={() => navigate("/category/sub-category/add_category")}
+              onClick={() =>
+                navigate("/category/inner-category/add_inner_category")
+              }
               className="w-full bg-[#343a40] text-white"
             >
               Add

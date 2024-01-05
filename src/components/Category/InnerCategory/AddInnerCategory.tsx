@@ -1,10 +1,9 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
 import TextAreaWithLabel from "@/components/Common/TextAreaWithLabel";
-import { Switch } from "@/components/ui/switch";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const AddCategory = () => {
+const AddInnerCategory = () => {
   const navigate = useNavigate();
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
@@ -17,8 +16,8 @@ const AddCategory = () => {
         <div className="col-span-10 grid grid-cols-12 gap-4">
           <div className="col-span-12">
             <InputWithLabel
-              id="parent-category"
-              placeholder="Parent Category Name"
+              id="sub-category"
+              placeholder="sub Category Name"
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
             />
           </div>
@@ -73,4 +72,4 @@ const AddCategory = () => {
   );
 };
 
-export default AddCategory;
+export default AddInnerCategory;

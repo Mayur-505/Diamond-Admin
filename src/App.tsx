@@ -17,6 +17,7 @@ import AddCategory from "./components/Category/Category/AddCategory";
 import CategoryList from "./components/Category/Category/List";
 import Clarity from "./components/Clarity";
 import InnerCategoryList from "./components/Category/InnerCategory/InnerCategoryList";
+import AddInnerCategory from "./components/Category/InnerCategory/AddInnerCategory";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
       {
         path: "inner-category",
         element: <InnerCategoryList />,
+      },
+      {
+        path: "inner-category/add_inner_category",
+        element: <AddInnerCategory />,
       },
     ],
   },
