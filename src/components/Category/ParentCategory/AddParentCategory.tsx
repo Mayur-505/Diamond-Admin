@@ -3,6 +3,7 @@ import { AddCategory } from "@/services/categoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const AddParentCategory = () => {
   const navigate = useNavigate();
@@ -22,9 +23,12 @@ const AddParentCategory = () => {
   const { mutate: createCategory } = useMutation({
     mutationFn: AddCategory,
     onSuccess: () => {
+      toast.success("Successfully add category!");
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
-    onError: () => {},
+    onError: () => {
+      toast.error("Something went wrong.");
+    },
   });
 
   const handleSubmit = () => {
@@ -37,6 +41,10 @@ const AddParentCategory = () => {
       payload.append("description", category.description);
     }
     createCategory(payload);
+    setCategory({
+      name: "",
+      description: "",
+    });
   };
 
   return (
@@ -77,6 +85,7 @@ const AddParentCategory = () => {
           >
             Add
           </button>
+          <Toaster />
         </div>
       </div>
     </div>
