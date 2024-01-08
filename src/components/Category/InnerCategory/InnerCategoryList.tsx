@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DataTableDemo } from "@/components/Common/DataTable";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { Button } from "@/components/ui/button";
@@ -88,9 +88,10 @@ const InnerCategoryList = () => {
   //     </div>
   //   );
   // };
+  const [activePage, setActivePage] = useState(1);
   const { data: InnercategoryData } = useQuery({
-    queryKey: ["GET_INNERCATEGORY"],
-    queryFn: getInnerCategory,
+    queryKey: ["GET_INNERCATEGORY", { activePage }],
+    queryFn: () => getInnerCategory({ page: activePage, pageSize: 10 }),
   });
 
   const columns: Column<Customer>[] = [
@@ -215,6 +216,8 @@ const InnerCategoryList = () => {
         // @ts-expect-error
         columns={columns}
         filterName={"name"}
+        setActivePage={setActivePage}
+        pageCount={InnercategoryData?.data?.total}
         customButton={
           <div className="flex justify-end gap-4">
             <Button

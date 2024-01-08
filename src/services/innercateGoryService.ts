@@ -1,10 +1,10 @@
 import api from "./api";
 
-export const getInnerCategory = async (): Promise<[]> => {
-  const url = "/innercategory/getallinnercategory?page=1&pageSize=10";
+export const getInnerCategory = async (params) => {
+  const url = "/innercategory/getallinnercategory";
   const method = "get";
 
-  const res = await api({ url, method });
+  const res = await api({ url, method, params });
   return res.data;
 };
 

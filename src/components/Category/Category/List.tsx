@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DataTableDemo } from "@/components/Common/DataTable";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { DialogBox } from "@/components/Common/DialogBox";
 
 interface Customer {
   id: number;
@@ -88,9 +89,10 @@ const List = () => {
   //     </div>
   //   );
   // };
+  const [activePage, setActivePage] = useState(1);
   const { data: subcategoryData } = useQuery({
-    queryKey: ["GET_SUBCATEGORY"],
-    queryFn: getSubCategory,
+    queryKey: ["GET_SUBCATEGORY", { activePage }],
+    queryFn: () => getSubCategory({ page: activePage, pageSize: 10 }),
   });
 
   const columns: Column<Customer>[] = [
@@ -191,7 +193,9 @@ const List = () => {
               type="button"
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
-              <AiOutlineEdit className="text-[#fff] text-[16px]" />
+              <DialogBox
+                icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
+              />
             </button>
             <button
               type="button"
@@ -208,13 +212,11 @@ const List = () => {
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
       <DataTableDemo
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         data={subcategoryData?.data?.responseData || []}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         columns={columns}
         filterName={"name"}
+        setActivePage={setActivePage}
+        pageCount={subcategoryData?.data?.total}
         customButton={
           <div className="flex justify-end gap-4">
             <Button

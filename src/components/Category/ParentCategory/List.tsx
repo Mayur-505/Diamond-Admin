@@ -8,6 +8,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { useQuery } from "@tanstack/react-query";
 import { getCategory } from "@/services/categoryService";
+import { DialogBox } from "@/components/Common/DialogBox";
 
 interface Customer {
   id: number;
@@ -53,6 +54,7 @@ interface Column<T> {
 const List = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [activePage, setActivePage] = useState(1);
 
   const columns: Column<Customer>[] = [
     {
@@ -98,7 +100,11 @@ const List = () => {
               type="button"
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
-              <AiOutlineEdit className="text-[#fff] text-[16px]" />
+              <DialogBox
+                icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
+                mainTitle="Edit Category"
+                ID={row?.original?.id}
+              />
             </button>
             <button
               type="button"
@@ -113,20 +119,18 @@ const List = () => {
   ];
 
   const { data: categoryData } = useQuery({
-    queryKey: ["GET_CATEGORY"],
-    queryFn: getCategory,
+    queryKey: ["GET_CATEGORY", { activePage }],
+    queryFn: () => getCategory({ page: activePage, pageSize: 10 }),
   });
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
       <DataTableDemo
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         data={categoryData?.data?.modifiedCategories || []}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         columns={columns}
         filterName={"name"}
+        setActivePage={setActivePage}
+        pageCount={categoryData?.data?.total}
         customButton={
           <div className="flex justify-end gap-4">
             <Button

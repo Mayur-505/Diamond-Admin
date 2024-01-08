@@ -29,14 +29,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
+import ReactPaginate from "react-paginate";
 
 interface DataTableProps<T extends Record<string, unknown>> {
   columns: Column<T>[];
   data: T[];
   filterName?: string | undefined;
   customButton?: React.ReactNode;
+  setActivePage?: React.Dispatch<React.SetStateAction<number>>;
+  pageCount?: number;
 }
 
 export function DataTableDemo<T extends Record<string, unknown>>({
@@ -44,6 +45,8 @@ export function DataTableDemo<T extends Record<string, unknown>>({
   columns,
   filterName = "name",
   customButton,
+  setActivePage,
+  pageCount,
 }: DataTableProps<T>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -71,6 +74,12 @@ export function DataTableDemo<T extends Record<string, unknown>>({
       rowSelection,
     },
   });
+
+  const handlePageClick = (data) => {
+    const selectedPage = data.selected;
+    setActivePage(selectedPage + 1);
+    // You can perform additional logic based on the selected page
+  };
 
   return (
     <div className="w-full">
@@ -170,7 +179,44 @@ export function DataTableDemo<T extends Record<string, unknown>>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+        <ReactPaginate
+          previousLabel={"<"}
+          nextLabel={">"}
+          breakLabel={"..."}
+          breakClassName={"break-me"}
+          pageCount={pageCount || 3}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          previousLinkClassName={"previous"}
+          nextLinkClassName={"next"}
+          disabledClassName={"disabled"}
+        />
+        {/* <div className="flex-1 text-sm text-muted-foreground">
+          {table.getPaginationRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div> */}
+        {/* <div className="flex w-[100px] items-center justify-center text-sm font-medium">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>
@@ -211,7 +257,7 @@ export function DataTableDemo<T extends Record<string, unknown>>({
             <span className="sr-only">Go to last page</span>
             <FaAngleDoubleRight className="h-4 w-4" />
           </Button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
