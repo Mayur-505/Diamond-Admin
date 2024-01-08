@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { DataTableDemo } from "@/components/Common/DataTable";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { Button } from "@/components/ui/button";
-import { getSubCategory } from "@/services/subcategoryService";
-import { useQuery } from "@tanstack/react-query";
+import {
+  deleteSubCategory,
+  getSubCategory,
+} from "@/services/subcategoryService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { DialogBox } from "@/components/Common/DialogBox";
+import { useToast } from "@/components/ui/use-toast";
+import Loading from "@/components/Common/Loading";
+import Modal from "@/components/Common/Model";
 
 interface Customer {
   id: number;
@@ -59,6 +64,11 @@ interface Column<T> {
 
 const List = () => {
   const navigate = useNavigate();
+  const toast = useToast();
+  const queryClient = useQueryClient();
+
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteID, setDeleteID] = useState("");
   // const statusBodyTemplate = (rowData) => {
   //   return (
   //     <span
@@ -94,6 +104,26 @@ const List = () => {
     queryKey: ["GET_SUBCATEGORY", { activePage }],
     queryFn: () => getSubCategory({ page: activePage, pageSize: 10 }),
   });
+
+  const { mutate: removeCategory, isPending } = useMutation({
+    mutationFn: deleteSubCategory,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
+    },
+    onError: () => {
+      toast({ variant: "error", description: "Not deleted" });
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
+
+  const handleDeleteCategory = () => {
+    removeCategory(deleteID);
+    setOpenDelete(false);
+  };
 
   const columns: Column<Customer>[] = [
     {
@@ -193,13 +223,18 @@ const List = () => {
               type="button"
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
-              <DialogBox
+              {/* <DialogBoxCategory
                 icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
-              />
+                mainTitle="Edit Category"
+                item={row?.original}
+                apiKey="subcategory"
+              /> */}
             </button>
             <button
               type="button"
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
+              key={row.original.id}
+              onClick={handleDelete.bind(null, row.original.id)}
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
             </button>
@@ -208,6 +243,30 @@ const List = () => {
       },
     },
   ];
+
+  const body = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteCategory}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
@@ -230,6 +289,12 @@ const List = () => {
               data={subcategoryData?.data?.responseData || []}
               filename="CategoryData.xlsx"
               className="text-[14px] font-[600] text-[#343a40] border px-4 py-2 rounded"
+            />
+            <Modal
+              open={openDelete}
+              onClose={() => setOpenDelete(false)}
+              children={body}
+              className="!p-[20px]"
             />
           </div>
         }

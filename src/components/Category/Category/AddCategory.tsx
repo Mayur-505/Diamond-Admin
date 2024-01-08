@@ -137,7 +137,7 @@ const AddCategory = () => {
             <button
               className="px-5 py-1.5 rounded-[4px] text-[#ff0000] border border-[#ff0000] font-Nunito font-[600]"
               type="button"
-              onClick={() => navigate("/category/category")}
+              onClick={() => navigate("/category/sub-category")}
             >
               Cancel
             </button>

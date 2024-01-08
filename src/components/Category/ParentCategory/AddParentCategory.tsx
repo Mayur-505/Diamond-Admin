@@ -1,7 +1,7 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
 import { useToast } from "@/components/ui/use-toast";
 import { ErrorType } from "@/lib/types";
-import { AddCategory } from "@/services/categoryService";
+import { AddCategory, deleteCategory } from "@/services/categoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";

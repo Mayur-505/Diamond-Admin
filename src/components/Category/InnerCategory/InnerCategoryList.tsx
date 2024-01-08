@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import { DataTableDemo } from "@/components/Common/DataTable";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { Button } from "@/components/ui/button";
-import { getInnerCategory } from "@/services/innercateGoryService";
-import { useQuery } from "@tanstack/react-query";
+import {
+  deleteInnerCategory,
+  getInnerCategory,
+} from "@/services/innercateGoryService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import Loading from "@/components/Common/Loading";
+import Modal from "@/components/Common/Model";
 
 interface Customer {
   id: number;
@@ -58,17 +64,11 @@ interface Column<T> {
 
 const InnerCategoryList = () => {
   const navigate = useNavigate();
-  // const statusBodyTemplate = (rowData) => {
-  //   return (
-  //     <span
-  //       className={`badge text-white px-1 py-0.5 text-[12px] rounded ${
-  //         rowData.status === "Active" ? "bg-[#28a745]" : "bg-[#dc3545]"
-  //       }`}
-  //     >
-  //       {rowData.status}
-  //     </span>
-  //   );
-  // };
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteID, setDeleteID] = useState("");
 
   // const actionBodyTemplate = (rowData) => {
   //   return (
@@ -93,6 +93,27 @@ const InnerCategoryList = () => {
     queryKey: ["GET_INNERCATEGORY", { activePage }],
     queryFn: () => getInnerCategory({ page: activePage, pageSize: 10 }),
   });
+
+  const { mutate: removeCategory, isPending } = useMutation({
+    mutationFn: deleteInnerCategory,
+    onSuccess: () => {
+      setOpenDelete(false);
+      queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
+    },
+    onError: () => {
+      toast({ variant: "error", description: "Not deleted" });
+    },
+  });
+
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
+
+  const handleDeleteCategory = () => {
+    removeCategory(deleteID);
+    setOpenDelete(false);
+  };
 
   const columns: Column<Customer>[] = [
     {
@@ -197,6 +218,8 @@ const InnerCategoryList = () => {
             <button
               type="button"
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
+              key={row.original.id}
+              onClick={handleDelete.bind(null, row.original.id)}
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
             </button>
@@ -205,7 +228,29 @@ const InnerCategoryList = () => {
       },
     },
   ];
-
+  const body = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteCategory}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
       <DataTableDemo
@@ -233,6 +278,12 @@ const InnerCategoryList = () => {
               data={InnercategoryData?.data?.responseData || []}
               filename="CategoryData.xlsx"
               className="text-[14px] font-[600] text-[#343a40] border px-4 py-2 rounded"
+            />
+            <Modal
+              open={openDelete}
+              onClose={() => setOpenDelete(false)}
+              children={body}
+              className="!p-[20px]"
             />
           </div>
         }

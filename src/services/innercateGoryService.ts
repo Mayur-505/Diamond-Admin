@@ -17,3 +17,13 @@ export const addInnerCategory = async (data: any) => {
   };
   return api({ url, method, data, headers, isFormData: true });
 };
+
+export const deleteInnerCategory = (id: string) => {
+  const url = `/innercategory/delete/${id}`,
+    method = "delete";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, headers, data: {} });
+};
