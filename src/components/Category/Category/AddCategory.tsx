@@ -1,11 +1,73 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
+import SelectMenu from "@/components/Common/SelectMenu";
 import TextAreaWithLabel from "@/components/Common/TextAreaWithLabel";
-import { Switch } from "@/components/ui/switch";
-import React from "react";
+import toast from "react-hot-toast";
+import { AddSubCategory, getSubCategory } from "@/services/subcategoryService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 const AddCategory = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  const [formValues, setFormValues] = useState({
+    name: "",
+    description: "",
+    category: "",
+  });
+
+  const { data: subcategoryData } = useQuery({
+    queryKey: ["GET_SUBCATEGORY"],
+    queryFn: getSubCategory,
+  });
+
+  const categoryOptions = subcategoryData?.data?.responseData
+    ? subcategoryData?.data?.responseData?.map((item) => ({
+        label: item.name,
+        value: item.category,
+      }))
+    : [];
+
+  const handleChange = (name: string, value: string | Date | undefined) => {
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const { mutate: createSubCategory } = useMutation({
+    mutationFn: AddSubCategory,
+    onSuccess: () => {
+      toast({
+        variant: "success",
+        description: "Sub category Created Successfully.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["addCategory"] });
+    },
+    onError: () => {
+      toast({ variant: "error", description: "Something went wrong." });
+    },
+  });
+
+  const handleSubmit = () => {
+    const payload = new FormData();
+    if (formValues.category) {
+      payload.append("categoryid", formValues.category);
+    }
+    if (formValues.name) {
+      payload.append("name", formValues.name);
+    }
+    if (formValues.description) {
+      payload.append("description", formValues.description);
+    }
+    createSubCategory(payload);
+    setFormValues({
+      name: "",
+      description: "",
+      category: "",
+    });
+  };
+
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
       <div className="grid grid-cols-12 gap-4">
@@ -16,17 +78,27 @@ const AddCategory = () => {
         </div>
         <div className="col-span-10 grid grid-cols-12 gap-4">
           <div className="col-span-12">
-            <InputWithLabel
+            <SelectMenu
+              placeholder="Parent Category Name"
+              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
+              label=""
+              options={categoryOptions}
+              value={formValues.category}
+              onChange={(e) => handleChange("category", e)}
+            />
+            {/* <InputWithLabel
               id="parent-category"
               placeholder="Parent Category Name"
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
-            />
+            /> */}
           </div>
           <div className="col-span-4">
             <InputWithLabel
               id="title"
               placeholder="Title"
+              value={formValues.name}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
+              onChange={(e) => handleChange("name", e.target.value)}
             />
           </div>
           <div className="col-span-4">
@@ -45,17 +117,20 @@ const AddCategory = () => {
           </div>
           <div className="col-span-12">
             <TextAreaWithLabel
+              id="description"
               label={""}
               placeholder="description"
-              value={""}
+              value={formValues.description}
               textAreaClassName="h-[210px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
               className="md:col-span-2"
+              onChange={(e) => handleChange("description", e.target.value)}
             />
           </div>
           <div className="col-span-12 flex items-center gap-4">
             <button
               className="px-5 py-1.5 bg-[#2796ef] rounded-[4px] text-[#ffffff] border border-transparent font-Nunito font-[600]"
               type="button"
+              onClick={handleSubmit}
             >
               Create Category
             </button>

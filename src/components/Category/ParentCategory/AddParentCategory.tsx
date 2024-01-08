@@ -1,4 +1,5 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
+import { useToast } from "@/components/ui/use-toast";
 import { ErrorType } from "@/lib/types";
 import { AddCategory } from "@/services/categoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -8,11 +9,13 @@ import { useNavigate } from "react-router-dom";
 const AddParentCategory = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [checked, setChecked] = React.useState(true);
+  const { toast } = useToast();
+
   const [category, setCategory] = useState({
     name: "",
     description: "",
   });
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setCategory((prevCategory) => ({
@@ -20,13 +23,18 @@ const AddParentCategory = () => {
       [id]: value,
     }));
   };
+
   const { mutate: createCategory } = useMutation({
     mutationFn: AddCategory,
     onSuccess: () => {
+      toast({
+        variant: "success",
+        description: "Parent category Created Successfully.",
+      });
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: (error: ErrorType) => {
-      console.log("error");
+      toast({ variant: "error", description: "Something went wrong." });
     },
   });
 
