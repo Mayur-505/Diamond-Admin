@@ -14,16 +14,30 @@ export const getCategory = async (params: {
 export const AddCategory = async (data: any) => {
   const url = "/category/create";
   const method = "post";
-  return api({ url, method, data, isFormData: true });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, data, headers, isFormData: true });
 };
 
 export const EditCategory = async (id: string, data: any) => {
-  console.log("localStorage.token ", localStorage.token);
   const url = `/category/update/${id}`;
   const method = "put";
+  const token = localStorage.token;
   const headers = {
-    "Content-Type": "application/x-www-form-urlencoded",
-    Authorization: `Bearer ${localStorage.token || ""}`,
+    Authorization: `Bearer ${token}`,
   };
-  return api({ url, method, data, isFormData: true, headers });
+
+  return api({ url, method, data, headers });
+};
+
+export const deleteCategory = (id: string) => {
+  const url = `category/delete/${id}`,
+    method = "delete";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, headers, data: {} });
 };
