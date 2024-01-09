@@ -93,20 +93,6 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
               New Product
             </Link>
             <Link
-              to={"/gems/shopping-cart"}
-              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
-            >
-              <LuShoppingCart />
-              Shopping Cart
-            </Link>
-            <Link
-              to={"/gems/checkout-form"}
-              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
-            >
-              <TfiCheckBox />
-              Checkout From
-            </Link>
-            <Link
               to={"/gems/order-history"}
               className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
             >
