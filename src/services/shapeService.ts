@@ -15,7 +15,11 @@ export const getShape = async (params: {
 export const createShape = async (data: FormData) => {
   const url = "/shape/create";
   const method = "post";
-  const res = await api({ url, method, data, isFormData: true });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, data, isFormData: true, headers });
   return res.data;
 };
 
