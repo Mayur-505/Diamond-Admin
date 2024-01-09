@@ -25,8 +25,8 @@ const InputWithLabel = forwardRef<HTMLInputElement, InputWithLabelProps>(
         )}
         <div className={`grid items-center gap-1 overflow-hidden ${className}`}>
           <Input {...rest} id={id} name={name} ref={ref} />
-          {error && <FormError message={error} />}
         </div>
+        {error && <FormError message={error} />}
       </>
     );
   }

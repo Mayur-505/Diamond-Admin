@@ -4,15 +4,9 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
-import { Clarity, ErrorType } from "@/lib/types";
+import { Cut, ErrorType } from "@/lib/types";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  createClarity,
-  deleteClarity,
-  getClarity,
-  updateClarity,
-} from "@/services/clarityService";
 import Modal from "../Common/Model";
 import InputWithLabel from "../Common/InputWithLabel";
 import { FormProvider, useForm } from "react-hook-form";
@@ -20,6 +14,12 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
+import {
+  createCut,
+  deleteCut,
+  getCut,
+  updateCut,
+} from "@/services/cutServices";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -59,20 +59,20 @@ const Index = () => {
   } = methods;
 
   const navigate = useNavigate();
-  const { data: clarityData } = useQuery({
-    queryKey: ["GET_CLARITY", { activePage }],
-    queryFn: () => getClarity({ page: activePage, pageSize: 10 }),
+  const { data: cutData } = useQuery({
+    queryKey: ["GET_CUT", { activePage }],
+    queryFn: () => getCut({ page: activePage, pageSize: 10 }),
   });
 
   const queryClient = useQueryClient();
 
-  const { mutate: addClarity } = useMutation({
-    mutationFn: createClarity,
+  const { mutate: addCut } = useMutation({
+    mutationFn: createCut,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
         variant: "success",
-        title: "Clarity created successfully",
+        title: "Cut created successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
       setOpen(false);
@@ -83,13 +83,13 @@ const Index = () => {
     },
   });
 
-  const { mutate: removeClarity } = useMutation({
-    mutationFn: deleteClarity,
+  const { mutate: removeCut } = useMutation({
+    mutationFn: deleteCut,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
         variant: "success",
-        title: "Clarity Deleted successfully",
+        title: "Cut Deleted successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
     },
@@ -98,10 +98,10 @@ const Index = () => {
     },
   });
 
-  const { mutate: editClarity } = useMutation({
-    mutationFn: updateClarity,
+  const { mutate: editCut } = useMutation({
+    mutationFn: updateCut,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       setOpen(false);
       setEdit("");
       reset();
@@ -112,14 +112,15 @@ const Index = () => {
   });
 
   const handleEdit = (id: string) => {
-    const allData: Clarity[] = clarityData?.data?.Claritydata;
-    const data = allData?.find((item: Clarity) => item.id === id);
+    const allData: Cut[] = cutData?.data?.Cutdata;
+    const data = allData?.find((item: Cut) => item.id === id);
+
     setEdit(id);
     setValue("name", data?.name);
     setOpen(true);
   };
 
-  const columns: Column<Clarity>[] = [
+  const columns: Column<Cut>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => {
@@ -129,7 +130,7 @@ const Index = () => {
             className="p-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Clarity
+            Cut
             <RiArrowUpDownFill className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -151,7 +152,7 @@ const Index = () => {
             </button>
             <button
               type="button"
-              onClick={() => removeClarity(row?.original?.id)}
+              onClick={() => removeCut(row?.original?.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -164,6 +165,7 @@ const Index = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setEdit("");
     reset();
   };
 
@@ -171,16 +173,20 @@ const Index = () => {
     // setOpen(false);
     const { name } = data;
     if (edit) {
-      editClarity({ name, id: edit });
+      const payload = {
+        name,
+        cutid: edit,
+      };
+      editCut({ data: payload });
     } else {
-      addClarity(name);
+      addCut(data);
     }
   };
 
   const body = (
     <div>
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
-        Add Clarity
+        {edit ? "Edit" : "Add"} Cut
       </h2>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -191,8 +197,8 @@ const Index = () => {
               // @ts-expect-error
               name="name"
               id="name"
-              label="Clarity"
-              placeholder="Clarity"
+              label="Cut"
+              placeholder="Cut"
               error={errors?.name?.message}
               {...register("name")}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
@@ -224,7 +230,7 @@ const Index = () => {
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        data={clarityData?.data?.Claritydata || []}
+        data={cutData?.data?.Cutdata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         columns={columns}
@@ -241,7 +247,7 @@ const Index = () => {
           </div>
         }
         setActivePage={setActivePage}
-        pageCount={clarityData?.data?.total}
+        pageCount={cutData?.data?.total}
       />
       <Modal
         open={open}

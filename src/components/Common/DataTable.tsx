@@ -75,10 +75,11 @@ export function DataTableDemo<T extends Record<string, unknown>>({
     },
   });
 
-  const handlePageClick = (data) => {
+  console.log("table++++", data);
+
+  const handlePageClick = (data: any) => {
     const selectedPage = data.selected;
     setActivePage(selectedPage + 1);
-    // You can perform additional logic based on the selected page
   };
 
   return (
@@ -178,13 +179,14 @@ export function DataTableDemo<T extends Record<string, unknown>>({
           </TableBody>
         </Table>
       </div>
+      {console.log("table+++++", table.getTotalSize())}
       <div className="flex items-center justify-end space-x-2 py-4">
         <ReactPaginate
           previousLabel={"<"}
           nextLabel={">"}
           breakLabel={"..."}
           breakClassName={"break-me"}
-          pageCount={pageCount || 3}
+          pageCount={pageCount / 10}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}

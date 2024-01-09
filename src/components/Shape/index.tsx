@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { Button } from "../ui/button";
 import { ErrorType, Shape } from "@/lib/types";
-import { createShape, getShape } from "@/services/shapeService";
+import {
+  createShape,
+  deleteShape,
+  getShape,
+  updateShape,
+} from "@/services/shapeService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataTableDemo } from "../Common/DataTable";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
@@ -40,6 +45,8 @@ const schema = yup.object({
 
 const Index = () => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [activePage, setActivePage] = React.useState<number>(1);
+  const [isEdit, setIsEdit] = React.useState<string>("");
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -55,17 +62,60 @@ const Index = () => {
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
+    watch,
+    getValues,
   } = methods;
 
-  console.log("error+++++", errors);
+  const image = watch("images");
 
   const { data } = useQuery({
-    queryKey: ["GET_SHAPE"],
-    queryFn: getShape,
+    queryKey: ["GET_SHAPE", { activePage }],
+    queryFn: () => getShape({ page: activePage, pageSize: 10 }),
   });
+  console.log("error+++++", data);
+
+  useEffect(() => {
+    if (data && isEdit) {
+      const findData: Shape = data?.Shapedata?.find(
+        (item: Shape) => item.id === isEdit
+      );
+      setValue("name", findData?.name);
+      setValue("description", findData?.description);
+      setValue("images", findData?.images);
+    } else {
+      setValue("name", "");
+      setValue("description", "");
+      setValue("images", []);
+    }
+  }, [data, isEdit]);
+
+  console.log("image+++++", getValues());
 
   const { mutate: addShape, isPending } = useMutation({
     mutationFn: createShape,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
+      setOpen(false);
+      reset();
+    },
+    onError: (error: ErrorType) => {
+      console.log(error);
+    },
+  });
+
+  const { mutate: removeShape } = useMutation({
+    mutationFn: deleteShape,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
+    },
+    onError: (error: ErrorType) => {
+      console.log(error);
+    },
+  });
+
+  const { mutate: editShape } = useMutation({
+    mutationFn: updateShape,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
       setOpen(false);
@@ -80,7 +130,7 @@ const Index = () => {
 
   const columns: Column<Shape>[] = [
     {
-      accessorKey: "name",
+      accessorKey: "image",
       header: <div className="text-left">Image</div>,
       cell: ({ row }) => {
         return (
@@ -133,14 +183,17 @@ const Index = () => {
           <div className="flex gap-2">
             <button
               type="button"
-              //   onClick={() => handleEdit(row?.original?.id)}
+              onClick={() => {
+                setIsEdit(row?.original?.id);
+                setOpen(true);
+              }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <AiOutlineEdit className="text-[#fff] text-[16px]" />
             </button>
             <button
               type="button"
-              //   onClick={() => removeClarity(row?.original?.id)}
+              onClick={() => removeShape(row?.original?.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -163,7 +216,15 @@ const Index = () => {
     if (data?.images && data?.images?.length > 0) {
       payload.append("image", data.images[0]);
     }
-    addShape(payload);
+    if (isEdit) {
+      payload.append("shapeid", isEdit);
+    }
+
+    if (isEdit) {
+      editShape({ data: payload });
+    } else {
+      addShape(payload);
+    }
 
     // if (edit) {
     //   editClarity({ name, id: edit });
@@ -176,7 +237,7 @@ const Index = () => {
     <div>
       {isPending && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
-        Add Shape
+        {isEdit ? "Edit" : "Add"} Shape
       </h2>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -221,6 +282,7 @@ const Index = () => {
               {...register("images")}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
             />
+            {}
           </div>
           <div className="flex justify-end gap-4 mt-5">
             <Button
@@ -264,6 +326,8 @@ const Index = () => {
             </Button>
           </div>
         }
+        setActivePage={setActivePage}
+        pageCount={data?.total}
       />
       <Modal
         open={open}

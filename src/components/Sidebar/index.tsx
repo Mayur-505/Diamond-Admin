@@ -44,6 +44,20 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
           </h2>
           <ul>
             <Link
+              to={"/gems/cut"}
+              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
+            >
+              <CiImageOn />
+              Cut
+            </Link>
+            <Link
+              to={"/gems/color"}
+              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
+            >
+              <CiImageOn />
+              Color
+            </Link>
+            <Link
               to={"/gems/clarity"}
               className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
             >
