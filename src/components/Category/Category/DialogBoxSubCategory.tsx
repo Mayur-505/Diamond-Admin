@@ -12,11 +12,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
-import { EditCategory } from "@/services/categoryService";
+import { EditSubCategory } from "@/services/subcategoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-export function DialogBoxCategory({ icon, mainTitle, item }) {
+export function DialogBoxSubCategory({ icon, mainTitle, item }) {
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
@@ -24,13 +24,13 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
   });
   const queryClient = useQueryClient();
 
-  const { mutate: editCategory } = useMutation({
-    mutationFn: (data) => EditCategory(item.id, data),
+  const { mutate: editSubCategory } = useMutation({
+    mutationFn: (data) => EditSubCategory(item.id, data),
     onSuccess: () => {
       toast({
         description: "Sub category Created Successfully.",
       });
-      queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_SUBCATEGORY"] });
     },
     onError: () => {
       toast({ description: "Something went wrong." });
@@ -53,7 +53,7 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
     if (formValues.description) {
       payload.append("description", formValues.description);
     }
-    editCategory(payload);
+    editSubCategory(payload);
   };
 
   return (
@@ -88,7 +88,7 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
             />
           </div>
           {/* <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="image">Image</Label>
+            <Label htmlFor="username">Username</Label>
             <Input
               id="image"
               type="file"

@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
+import { DialogBoxInnerCategory } from "./DialogBoxInnerCategory";
 
 interface Customer {
   id: number;
@@ -98,7 +99,7 @@ const InnerCategoryList = () => {
     mutationFn: deleteInnerCategory,
     onSuccess: () => {
       setOpenDelete(false);
-      queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_INNERCATEGORY"] });
     },
     onError: () => {
       toast({ variant: "error", description: "Not deleted" });
@@ -213,7 +214,11 @@ const InnerCategoryList = () => {
               type="button"
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
-              <AiOutlineEdit className="text-[#fff] text-[16px]" />
+              <DialogBoxInnerCategory
+                icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
+                mainTitle="Edit Category"
+                item={row?.original}
+              />
             </button>
             <button
               type="button"
