@@ -1,6 +1,7 @@
 import React from "react";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { Clarity, ErrorType } from "@/lib/types";
@@ -10,13 +11,15 @@ import {
   createClarity,
   deleteClarity,
   getClarity,
+  updateClarity,
 } from "@/services/clarityService";
 import Modal from "../Common/Model";
 import InputWithLabel from "../Common/InputWithLabel";
-import { toast } from "../ui/use-toast";
-import { DialogBoxClarity } from "./DialogBoxClarity";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "../ui/use-toast";
+import { ToastAction } from "../ui/toast";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -25,60 +28,95 @@ interface Column<T> {
   enableSorting?: boolean;
 }
 
+interface data {
+  name: string;
+}
+
+const schema = yup.object({
+  name: yup.string().required(),
+});
+
+const initialValues: data = {
+  name: "",
+};
+
 const Index = () => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [edit, setEdit] = React.useState<string>("");
   const methods = useForm({
-    resolver: yupResolver(Schema),
+    resolver: yupResolver(schema),
     defaultValues: initialValues,
     mode: "all",
   });
 
-  const queryClient = useQueryClient();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = methods;
+
+  const navigate = useNavigate();
   const { data: clarityData } = useQuery({
     queryKey: ["GET_CLARITY", { activePage }],
     queryFn: () => getClarity({ page: activePage, pageSize: 10 }),
   });
 
-  const handleChange = (name: string, value: string | undefined) => {
-    setFormValues((prev) => ({ ...prev, [name]: value }));
-  };
+  const queryClient = useQueryClient();
 
-  const { mutate: createClarityData } = useMutation({
+  const { mutate: addClarity } = useMutation({
     mutationFn: createClarity,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
       toast({
         variant: "success",
-        description: "Contact Created Successfully.",
+        title: "Clarity created successfully",
+        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
-      queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
+      setOpen(false);
+      reset();
     },
     onError: (error: ErrorType) => {
-      toast({ variant: "error", description: "Something went wrong." });
+      console.log(error);
     },
   });
 
-  const { mutate: removeClarity, isPending } = useMutation({
+  const { mutate: removeClarity } = useMutation({
     mutationFn: deleteClarity,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
+      toast({
+        variant: "success",
+        title: "Clarity Deleted successfully",
+        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+      });
     },
-    onError: () => {
-      toast({ variant: "error", description: "Not deleted" });
+    onError: (error: ErrorType) => {
+      console.log(error);
     },
   });
 
-  const handleSubmit = () => {
-    const payload = new FormData();
-    if (formValues.name) {
-      payload.append("name", formValues.name);
-    }
-    createClarityData(payload);
-    setOpen(false);
-    setFormValues({
-      name: "",
-    });
+  const { mutate: editClarity } = useMutation({
+    mutationFn: updateClarity,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
+      setOpen(false);
+      setEdit("");
+      reset();
+    },
+    onError: (error: ErrorType) => {
+      console.log(error);
+    },
+  });
+
+  const handleEdit = (id: string) => {
+    const allData: Clarity[] = clarityData?.data?.Claritydata;
+    const data = allData?.find((item: Clarity) => item.id === id);
+    setEdit(id);
+    setValue("name", data?.name);
+    setOpen(true);
   };
 
   const columns: Column<Clarity>[] = [
@@ -106,13 +144,10 @@ const Index = () => {
           <div className="flex gap-2">
             <button
               type="button"
+              onClick={() => handleEdit(row?.original?.id)}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
-              <DialogBoxClarity
-                icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
-                mainTitle="Edit Clarity"
-                item={row?.original}
-              />
+              <AiOutlineEdit className="text-[#fff] text-[16px]" />
             </button>
             <button
               type="button"
@@ -127,43 +162,60 @@ const Index = () => {
     },
   ];
 
+  const handleClose = () => {
+    setOpen(false);
+    reset();
+  };
+
+  const onSubmit = (data: data) => {
+    // setOpen(false);
+    const { name } = data;
+    if (edit) {
+      editClarity({ name, id: edit });
+    } else {
+      addClarity(name);
+    }
+  };
+
   const body = (
     <div>
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         Add Clarity
       </h2>
-      <div>
-        <div className="mt-1">
-          <InputWithLabel
-            type="text"
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            name="clarity"
-            id="clarity"
-            label="Clarity"
-            placeholder="Clarity"
-            defaultValue={formValues.name}
-            onChange={(e) => handleChange("name", e.target.value)}
-            className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
-          />
-        </div>
-        <div className="flex justify-end gap-4 mt-5">
-          <Button
-            variant={"outline"}
-            className="w-full bg-[#343a40] text-white"
-            // onClick={() => handleClose()}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            variant={"outline"}
-            className="w-full bg-[#343a40] text-white"
-            onClick={handleSubmit}
-          >
-            Save
-          </Button>
-        </div>
-      </div>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mt-1">
+            <InputWithLabel
+              type="text"
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-expect-error
+              name="name"
+              id="name"
+              label="Clarity"
+              placeholder="Clarity"
+              error={errors?.name?.message}
+              {...register("name")}
+              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
+            />
+          </div>
+          <div className="flex justify-end gap-4 mt-5">
+            <Button
+              variant={"outline"}
+              className="w-full bg-[#343a40] text-white"
+              onClick={() => handleClose()}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant={"outline"}
+              className="w-full bg-[#343a40] text-white"
+            >
+              Save
+            </Button>
+          </div>
+        </form>
+      </FormProvider>
     </div>
   );
 
@@ -171,12 +223,11 @@ const Index = () => {
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         data={clarityData?.data?.Claritydata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         columns={columns}
-        setActivePage={setActivePage}
-        pageCount={clarityData?.data?.total}
         filterName={"name"}
         customButton={
           <div className="flex justify-end gap-4">
