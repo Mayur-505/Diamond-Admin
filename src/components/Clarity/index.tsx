@@ -15,6 +15,8 @@ import Modal from "../Common/Model";
 import InputWithLabel from "../Common/InputWithLabel";
 import { toast } from "../ui/use-toast";
 import { DialogBoxClarity } from "./DialogBoxClarity";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -25,9 +27,12 @@ interface Column<T> {
 
 const Index = () => {
   const [open, setOpen] = React.useState<boolean>(false);
-  const [activePage, setActivePage] = React.useState(1);
-  const [formValues, setFormValues] = React.useState({
-    name: "",
+  const [activePage, setActivePage] = React.useState<number>(1);
+  const [edit, setEdit] = React.useState<string>("");
+  const methods = useForm({
+    resolver: yupResolver(Schema),
+    defaultValues: initialValues,
+    mode: "all",
   });
 
   const queryClient = useQueryClient();
@@ -184,6 +189,8 @@ const Index = () => {
             </Button>
           </div>
         }
+        setActivePage={setActivePage}
+        pageCount={clarityData?.data?.total}
       />
       <Modal
         open={open}

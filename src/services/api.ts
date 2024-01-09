@@ -37,6 +37,7 @@ const api = ({
     params,
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmMjk3ZDMwNC1kOTdmLTQ1MDItYWFkNi02ODZjNTlhMDliMTkiLCJpYXQiOjE3MDQ3OTg4NzIsImV4cCI6MTcwNDgwMjQ3Mn0.0H7kqyPxcdgWzZduHi3DkNyHJc9vP9Q6-2QpNmOYnTo`,
       ...headers,
     },
   };

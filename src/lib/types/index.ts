@@ -18,6 +18,20 @@ export type Clarity = {
   updatedAt: string;
 };
 
+export type Cut = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Color = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Shape = {
   id: string;
   name: string;

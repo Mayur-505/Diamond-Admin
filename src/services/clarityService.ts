@@ -1,16 +1,15 @@
+import { Clarity } from "@/lib/types";
 import api from "./api";
 
-export const getClarity = async (params: {
-  page: number;
-  pageSize: number;
-}) => {
+export const getClarity = async ({
+  params,
+}: {
+  params: { page: number; pageSize: number };
+}): Promise<Clarity[]> => {
   const url = "/clarity/fetch";
   const method = "get";
-  const token = localStorage.token;
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-  const res = await api({ url, method, params, headers });
+
+  const res = await api({ url, method, params });
   return res.data;
 };
 

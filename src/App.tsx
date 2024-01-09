@@ -24,6 +24,8 @@ import SignUp from "./components/LoginPage/SignUp";
 import ForgotPassword from "./components/LoginPage/ForgotPassword";
 import NewPassword from "./components/LoginPage/NewPassword";
 import Verification from "./components/LoginPage/Verification";
+import Cut from "./components/Cut/index";
+import Color from "./components/Color/index";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Shape from "./components/Shape";
 import { Toaster } from "./components/ui/toaster";
@@ -70,6 +72,14 @@ const router = createBrowserRouter([
     path: "/gems",
     element: <RootLayout />,
     children: [
+      {
+        path: "cut",
+        element: <Cut />,
+      },
+      {
+        path: "color",
+        element: <Color />,
+      },
       {
         path: "clarity",
         element: <Clarity />,
