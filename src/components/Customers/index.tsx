@@ -5,11 +5,14 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { Progress } from "../ui/progress";
 import { useNavigate } from "react-router-dom";
 import {
+  deleteContact,
   getActiveContact,
   getInActiveContact,
 } from "@/services/contactService";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { toast } from "../ui/use-toast";
+import { MdDeleteOutline } from "react-icons/md";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -22,6 +25,7 @@ const Index: React.FC = () => {
   const [activePage, setActivePage] = useState(1);
   const [inActivePage, setInActivePage] = useState(1);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { data: ActiveContactData } = useQuery({
     queryKey: ["ACTIVE_CONTACT", { activePage }],
@@ -32,6 +36,17 @@ const Index: React.FC = () => {
     queryFn: () => getInActiveContact({ page: inActivePage, pageSize: 10 }),
   });
 
+  const { mutate: removeContact } = useMutation({
+    mutationFn: deleteContact,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["ACTIVE_CONTACT", "INACTIVE_CONTACT"],
+      });
+    },
+    onError: () => {
+      toast({ variant: "error", description: "Not deleted" });
+    },
+  });
   const columns: Column<Payment>[] = [
     {
       accessorKey: "name",
@@ -103,15 +118,6 @@ const Index: React.FC = () => {
         // const isImage = row?.original?.representative?.image.includes("http");
         return (
           <div className="text-left font-medium flex items-center gap-2">
-            {/* {isImage ? (
-              <img
-                src={row?.original?.representative?.image}
-                alt="img"
-                className="w-[24px] h-[24px] rounded-full"
-              />
-            ) : (
-              <div className="!w-[24px] !h-[24px] rounded-full bg-slate-500"></div>
-            )} */}
             {row.original.comment}
           </div>
         );
@@ -124,6 +130,23 @@ const Index: React.FC = () => {
         return (
           <Progress value={row.original.status} className="h-2 w-[100px]" />
           //   <div className="text-left font-medium">{row.original.activity}</div>
+        );
+      },
+    },
+    {
+      accessorKey: "Action",
+      header: () => <div className="text-left">Action</div>,
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => removeContact(row?.original?.id)}
+              className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
+            >
+              <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
+            </button>
+          </div>
         );
       },
     },
@@ -168,15 +191,6 @@ const Index: React.FC = () => {
             setActivePage={setInActivePage}
             pageCount={InActiveContactData?.data?.total}
             filterable={"name"}
-            // customButton={
-            //   <Button
-            //     variant={"outline"}
-            //     className="w-full bg-[#343a40] text-white"
-            //     onClick={() => navigate("/customer-contact/add_customer")}
-            //   >
-            //     Add Customer
-            //   </Button>
-            // }
           />
         </TabsContent>
       </Tabs>

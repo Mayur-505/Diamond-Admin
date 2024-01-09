@@ -4,7 +4,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { Button } from "../ui/button";
 import { ErrorType, Shape } from "@/lib/types";
-import { createShape, getShape } from "@/services/shapeService";
+import { createShape, deleteShape, getShape } from "@/services/shapeService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataTableDemo } from "../Common/DataTable";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
@@ -13,6 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Modal from "../Common/Model";
 import Loading from "../Common/Loading";
+import { toast } from "../ui/use-toast";
+import { DialogBoxShape } from "./DialogBoxShape";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -76,7 +78,15 @@ const Index = () => {
     },
   });
 
-  console.log("isLoading", isPending);
+  const { mutate: removeShape } = useMutation({
+    mutationFn: deleteShape,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
+    },
+    onError: () => {
+      toast({ variant: "error", description: "Not deleted" });
+    },
+  });
 
   const columns: Column<Shape>[] = [
     {
@@ -133,14 +143,17 @@ const Index = () => {
           <div className="flex gap-2">
             <button
               type="button"
-              //   onClick={() => handleEdit(row?.original?.id)}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
-              <AiOutlineEdit className="text-[#fff] text-[16px]" />
+              <DialogBoxShape
+                icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
+                mainTitle="Edit Shape"
+                item={row?.original}
+              />
             </button>
             <button
               type="button"
-              //   onClick={() => removeClarity(row?.original?.id)}
+              onClick={() => removeShape(row?.original?.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -164,12 +177,6 @@ const Index = () => {
       payload.append("image", data.images[0]);
     }
     addShape(payload);
-
-    // if (edit) {
-    //   editClarity({ name, id: edit });
-    // } else {
-    //   addClarity(name);
-    // }
   };
 
   const body = (

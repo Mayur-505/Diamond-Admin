@@ -1,39 +1,45 @@
-import { Clarity } from "@/lib/types";
 import api from "./api";
 
-export const getClarity = async (): Promise<Clarity[]> => {
+export const getClarity = async (params: {
+  page: number;
+  pageSize: number;
+}) => {
   const url = "/clarity/fetch";
   const method = "get";
-
-  const res = await api({ url, method });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, params, headers });
   return res.data;
 };
 
-export const createClarity = async (name: string) => {
+export const createClarity = async (data: any) => {
   const url = "/clarity/create";
   const method = "post";
-  const data = { name };
-  const res = await api({ url, method, data });
-  return res.data;
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, data, headers, isFormData: false });
 };
 
-export const updateClarity = async ({
-  id,
-  name,
-}: {
-  id: string;
-  name: string;
-}): Promise<string> => {
+export const updateClarity = (data: any) => {
   const url = "/clarity/update";
   const method = "patch";
-  const data = { clarityid: id, name };
-  const res = await api({ url, method, data });
-  return res.data;
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, data, headers });
 };
 
-export const deleteClarity = async (id: string) => {
-  const url = `/clarity/delete/${id}`;
-  const method = "delete";
-  const res = await api({ url, method, data: {} });
-  return res.data;
+export const deleteClarity = (id: string) => {
+  const url = `/clarity/delete/${id}`,
+    method = "delete";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, headers, data: {} });
 };

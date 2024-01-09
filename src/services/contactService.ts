@@ -37,3 +37,13 @@ export const addContact = async (data: any) => {
   };
   return api({ url, method, data, headers });
 };
+
+export const deleteContact = (id: string) => {
+  const url = `/contact/remove/${id}`,
+    method = "delete";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, headers, data: {} });
+};
