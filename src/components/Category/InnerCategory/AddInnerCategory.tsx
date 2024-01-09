@@ -34,8 +34,6 @@ const AddInnerCategory = () => {
     : [];
 
   const handleChange = (name: string, value: string | undefined) => {
-    console.log(name, value, "1213+++");
-
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 

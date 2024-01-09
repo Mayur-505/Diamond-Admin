@@ -26,7 +26,7 @@ export const EditSubCategory = async (id: string, data: any) => {
     Authorization: `Bearer ${token}`,
   };
 
-  return api({ url, method, data, headers });
+  return api({ url, method, data, headers, isFormData: true });
 };
 
 export const deleteSubCategory = (id: string) => {

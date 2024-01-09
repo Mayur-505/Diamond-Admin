@@ -11,12 +11,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/use-toast";
-import { EditCategory } from "@/services/categoryService";
+import { toast, useToast } from "@/components/ui/use-toast";
+import { EditInnerCategory } from "@/services/innercateGoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-export function DialogBoxCategory({ icon, mainTitle, item }) {
+export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
@@ -24,13 +24,13 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
   });
   const queryClient = useQueryClient();
 
-  const { mutate: editCategory } = useMutation({
-    mutationFn: (data) => EditCategory(item.id, data),
+  const { mutate: editInnerCategory } = useMutation({
+    mutationFn: (data) => EditInnerCategory(item.id, data),
     onSuccess: () => {
       toast({
         description: "Sub category Created Successfully.",
       });
-      queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_INNERCATEGORY"] });
     },
     onError: () => {
       toast({ description: "Something went wrong." });
@@ -53,7 +53,7 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
     if (formValues.description) {
       payload.append("description", formValues.description);
     }
-    editCategory(payload);
+    editInnerCategory(payload);
   };
 
   return (
@@ -69,6 +69,13 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name">Name</Label>
+            {/* <Input
+              id="name"
+              type="text"
+              defaultValue={item.name}
+              className="col-span-3 border-[#ccc] border-[1px] border-solid rounded-[5px]"
+              onChange={(e) => handelchange("name", e)}
+            /> */}
             <InputWithLabel
               id="title"
               placeholder="Title"
