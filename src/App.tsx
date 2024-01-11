@@ -27,6 +27,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Shape from "./components/Shape";
 import { Toaster } from "./components/ui/toaster";
 import User from "./components/User";
+import AdminUser from "./components/User/AdminUser";
 
 const router = createBrowserRouter([
   {
@@ -158,6 +159,10 @@ const router = createBrowserRouter([
       {
         path: "user-list",
         element: <User />,
+      },
+      {
+        path: "admin",
+        element: <AdminUser />,
       },
     ],
   },
