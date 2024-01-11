@@ -3,9 +3,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./components/Layout/RootLayout";
 import OrderHistory from "./components/Ecommerce/OrderHistory";
 import OrderSummary from "./components/Ecommerce/OrderSummary";
-import CheckoutForm from "./components/Ecommerce/CheckoutForm";
 import NewProduct from "./components/Ecommerce/NewProduct";
-import ShoppingCart from "./components/Ecommerce/ShoppingCart";
 import ProductOverview from "./components/Ecommerce/ProductOverview";
 import ProductList from "./components/Ecommerce/ProductList";
 import Dashboard from "./components/Dashboard";
@@ -99,14 +97,6 @@ const router = createBrowserRouter([
       {
         path: "new-product",
         element: <NewProduct />,
-      },
-      {
-        path: "shopping-cart",
-        element: <ShoppingCart />,
-      },
-      {
-        path: "checkout-form",
-        element: <CheckoutForm />,
       },
       {
         path: "order-history",
