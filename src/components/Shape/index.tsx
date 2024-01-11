@@ -75,7 +75,6 @@ const Index = () => {
     queryKey: ["GET_SHAPE", { activePage }],
     queryFn: () => getShape({ page: activePage, pageSize: 10 }),
   });
-  console.log("error+++++", data);
 
   useEffect(() => {
     if (data && isEdit) {
@@ -91,8 +90,6 @@ const Index = () => {
       setValue("images", []);
     }
   }, [data, isEdit]);
-
-  console.log("image+++++", getValues());
 
   const { mutate: addShape, isPending } = useMutation({
     mutationFn: createShape,
@@ -127,8 +124,6 @@ const Index = () => {
       console.log(error);
     },
   });
-
-  console.log("isLoading", isPending);
 
   const columns: Column<Shape>[] = [
     {

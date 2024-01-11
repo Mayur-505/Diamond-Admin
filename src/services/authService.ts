@@ -8,10 +8,40 @@ export const userLogin = (data: any) => {
 
 export const forgotPassword = (data: any) => {
   const method = "post",
-    url = "user/verification/forgetpassword";
+    url = "/user/forgetpassword";
   const token = localStorage.token;
   const headers = {
     Authorization: `Bearer ${token}`,
   };
-  return api({ method, url, headers, data });
+  return api({ method, url, headers, data, isFormData: false });
+};
+
+export const VerificationOtp = (data: any) => {
+  const method = "post",
+    url = "/user/verification/forgetpassword";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ method, url, headers, data, isFormData: false });
+};
+
+export const ResendOtp = (data: any) => {
+  const method = "post",
+    url = "/user/resendotp";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ method, url, headers, data, isFormData: false });
+};
+
+export const newPassword = (data: any) => {
+  const method = "post",
+    url = "/user/create_password";
+  const token = localStorage.ForgetPasswordToken;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ method, url, headers, data, isFormData: true });
 };

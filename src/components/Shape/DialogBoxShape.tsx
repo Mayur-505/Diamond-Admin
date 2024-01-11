@@ -36,7 +36,6 @@ export function DialogBoxShape({ icon, mainTitle, item }) {
       toast({ description: "Something went wrong." });
     },
   });
-  console.log(item.image);
 
   const handleChange = (name, value) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));

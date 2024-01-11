@@ -8,7 +8,6 @@ import ProductOverview from "./components/Ecommerce/ProductOverview";
 import ProductList from "./components/Ecommerce/ProductList";
 import Dashboard from "./components/Dashboard";
 import Customers from "./components/Customers";
-import AddCustomer from "./components/Customers/AddCustomer";
 import List from "./components/Category/ParentCategory/List";
 import AddParentCategory from "./components/Category/ParentCategory/AddParentCategory";
 import AddCategory from "./components/Category/Category/AddCategory";
@@ -27,6 +26,7 @@ import Color from "./components/Color/index";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Shape from "./components/Shape";
 import { Toaster } from "./components/ui/toaster";
+import User from "./components/User";
 
 const router = createBrowserRouter([
   {
@@ -148,9 +148,16 @@ const router = createBrowserRouter([
         path: "customer",
         element: <Customers />,
       },
+    ],
+  },
+  // User Routes
+  {
+    path: "/user",
+    element: <RootLayout />,
+    children: [
       {
-        path: "add_customer",
-        element: <AddCustomer />,
+        path: "user-list",
+        element: <User />,
       },
     ],
   },

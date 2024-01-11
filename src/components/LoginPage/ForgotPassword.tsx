@@ -1,12 +1,13 @@
 import { Button } from "../ui/button";
 import Diamond from "../../assets/Image/dark-logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputWithLabel from "../Common/InputWithLabel";
 import { type FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPassword } from "@/services/authService";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,12 +19,15 @@ const ForgotPassword = () => {
     mutationFn: (data: FieldValues) => forgotPassword(data),
     onSuccess: () => {
       reset();
+      navigate("/auth/verification");
     },
   });
 
   const onSubmit = (values: FieldValues) => {
+    localStorage.setItem("forgotmail", values.email);
     mutate(values);
   };
+
   return (
     <>
       <img src={Diamond} alt="Diamond" className="h-[56px] [mt-21px]" />

@@ -5,6 +5,7 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { Progress } from "../ui/progress";
 import { useNavigate } from "react-router-dom";
 import {
+  EditContact,
   deleteContact,
   getActiveContact,
   getInActiveContact,
@@ -13,6 +14,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { toast } from "../ui/use-toast";
 import { MdDeleteOutline } from "react-icons/md";
+import { AiOutlineEdit } from "react-icons/ai";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -24,6 +26,7 @@ interface Column<T> {
 const Index: React.FC = () => {
   const [activePage, setActivePage] = useState(1);
   const [inActivePage, setInActivePage] = useState(1);
+  const [active, setActive] = useState("active");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -41,6 +44,18 @@ const Index: React.FC = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["ACTIVE_CONTACT", "INACTIVE_CONTACT"],
+      });
+    },
+    onError: () => {
+      toast({ variant: "error", description: "Not deleted" });
+    },
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: EditContact,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["ACTIVE_CONTACT"],
       });
     },
     onError: () => {
@@ -139,6 +154,17 @@ const Index: React.FC = () => {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
+            {active === "active" && (
+              <button
+                type="button"
+                onClick={() =>
+                  mutate({ contactid: row?.original?.id, status: 2 })
+                }
+                className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
+              >
+                <AiOutlineEdit className="text-[#fff] text-[16px]" />
+              </button>
+            )}
             <button
               type="button"
               onClick={() => removeContact(row?.original?.id)}
@@ -156,8 +182,12 @@ const Index: React.FC = () => {
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
       <Tabs defaultValue="Active" className="">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="Active">Active</TabsTrigger>
-          <TabsTrigger value="InActive">InActive</TabsTrigger>
+          <TabsTrigger value="Active" onClick={() => setActive("active")}>
+            Active
+          </TabsTrigger>
+          <TabsTrigger value="InActive" onClick={() => setActive("inactive")}>
+            InActive
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="Active">
           <DataTableDemo
@@ -169,16 +199,6 @@ const Index: React.FC = () => {
             setActivePage={setActivePage}
             pageCount={ActiveContactData?.data?.total}
             filterable={"name"}
-            customButton={
-              <Button
-                variant={"outline"}
-                className="w-full bg-[#343a40] text-white"
-                onClick={() => navigate("/customer-contact/add_customer")}
-              >
-                Add Customer
-              </Button>
-            }
-            // TabButton={}
           />
         </TabsContent>
         <TabsContent value="InActive">

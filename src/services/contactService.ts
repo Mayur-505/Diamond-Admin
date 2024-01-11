@@ -28,9 +28,9 @@ export const getInActiveContact = async (params: {
   return res.data;
 };
 
-export const addContact = async (data: any) => {
-  const url = "/contact/create";
-  const method = "post";
+export const EditContact = async (data: any) => {
+  const url = "/contact/update";
+  const method = "patch";
   const token = localStorage.token;
   const headers = {
     Authorization: `Bearer ${token}`,

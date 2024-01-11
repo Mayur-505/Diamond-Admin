@@ -104,7 +104,6 @@ const Index = () => {
     // setDataArray(array);
     // setColor(color);
     // setBgColor(bgcolor);
-    console.log(array, color, bgcolor);
   };
 
   return (

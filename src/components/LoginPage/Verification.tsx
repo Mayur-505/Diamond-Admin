@@ -1,51 +1,68 @@
 import { useEffect, useRef, useState } from "react";
 import Diamond from "../../assets/Image/dark-logo.svg";
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { FieldValues } from "react-hook-form";
+import { ResendOtp, VerificationOtp } from "@/services/authService";
 
 const Verification = () => {
-  const inputsRef = useRef([]);
+  const inputsRef = useRef<HTMLInputElement[]>([]);
   const [Otp, setOtp] = useState("");
+  const email = localStorage.getItem("forgotmail");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleKeyDown = (event, index) => {
+    const handleInput = (
+      event: React.FormEvent<HTMLInputElement>,
+      index: number
+    ) => {
       const inputs = inputsRef.current;
-      if (event.key === "Backspace") {
-        setOtp((prev) => prev.slice(0, -1));
-        inputs[index].value = "";
-        if (index !== 0) inputs[index - 1].focus();
-      } else if (event.key === "Tab") return false;
-      else {
-        const isNumericKey = /^[0-9]$/.test(event.key);
-        if (index === inputs.length - 1 && inputs[index].value !== "") {
-          return true;
-        } else if (isNumericKey) {
-          setOtp((prevValue) => prevValue + event.key.toUpperCase());
-          inputs[index].value = event.key;
-          if (index !== inputs.length - 1) inputs[index + 1].focus();
-          event.preventDefault();
-        } else if (/^[A-Za-z]$/.test(event.key)) {
-          setOtp((prevValue) => prevValue + event.key.toUpperCase());
-          inputs[index].value = event.key.toUpperCase();
-          if (index !== inputs.length - 1) inputs[index + 1].focus();
-          event.preventDefault();
-        }
+      const numericValues = inputs
+        .map((input) => input.value)
+        .filter((value) => /^[0-9]$/.test(value));
+      setOtp(numericValues.join("").slice(0, 6));
+
+      if (index !== inputs.length - 1 && inputs[index].value !== "") {
+        inputs[index + 1].focus();
       }
     };
-    const inputs = document.querySelectorAll("#otp > *[id]");
+
+    const inputs = document.querySelectorAll<HTMLInputElement>("#otp > *[id]");
     inputsRef.current = Array.from(inputs);
     inputsRef.current.forEach((input, index) => {
-      input.addEventListener("keydown", (event) => handleKeyDown(event, index));
+      input.addEventListener("input", (event) => handleInput(event, index));
     });
+
     return () => {
-      // Cleanup event listeners when the component unmounts
       inputsRef.current.forEach((input, index) => {
-        input.removeEventListener("keydown", (event) =>
-          handleKeyDown(event, index)
-        );
+        if (input) {
+          input.removeEventListener("input", (event) =>
+            handleInput(event, index)
+          );
+        }
       });
     };
   }, []);
+
+  const { mutate } = useMutation({
+    mutationFn: (data: FieldValues) => VerificationOtp(data),
+    onSuccess: (response) => {
+      localStorage.setItem(
+        "ForgetPasswordToken",
+        response?.data?.data?.ForgetPasswordToken
+      );
+      navigate("/auth/new-password");
+    },
+  });
+  const { mutate: resendOtp } = useMutation({
+    mutationFn: (data: FieldValues) => ResendOtp(data),
+    onSuccess: () => {},
+  });
+
+  const handleResentOtp = () => {
+    resendOtp({ email });
+  };
   return (
     <>
       <img src={Diamond} alt="Diamond" className="h-[56px] [mt-21px]" />
@@ -59,14 +76,12 @@ const Verification = () => {
           </p>
           <div className="flex items-center w-full justify-center">
             <i className="ri-mail-line text-[#757575] mr-[7px]"></i>
-            <span className="text-[14px] font-Nunito font-bold">
-              dm**@gmail.com
-            </span>
+            <span className="text-[14px] font-Nunito font-bold">{email}</span>
           </div>
         </div>
         <form>
           <div className="mb-[21px] flex justify-center gap-[14px]" id="otp">
-            {Array.from({ length: 4 }).map((_, index) => (
+            {Array.from({ length: 6 }).map((_, index) => (
               <input
                 key={index}
                 type="text"
@@ -85,15 +100,19 @@ const Verification = () => {
         <Button
           variant={"secondary"}
           className="h-[35px] w-[280px] p-[7px] border border-[#2196F3] hover:bg-[#2196F3] hover:bg-opacity-[0.8] bg-[#2196F3] rounded-[4px] text-[#fff]"
+          onClick={() => mutate({ email, otp: Otp })}
         >
           Verify
         </Button>
       </div>
       <p className="m-0 text-[14px] font-normal font-Nunito text-[#495057]">
         A problem?{" "}
-        <Link to={"/auth/signup"} className="text-[#2196F3]">
+        <span
+          className="text-[#2196F3] cursor-pointer"
+          onClick={handleResentOtp}
+        >
           Click here
-        </Link>{" "}
+        </span>{" "}
         and let us help you.
       </p>
     </>

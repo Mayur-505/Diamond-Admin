@@ -6,6 +6,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import useActions from "@/hooks/use-actions";
 import { userLogin } from "@/services/authService";
+import { toast } from "../ui/use-toast";
 
 const Login = () => {
   const { setUserData } = useActions();
@@ -23,11 +24,10 @@ const Login = () => {
     onSuccess: (response) => {
       setUserData(response.data.data);
       reset();
-      if (response.data.data.qurey.status === 1) {
+      if (response.data.data.qurey.role === 2) {
         navigate("/dashboard");
-      }
-      if (response.data.data.qurey.status === 0) {
-        navigate("/auth/new-password");
+      } else {
+        toast({ description: "Invalid user role or email" });
       }
     },
   });
