@@ -38,3 +38,24 @@ export const deleteSubCategory = (id: string) => {
   };
   return api({ url, method, headers, data: {} });
 };
+
+export const categoryTosubCategory = async (params) => {
+  const url = `/category/subcategory`;
+  const method = "get";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  return api({ url, method, params, headers });
+};
+export const subcategoryToInnerCategory = async (params) => {
+  const url = `/subcategory/innercategory`;
+  const method = "get";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  return api({ url, method, params, headers });
+};

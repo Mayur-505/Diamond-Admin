@@ -1,14 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
-import { Switch } from "../ui/switch";
-import { TagInput } from "../Common/TagInput";
 import InputWithLabel from "../Common/InputWithLabel";
-import { useDropzone } from "react-dropzone";
 import TextAreaWithLabel from "../Common/TextAreaWithLabel";
 import SelectMenu from "../Common/SelectMenu";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getInnerCategory } from "@/services/innercateGoryService";
+import {
+  categoryTosubCategory,
+  getSubCategory,
+  subcategoryToInnerCategory,
+} from "@/services/subcategoryService";
+import { getCategory } from "@/services/categoryService";
+import { getShape } from "@/services/shapeService";
+import { getColor } from "@/services/colorServices";
+import { getClarity } from "@/services/clarityService";
+import { getCut } from "@/services/cutServices";
+import { toast } from "../ui/use-toast";
+import { addProduct } from "@/services/newproductService";
 
 const NewProduct = () => {
-  const [selected, setSelected] = useState<string[]>(["Nike"]);
+  const queryClient = useQueryClient();
+  const [activePage, setActivePage] = useState(1);
   const [formValues, setFormValues] = useState({
     maintitle: "",
     title: "",
@@ -29,6 +41,9 @@ const NewProduct = () => {
     cert_number: "",
     table: "",
     crown_height: "",
+    depth: "",
+    crown_angle: "",
+    pavilian_depth: "",
     pavilian_angle: "",
     status: "",
     size: "",
@@ -36,23 +51,217 @@ const NewProduct = () => {
     color_desc: "",
     clarity_desc: "",
     cut_desc: "",
+    sizeimages: null,
+    colorimage: null,
+    clarityimage: null,
+    cutimage: null,
+    productimage: [],
   });
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      "image/*": [],
-    },
-    onDrop: (acceptedFiles: File[]) => {
-      // Handle the dropped files
-      onImageUpload(acceptedFiles);
-    },
+  const { data: categoryData } = useQuery({
+    queryKey: ["GET_CATEGORY", { activePage }],
+    queryFn: () => getCategory({ page: activePage, pageSize: 10 }),
   });
 
-  const onImageUpload = (acceptedFiles: File[]) => {
-    // Handle the uploaded image
+  const categoryOptions = categoryData?.data?.modifiedCategories
+    ? categoryData?.data?.modifiedCategories?.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }))
+    : [];
+
+  const { data: subcategoryData } = useQuery({
+    queryKey: ["GET_CATEGORY_TO_SUBCATEGORY", formValues.categoryid],
+    queryFn: () =>
+      categoryTosubCategory({
+        page: activePage,
+        pageSize: 10,
+        categoryid: formValues.categoryid,
+      }),
+  });
+
+  const categorySubOptions = subcategoryData?.data?.data?.categories
+    ? subcategoryData?.data?.data?.categories?.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }))
+    : [];
+
+  const { data: InnercategoryData } = useQuery({
+    queryKey: ["SUB_CATEGORY_TO_INNERCATEGORY", formValues.subcategoryid],
+    queryFn: () =>
+      subcategoryToInnerCategory({
+        subcategoryid: formValues.subcategoryid,
+      }),
+  });
+
+  const categoryInnerOptions = InnercategoryData?.data?.data?.innercategories
+    ? InnercategoryData?.data?.data?.innercategories?.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }))
+    : [];
+
+  const { data: shapeData } = useQuery({
+    queryKey: ["GET_SHAPE", { activePage }],
+    queryFn: () => getShape({ page: activePage, pageSize: 10 }),
+  });
+
+  const shapeOptions = shapeData?.Shapedata
+    ? shapeData?.Shapedata?.map((item) => ({
+        label: item.name,
+        value: item.name,
+      }))
+    : [];
+
+  const { data: colorData } = useQuery({
+    queryKey: ["GET_COLOR", { activePage }],
+    queryFn: () => getColor({ page: activePage, pageSize: 10 }),
+  });
+
+  const colorOptions = colorData?.data?.Colordata
+    ? colorData?.data?.Colordata?.map((item) => ({
+        label: item.name,
+        value: item.name,
+      }))
+    : [];
+
+  const { data: clarityData } = useQuery({
+    queryKey: ["GET_CLARITY", { activePage }],
+    queryFn: () => getClarity({ page: activePage, pageSize: 10 }),
+  });
+  const clarityOptions = clarityData?.data?.Claritydata
+    ? clarityData?.data?.Claritydata?.map((item) => ({
+        label: item.name,
+        value: item.name,
+      }))
+    : [];
+
+  const { data: cutData } = useQuery({
+    queryKey: ["GET_CUT", { activePage }],
+    queryFn: () => getCut({ page: activePage, pageSize: 10 }),
+  });
+
+  const cutOptions = cutData?.data?.Cutdata
+    ? cutData?.data?.Cutdata?.map((item) => ({
+        label: item.name,
+        value: item.name,
+      }))
+    : [];
+  const handleChange = (name: string, value: string | number) => {
+    setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleChange = (name: string, value: string | Date | undefined) => {
-    setFormValues((prev) => ({ ...prev, [name]: value }));
+  const handleChangeImage = (e: any) => {
+    const { files } = e.target;
+    if (files) {
+      const images: File[] = [];
+
+      for (let i = 0; i < files.length; i++) {
+        images.push(files[i]);
+      }
+      setFormValues((prev) => ({ ...prev, productimage: images }));
+    }
+  };
+
+  const { mutate: createProduct } = useMutation({
+    mutationFn: addProduct,
+    onSuccess: () => {
+      toast({
+        description: "Sub category Created Successfully.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["addCategory"] });
+    },
+    onError: () => {
+      toast({ description: "Something went wrong." });
+    },
+  });
+
+  const handleSubmit = () => {
+    const payload = new FormData();
+    for (const key in formValues) {
+      if (key !== "productimage") {
+        payload.append(key, formValues[key]);
+      }
+    }
+    formValues.productimage.forEach((image) => {
+      payload.append("productimage", image);
+    });
+
+    createProduct(payload);
+    setFormValues({
+      maintitle: "",
+      title: "",
+      price: "",
+      disccount_price: "",
+      subcategoryid: "",
+      innercategoryid: "",
+      categoryid: "",
+      shape: "",
+      carat: "",
+      colour: "",
+      clarity: "",
+      polish: "",
+      cut: "",
+      symmetry: "",
+      flourescence: "",
+      measurements: "",
+      cert_number: "",
+      table: "",
+      crown_height: "",
+      depth: "",
+      crown_angle: "",
+      pavilian_depth: "",
+      pavilian_angle: "",
+      status: "",
+      size: "",
+      size_desc: "",
+      color_desc: "",
+      clarity_desc: "",
+      cut_desc: "",
+      sizeimages: null,
+      colorimage: null,
+      clarityimage: null,
+      cutimage: null,
+      productimage: [],
+    });
+  };
+  const handleDiscard = () => {
+    setFormValues({
+      maintitle: "",
+      title: "",
+      price: "",
+      disccount_price: "",
+      subcategoryid: "",
+      innercategoryid: "",
+      categoryid: "",
+      shape: "",
+      carat: "",
+      colour: "",
+      clarity: "",
+      polish: "",
+      cut: "",
+      symmetry: "",
+      flourescence: "",
+      measurements: "",
+      cert_number: "",
+      table: "",
+      crown_height: "",
+      depth: "",
+      crown_angle: "",
+      pavilian_depth: "",
+      pavilian_angle: "",
+      status: "",
+      size: "",
+      size_desc: "",
+      color_desc: "",
+      clarity_desc: "",
+      cut_desc: "",
+      sizeimages: null,
+      colorimage: null,
+      clarityimage: null,
+      cutimage: null,
+      productimage: [],
+    });
   };
   console.log("formValues", formValues);
 
@@ -71,7 +280,7 @@ const NewProduct = () => {
                     id="maintitle"
                     placeholder="Main Title"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.maintitle}
+                    value={formValues.maintitle}
                     onChange={(e) => handleChange("maintitle", e.target.value)}
                   />
                 </div>
@@ -80,7 +289,7 @@ const NewProduct = () => {
                     id="title"
                     placeholder="title"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.title}
+                    value={formValues.title}
                     onChange={(e) => handleChange("title", e.target.value)}
                   />
                 </div>
@@ -89,7 +298,7 @@ const NewProduct = () => {
                     id="Price"
                     placeholder="Price"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.price}
+                    value={formValues.price}
                     onChange={(e) => handleChange("price", e.target.value)}
                   />
                 </div>
@@ -98,7 +307,7 @@ const NewProduct = () => {
                     id="disccount_price"
                     placeholder="disccount_price"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.disccount_price}
+                    value={formValues.disccount_price}
                     onChange={(e) =>
                       handleChange("disccount_price", e.target.value)
                     }
@@ -106,44 +315,39 @@ const NewProduct = () => {
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <SelectMenu
-                    id="subcategory"
-                    placeholder="Sub Category"
-                    options={""}
-                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.shape}
-                    onChange={(e) =>
-                      handleChange("subcategoryid", e.target.value)
-                    }
-                  />
-                </div>
-                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
-                  <SelectMenu
-                    id="innercategory"
-                    placeholder="Inner Category"
-                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.carat}
-                    onChange={(e) =>
-                      handleChange("innercategoryid", e.target.value)
-                    }
-                  />
-                </div>
-                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
-                  <SelectMenu
-                    id="category"
                     placeholder="Category"
+                    options={categoryOptions}
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.carat}
-                    onChange={(e) => handleChange("categoryid", e.target.value)}
+                    value={formValues.categoryid}
+                    onChange={(val) => handleChange("categoryid", val)}
                   />
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <SelectMenu
-                    id="shape"
-                    placeholder="shape"
-                    options={""}
+                    placeholder="Sub Category"
+                    options={categorySubOptions}
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.shape}
-                    onChange={(e) => handleChange("shape", e.target.value)}
+                    value={formValues.subcategoryid}
+                    onChange={(e) => handleChange("subcategoryid", e)}
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <SelectMenu
+                    placeholder="Inner Category"
+                    options={categoryInnerOptions}
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.innercategoryid}
+                    onChange={(e) => handleChange("innercategoryid", e)}
+                  />
+                </div>
+
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <SelectMenu
+                    placeholder="shape"
+                    options={shapeOptions}
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.shape}
+                    onChange={(e) => handleChange("shape", e)}
                   />
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
@@ -151,28 +355,26 @@ const NewProduct = () => {
                     id="carat"
                     placeholder="carat"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.carat}
+                    value={formValues.carat}
                     onChange={(e) => handleChange("carat", e.target.value)}
                   />
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <SelectMenu
-                    id="colour"
-                    options={""}
+                    options={colorOptions}
                     placeholder="colour"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.colour}
-                    onChange={(e) => handleChange("colour", e.target.value)}
+                    value={formValues.colour}
+                    onChange={(e) => handleChange("colour", e)}
                   />
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <SelectMenu
-                    id="clarity"
                     placeholder="clarity"
-                    options={""}
+                    options={clarityOptions}
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.clarity}
-                    onChange={(e) => handleChange("clarity", e.target.value)}
+                    value={formValues.clarity}
+                    onChange={(e) => handleChange("clarity", e)}
                   />
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
@@ -180,18 +382,17 @@ const NewProduct = () => {
                     id="polish"
                     placeholder="polish"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.polish}
+                    value={formValues.polish}
                     onChange={(e) => handleChange("polish", e.target.value)}
                   />
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <SelectMenu
-                    id="cut"
-                    options={""}
+                    options={cutOptions}
                     placeholder="cut"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.cut}
-                    onChange={(e) => handleChange("cut", e.target.value)}
+                    value={formValues.cut}
+                    onChange={(e) => handleChange("cut", e)}
                   />
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
@@ -199,7 +400,7 @@ const NewProduct = () => {
                     id="symmetry"
                     placeholder="symmetry"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.symmetry}
+                    value={formValues.symmetry}
                     onChange={(e) => handleChange("symmetry", e.target.value)}
                   />
                 </div>
@@ -208,7 +409,7 @@ const NewProduct = () => {
                     id="flourescence"
                     placeholder="flourescence"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.flourescence}
+                    value={formValues.flourescence}
                     onChange={(e) =>
                       handleChange("flourescence", e.target.value)
                     }
@@ -219,7 +420,7 @@ const NewProduct = () => {
                     id="measurements"
                     placeholder="measurements"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.measurements}
+                    value={formValues.measurements}
                     onChange={(e) =>
                       handleChange("measurements", e.target.value)
                     }
@@ -230,7 +431,7 @@ const NewProduct = () => {
                     id="cert_number"
                     placeholder="cert_number"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.cert_number}
+                    value={formValues.cert_number}
                     onChange={(e) =>
                       handleChange("cert_number", e.target.value)
                     }
@@ -241,7 +442,7 @@ const NewProduct = () => {
                     id="table"
                     placeholder="table"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.table}
+                    value={formValues.table}
                     onChange={(e) => handleChange("table", e.target.value)}
                   />
                 </div>
@@ -250,9 +451,40 @@ const NewProduct = () => {
                     id="crown_height"
                     placeholder="crown_height"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.crown_height}
+                    value={formValues.crown_height}
                     onChange={(e) =>
                       handleChange("crown_height", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="depth"
+                    placeholder="Depth"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.depth}
+                    onChange={(e) => handleChange("depth", e.target.value)}
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="crown_angle"
+                    placeholder="Crown Angle"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.crown_angle}
+                    onChange={(e) =>
+                      handleChange("crown_angle", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="pavilian_depth"
+                    placeholder="Pavilian Depth"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.pavilian_depth}
+                    onChange={(e) =>
+                      handleChange("pavilian_depth", e.target.value)
                     }
                   />
                 </div>
@@ -261,7 +493,7 @@ const NewProduct = () => {
                     id="pavilian_angle"
                     placeholder="pavilian_angle"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.pavilian_angle}
+                    value={formValues.pavilian_angle}
                     onChange={(e) =>
                       handleChange("pavilian_angle", e.target.value)
                     }
@@ -272,7 +504,7 @@ const NewProduct = () => {
                     id="status"
                     placeholder="status"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.status}
+                    value={formValues.status}
                     onChange={(e) => handleChange("status", e.target.value)}
                   />
                 </div>
@@ -281,24 +513,99 @@ const NewProduct = () => {
                     id="size"
                     placeholder="size"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    defaultValue={formValues.size}
+                    value={formValues.size}
                     onChange={(e) => handleChange("size", e.target.value)}
                   />
                 </div>
 
-                <div className="p-[14px] py-0 mb-[14px] w-full">
-                  <div
-                    {...getRootProps()}
-                    className="border border-[#ced4da] rounded-[4px] px-[14px] py-[28px] text-center cursor-pointer h-[292px] flex items-center justify-center flex-col"
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full">
+                  <label
+                    htmlFor="sizeimages"
+                    className="flex items-center justify-center border border-dashed border-[#ced4da] h-[50px] w-full textsm text-center"
                   >
-                    <input {...getInputProps()} className="h-[182px]" />
-                    <div>
-                      <i className="ri-file-3-line text-[28px] text-[#2196F3]"></i>
-                    </div>
-                    <p className="text-[#212121] font-semibold text-[15.75px] font-Nunito">
-                      Drop or select images
-                    </p>
-                  </div>
+                    {formValues.sizeimages
+                      ? formValues.sizeimages?.name
+                      : "Size Images"}
+                  </label>
+                  <input
+                    id="sizeimages"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) =>
+                      handleChange("sizeimages", e.target.files[0])
+                    }
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full">
+                  <label
+                    htmlFor="colorimage"
+                    className="flex items-center justify-center border border-dashed border-[#ced4da] h-[50px] w-full textsm text-center"
+                  >
+                    {formValues.colorimage
+                      ? formValues.colorimage?.name
+                      : "Color Image"}
+                  </label>
+                  <input
+                    id="colorimage"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) =>
+                      handleChange("colorimage", e.target.files[0])
+                    }
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full">
+                  <label
+                    htmlFor="clarityimage"
+                    className="flex items-center justify-center border border-dashed border-[#ced4da] h-[50px] w-full textsm text-center"
+                  >
+                    {formValues.clarityimage
+                      ? formValues.clarityimage?.name
+                      : "Clarity Image"}
+                  </label>
+                  <input
+                    id="clarityimage"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) =>
+                      handleChange("clarityimage", e.target.files[0])
+                    }
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full">
+                  <label
+                    htmlFor="cutimage"
+                    className="flex items-center justify-center border border-dashed border-[#ced4da] h-[50px] w-full textsm text-center"
+                  >
+                    {formValues.cutimage
+                      ? formValues.cutimage?.name
+                      : "Cut Image"}
+                  </label>
+                  <input
+                    id="cutimage"
+                    type="file"
+                    className="hidden"
+                    onChange={(e) =>
+                      handleChange("cutimage", e.target.files[0])
+                    }
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] w-full">
+                  <label
+                    htmlFor="productimage"
+                    className="flex items-center justify-center border border-dashed border-[#ced4da] h-[50px] w-full textsm text-center"
+                  >
+                    {formValues.productimage
+                      ? "selected image"
+                      : "Product Image"}
+                  </label>
+                  <input
+                    type="file"
+                    id="productimage"
+                    className="hidden"
+                    multiple
+                    onChange={handleChangeImage}
+                  />
                 </div>
               </div>
             </div>
@@ -308,7 +615,7 @@ const NewProduct = () => {
                   <TextAreaWithLabel
                     label={"Size Description"}
                     placeholder="size_desc"
-                    value={""}
+                    value={formValues.size_desc}
                     textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     className="md:col-span-2"
                     onChange={(e) => handleChange("size_desc", e.target.value)}
@@ -320,7 +627,7 @@ const NewProduct = () => {
                   <TextAreaWithLabel
                     label={"Color Description"}
                     placeholder="color_desc"
-                    value={""}
+                    value={formValues.color_desc}
                     textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     className="md:col-span-2"
                     onChange={(e) => handleChange("color_desc", e.target.value)}
@@ -332,7 +639,7 @@ const NewProduct = () => {
                   <TextAreaWithLabel
                     label={"Clarity Description"}
                     placeholder="clarity_desc"
-                    value={""}
+                    value={formValues.clarity_desc}
                     textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     className="md:col-span-2"
                     onChange={(e) =>
@@ -346,7 +653,7 @@ const NewProduct = () => {
                   <TextAreaWithLabel
                     label={"Cut Description"}
                     placeholder="cut_desc"
-                    value={""}
+                    value={formValues.cut_desc}
                     textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     className="md:col-span-2"
                     onChange={(e) => handleChange("cut_desc", e.target.value)}
@@ -354,11 +661,17 @@ const NewProduct = () => {
                 </div>
               </div>
               <div className="rounded-[4px] flex justify-between items-center py-[7px] gap-4">
-                <Button className="flex-1 rounded-[4px] bg-transparent border-[#D32F2F] border text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white">
+                <Button
+                  className="flex-1 rounded-[4px] bg-transparent border-[#D32F2F] border text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white"
+                  onClick={handleDiscard}
+                >
                   <span>Discard</span>
                 </Button>
-                <Button className="flex-1 bg-[#2196F3] rounded-[4px] border-[#2196F3] border hover:text-[#000] hover:bg-white text-[#fff]">
-                  <span>Save</span>
+                <Button
+                  className="flex-1 bg-[#2196F3] rounded-[4px] border-[#2196F3] border hover:text-[#000] hover:bg-white text-[#fff]"
+                  onClick={handleSubmit}
+                >
+                  <span>Create Product</span>
                 </Button>
               </div>
             </div>
