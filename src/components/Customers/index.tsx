@@ -47,7 +47,7 @@ const Index: React.FC = () => {
       });
     },
     onError: () => {
-      toast({ variant: "error", description: "Not deleted" });
+      toast({ description: "Not deleted" });
     },
   });
 
@@ -59,7 +59,7 @@ const Index: React.FC = () => {
       });
     },
     onError: () => {
-      toast({ variant: "error", description: "Not deleted" });
+      toast({ description: "Not deleted" });
     },
   });
   const columns: Column<Payment>[] = [

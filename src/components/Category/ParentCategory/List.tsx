@@ -8,7 +8,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteCategory, getCategory } from "@/services/categoryService";
-import { useToast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxCategory } from "./DialogBoxCategory";
@@ -58,7 +58,6 @@ const List = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [activePage, setActivePage] = useState(1);
-  const toast = useToast();
   const queryClient = useQueryClient();
 
   const [openDelete, setOpenDelete] = useState(false);
@@ -151,7 +150,7 @@ const List = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
     },
     onError: () => {
-      toast({ variant: "error", description: "Not deleted" });
+      toast({ description: "Not deleted" });
     },
   });
 

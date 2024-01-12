@@ -102,7 +102,7 @@ const InnerCategoryList = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_INNERCATEGORY"] });
     },
     onError: () => {
-      toast({ variant: "error", description: "Not deleted" });
+      toast({ description: "Not deleted" });
     },
   });
 

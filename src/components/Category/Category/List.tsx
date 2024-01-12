@@ -112,7 +112,7 @@ const List = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SUBCATEGORY"] });
     },
     onError: () => {
-      toast({ variant: "error", description: "Not deleted" });
+      toast({ description: "Not deleted" });
     },
   });
 

@@ -39,13 +39,12 @@ const AddCategory = () => {
     mutationFn: AddSubCategory,
     onSuccess: () => {
       toast({
-        variant: "success",
         description: "Sub category Created Successfully.",
       });
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: () => {
-      toast({ variant: "error", description: "Something went wrong." });
+      toast({ description: "Something went wrong." });
     },
   });
 

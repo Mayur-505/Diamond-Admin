@@ -71,9 +71,7 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
-        variant: "success",
         title: "Cut created successfully",
-        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
       setOpen(false);
       reset();
