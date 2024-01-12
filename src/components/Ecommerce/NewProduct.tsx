@@ -595,8 +595,8 @@ const NewProduct = () => {
                     htmlFor="productimage"
                     className="flex items-center justify-center border border-dashed border-[#ced4da] h-[50px] w-full textsm text-center"
                   >
-                    {formValues.productimage
-                      ? "selected image"
+                    {formValues.productimage.length
+                      ? "images selected"
                       : "Product Image"}
                   </label>
                   <input
