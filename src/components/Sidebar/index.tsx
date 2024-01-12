@@ -1,6 +1,6 @@
 import WhiteLogo from "../../assets/Image/WhiteLogo.svg";
 import { AiOutlineHome } from "react-icons/ai";
-import { CiImageOn, CiKeyboard } from "react-icons/ci";
+import { CiBandage, CiImageOn, CiKeyboard } from "react-icons/ci";
 import { BiCategory, BiCategoryAlt } from "react-icons/bi";
 import { FaListUl, FaRegUser } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
@@ -67,6 +67,13 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
             >
               <CiImageOn />
               Shape
+            </Link>
+            <Link
+              to={"/gems/banner"}
+              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
+            >
+              <CiBandage />
+              Banner
             </Link>
             <Link
               to={"/gems/blog"}
