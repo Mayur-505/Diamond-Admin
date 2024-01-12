@@ -27,3 +27,35 @@ export const removeAdmin = (id: string) => {
   };
   return api({ url, method, headers, data: {} });
 };
+
+export const ChangePassword = (data: any) => {
+  const url = `/user/change_password`,
+    method = "post";
+  const token = localStorage.token;
+  const headers = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, headers, data });
+};
+
+export const UploadImage = (data: any) => {
+  const url = `/product/updatefile`,
+    method = "post";
+  const token = localStorage.token;
+  const headers = {
+    "Content-Type":
+      "multipart/form-data; boundary=<calculated when request is sent>",
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, headers, data });
+};
+
+export const UpdateProfile = (data: any) => {
+  const url = `/user/update`,
+    method = "patch";
+  const headers = {
+    "Content-Type": "application/x-www-form-urlencoded",
+  };
+  return api({ url, method, headers, data });
+};

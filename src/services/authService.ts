@@ -45,3 +45,12 @@ export const newPassword = (data: any) => {
   };
   return api({ method, url, headers, data });
 };
+
+export const LogOutAPI = (data: any) => {
+  const method = "post",
+    url = "/user/logout";
+  const headers = {
+    "Content-Type": "application/x-www-form-urlencoded",
+  };
+  return api({ method, url, headers, data });
+};

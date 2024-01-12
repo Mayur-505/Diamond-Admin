@@ -28,7 +28,11 @@ import { Toaster } from "./components/ui/toaster";
 import User from "./components/User";
 import AdminUser from "./components/User/AdminUser";
 import BlogList from "./components/blog/BlogList";
+<<<<<<< Updated upstream
 import BannerList from "./components/banner/BannerList";
+=======
+import MyProfile from "./components/MyProfile/MyProfile";
+>>>>>>> Stashed changes
 
 const router = createBrowserRouter([
   {
@@ -64,6 +68,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "/myprofile",
+        element: <MyProfile />,
       },
     ],
   },

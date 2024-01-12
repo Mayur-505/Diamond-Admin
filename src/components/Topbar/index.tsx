@@ -4,6 +4,7 @@ import { LuSearch } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import ProfileImage from "../../assets/Image/profileImage.jpg";
 import { GrTextAlignRight } from "react-icons/gr";
+import { ProfileDropDown } from "../Common/ProfileDropDown";
 
 interface HeaderProps {
   setCollapsed: (collapsed: boolean) => void;
@@ -50,16 +51,7 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
           <LuSearch style={{ fontSize: "22px" }} />
           <FaRegBell style={{ fontSize: "22px" }} />
         </div>
-        <div className="cursor-pointer flex gap-[7px] items-center">
-          <img
-            src={ProfileImage}
-            alt="ProfileImage"
-            className="max-w-[35px] w-full"
-          />
-          <p className="font-Nunito font-[600] text-[#495057] text-[12px] border-[#dee2e6] border-r-[1px] border-solid pr-[14px]">
-            Amelia Stone
-          </p>
-        </div>
+        <ProfileDropDown />
         <div className="h-[35px] w-[35px] bg-[#f8f9fa] mr-[14px]  flex items-center justify-center">
           <GrTextAlignRight style={{ fontSize: "20px" }} />
         </div>
