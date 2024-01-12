@@ -13,14 +13,15 @@ import * as yup from "yup";
 import Modal from "../Common/Model";
 import Loading from "../Common/Loading";
 import {
-  createBlog,
-  deleteBlog,
-  getBlog,
-  getSingleBlog,
-  updateBlog,
-} from "@/services/blogService";
+  createBanner,
+  deleteBanner,
+  getBanner,
+  getSingleBanner,
+  updateBanner,
+} from "@/services/bannerService";
 import { useAppSelector } from "@/hooks/use-redux";
 import { EyeIcon } from "lucide-react";
+import { useLocation } from "react-router-dom";
 // import { DialogBoxShape } from "./DialogBoxShape";
 
 interface Column<T> {
@@ -32,14 +33,12 @@ interface Column<T> {
 
 interface data {
   title: string;
-  heading: string;
   description: string;
   images: File[];
 }
 
 const schema = yup.object({
   title: yup.string().required(),
-  heading: yup.string().required(),
   description: yup.string().required(),
   images: yup
     .mixed()
@@ -51,6 +50,7 @@ const schema = yup.object({
 
 const BannerList = () => {
   const { user } = useAppSelector((state) => state.auth);
+  const loction = useLocation();
   const [open, setOpen] = React.useState<boolean>(false);
   const [openview, setOpenView] = React.useState<boolean>(false);
   const [singleBlogData, setSingleBlogData] = React.useState(null);
@@ -61,7 +61,6 @@ const BannerList = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       title: "",
-      heading: "",
       description: "",
       images: [],
     },
@@ -77,8 +76,8 @@ const BannerList = () => {
   } = methods;
 
   const { data } = useQuery({
-    queryKey: ["GET_BLOG", { activePage }],
-    queryFn: () => getBlog({ page: activePage, pageSize: 10 }),
+    queryKey: ["GET_BANNERDATA", { activePage }],
+    queryFn: () => getBanner({ page: activePage, pageSize: 10 }),
   });
   console.log("data?.Blogdata", data?.Blogdata);
 
@@ -88,21 +87,19 @@ const BannerList = () => {
         (item: Shape) => item.id === isEdit
       );
       setValue("title", findData?.title);
-      setValue("heading", findData?.heading);
       setValue("description", findData?.description);
       setValue("images", findData?.images);
     } else {
       setValue("title", "");
-      setValue("heading", "");
       setValue("description", "");
       setValue("images", []);
     }
   }, [data, isEdit]);
 
   const { mutate: addBlog, isPending } = useMutation({
-    mutationFn: createBlog,
+    mutationFn: createBanner,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
       setOpen(false);
       reset();
     },
@@ -112,9 +109,9 @@ const BannerList = () => {
   });
 
   const { mutate: removeBlog } = useMutation({
-    mutationFn: deleteBlog,
+    mutationFn: deleteBanner,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
     },
     onError: (error: ErrorType) => {
       console.log(error);
@@ -122,9 +119,9 @@ const BannerList = () => {
   });
 
   const { mutate: editBlog } = useMutation({
-    mutationFn: updateBlog,
+    mutationFn: updateBanner,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
       setOpen(false);
       reset();
     },
@@ -134,9 +131,9 @@ const BannerList = () => {
   });
 
   const { mutate: ViewBlog } = useMutation({
-    mutationFn: getSingleBlog,
+    mutationFn: getSingleBanner,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
       setOpenView(true);
       setSingleBlogData(data.data);
     },
@@ -159,7 +156,7 @@ const BannerList = () => {
       },
     },
     {
-      accessorKey: "Blog",
+      accessorKey: "Banner",
       header: ({ column }) => {
         return (
           <Button
@@ -167,31 +164,13 @@ const BannerList = () => {
             className="p-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Blog
+            Banner
             <RiArrowUpDownFill className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className="capitalize">{row?.original.title}</div>
-      ),
-    },
-    {
-      accessorKey: "Heading",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Heading
-            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.heading}</div>
       ),
     },
     {
@@ -260,20 +239,19 @@ const BannerList = () => {
     const payload = new FormData();
     payload.append("title", data.title);
     payload.append("description", data.description);
+    payload.append("redirectUrl", loction.pathname);
     if (data?.images && data?.images?.length > 0) {
       payload.append("image", data.images[0]);
     }
     console.log("data?.images", data?.images);
 
     if (isEdit) {
-      payload.append("blogid", isEdit);
+      payload.append("bannerid", isEdit);
     }
 
     if (isEdit) {
       editBlog({ data: payload });
     } else {
-      payload.append("heading", data.heading);
-      payload.append("author", user?.qurey?.id);
       addBlog(payload);
     }
 
@@ -288,7 +266,7 @@ const BannerList = () => {
     <div>
       {isPending && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
-        {isEdit ? "Edit" : "Add"} Blog
+        {isEdit ? "Edit" : "Add"} Banner
       </h2>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -299,24 +277,10 @@ const BannerList = () => {
               // @ts-expect-error
               name="title"
               id="title"
-              label="Blog"
-              placeholder="Blog Title"
+              label="Banner"
+              placeholder="Banner Title"
               error={errors?.title?.message}
               {...register("title")}
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
-            />
-          </div>
-          <div className="mt-1">
-            <InputWithLabel
-              type="text"
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
-              name="heading"
-              id="heading"
-              label="Heading"
-              placeholder="Heading"
-              error={errors?.heading?.message}
-              {...register("heading")}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
             />
           </div>
@@ -392,20 +356,6 @@ const BannerList = () => {
         </div>
         <div className="pb-4">
           <strong>Description:</strong> {singleBlogData?.description}
-        </div>
-        <div className="pb-4">
-          <div className="pb-2">
-            <strong>author:</strong>
-          </div>
-          <div className="pb-4">
-            <strong>Firstname:</strong> {singleBlogData?.author?.firstname}
-          </div>
-          <div className="pb-4">
-            <strong>Lastname:</strong> {singleBlogData?.author?.lastname}
-          </div>
-          <div className="pb-4">
-            <strong>email:</strong> {singleBlogData?.author?.email}
-          </div>
         </div>
       </div>
       <div className="flex justify-end gap-4 mt-5">
