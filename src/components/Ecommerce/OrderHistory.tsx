@@ -7,10 +7,13 @@ import {
   getOrderHistory,
   getOrderSummary,
 } from "@/services/orderhistoryService";
+import { EyeIcon } from "lucide-react";
+import Modal from "../Common/Model";
 
 const OrderHistory = () => {
   const [activePage, setActivePage] = useState(1);
   const [summaryData, setSummaryData] = useState();
+  const [openview, setOpenView] = useState<boolean>(false);
 
   const { data: orderHistoryData } = useQuery({
     queryKey: ["GET_ORDER_HISTORY", { activePage }],
@@ -68,11 +71,10 @@ const OrderHistory = () => {
       cell: ({ row }) => {
         return (
           <span
-            className={`badge text-white px-1 py-0.5 text-[12px] rounded ${
-              row?.original?.status === "Active"
-                ? "bg-[#28a745]"
-                : "bg-[#dc3545]"
-            }`}
+            className={`badge text-white px-1 py-0.5 text-[12px] rounded ${row?.original?.status === "Active"
+              ? "bg-[#28a745]"
+              : "bg-[#dc3545]"
+              }`}
           >
             {row?.original?.order_item?.[0]?.status == "0"
               ? "Inactive"
@@ -88,17 +90,74 @@ const OrderHistory = () => {
         return (
           <div className="flex gap-2">
             <Button
-              variant={"outline"}
-              className="w-[50px] bg-[#343a40] text-white"
-              onClick={() => handleView(row?.original?.id)}
+              onClick={() => {
+                handleView(row?.original?.id)
+                setOpenView(true)
+              }}
+              className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
-              View
+              <EyeIcon className="text-[#fff] text-[16px]" />
             </Button>
           </div>
         );
       },
     },
   ];
+
+  const handleClose = () => {
+    setOpenView(false)
+  };
+
+  const OrderViewBody = (
+    <div>
+      <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
+        Order Details
+      </h2>
+      <div className="bg-grey">
+        <div className="grid grid-cols-3 gap-4 border-b py-2">
+          <strong>Oder Id</strong>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.orderDetails?.id}</div>
+        </div>
+        <div className="grid grid-cols-3 gap-4 border-b py-2">
+          <strong>Product</strong>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.order_item[0]?.title}</div>
+        </div>
+        <div className="grid grid-cols-3 gap-4 border-b py-2">
+          <strong>Colour</strong>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.order_item[0]?.colour}</div>
+        </div>
+        <div className="grid grid-cols-3 gap-4 border-b py-2">
+          <strong>Currency</strong>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.orderDetails?.currency}</div>
+        </div>
+        <div className="grid grid-cols-3 gap-4 border-b py-2">
+          <strong>Shape</strong>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.order_item[0]?.shape}</div>
+        </div>
+        <div className="grid grid-cols-3 gap-4 border-b py-2">
+          <strong>Order Receipt</strong>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.orderDetails?.receipt}</div>
+        </div>
+        <div className="grid grid-cols-3 gap-4 border-b py-2">
+          <strong>Amount</strong>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.orderDetails?.amount}</div>
+        </div>
+        <div className="grid grid-cols-3 gap-4 border-b py-2">
+          <strong>Quantity</strong>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.quantity[0]}</div>
+        </div>
+      </div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => handleClose()}
+        >
+          Cancel
+        </Button>
+      </div>
+    </div>
+  )
   return (
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
       <DataTableDemo
@@ -119,6 +178,12 @@ const OrderHistory = () => {
             </div>
           </div>
         }
+      />
+      <Modal
+        open={openview}
+        onClose={() => setOpenView(false)}
+        children={OrderViewBody}
+        className="!p-[20px]"
       />
     </div>
   );
