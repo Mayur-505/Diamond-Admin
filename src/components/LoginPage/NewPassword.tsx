@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { newPassword } from "@/services/authService";
 
 const NewPassword = () => {
+  const navigate = useNavigate();
   const {
     register,
     formState: { errors },
@@ -17,18 +18,15 @@ const NewPassword = () => {
     mutationFn: (data: FieldValues) => newPassword(data),
     onSuccess: (response) => {
       reset();
-      // navigate("/auth/login");
+      navigate("/auth/login");
     },
   });
 
   const onSubmit = (values: FieldValues) => {
     const payload = new FormData();
-    if (values.confirm_pass) {
-      payload.append("confirm_pass", values.confirm_pass);
-    }
-    if (values.new_pass) {
-      payload.append("new_pass", values.new_pass);
-    }
+    payload.append("old_pass", values.old_pass);
+    payload.append("confirm_pass", values.confirm_pass);
+    payload.append("new_pass", values.new_pass);
     NewPass(payload);
   };
   return (
@@ -45,10 +43,10 @@ const NewPassword = () => {
             </p>
           </div>
           <InputWithLabel
-            id="new_pass"
-            placeholder="Password"
+            id="old_pass"
+            placeholder="Old Password"
             className="h-[35px] w-[280px] p-[7px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-            {...register("new_pass", { required: "This field is required." })}
+            {...register("old_pass", { required: "This field is required." })}
           />
           <InputWithLabel
             id="new_pass"
