@@ -21,6 +21,7 @@ import {
 } from "@/services/blogService";
 import { useAppSelector } from "@/hooks/use-redux";
 import { EyeIcon } from "lucide-react";
+import { toast } from "../ui/use-toast";
 // import { DialogBoxShape } from "./DialogBoxShape";
 
 interface Column<T> {
@@ -105,6 +106,10 @@ const BlogList = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
       setOpen(false);
       reset();
+      toast({
+        title: "create blog",
+        description: "create blog successfully",
+      });
     },
     onError: (error: ErrorType) => {
       console.log(error);
@@ -115,6 +120,10 @@ const BlogList = () => {
     mutationFn: deleteBlog,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
+      toast({
+        title: "delete blog",
+        description: "delete blog successfully",
+      });
     },
     onError: (error: ErrorType) => {
       console.log(error);
@@ -127,6 +136,10 @@ const BlogList = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
       setOpen(false);
       reset();
+      toast({
+        title: "update blog",
+        description: "update blog successfully",
+      });
     },
     onError: (error: ErrorType) => {
       console.log(error);

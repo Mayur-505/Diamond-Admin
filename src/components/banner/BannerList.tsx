@@ -22,6 +22,7 @@ import {
 import { useAppSelector } from "@/hooks/use-redux";
 import { EyeIcon } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { toast } from "../ui/use-toast";
 // import { DialogBoxShape } from "./DialogBoxShape";
 
 interface Column<T> {
@@ -102,6 +103,10 @@ const BannerList = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
       setOpen(false);
       reset();
+      toast({
+        title: "create banner",
+        description: "create banner successfully",
+      });
     },
     onError: (error: ErrorType) => {
       console.log(error);
@@ -112,6 +117,10 @@ const BannerList = () => {
     mutationFn: deleteBanner,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
+      toast({
+        title: "delete banner",
+        description: "delete banner successfully",
+      });
     },
     onError: (error: ErrorType) => {
       console.log(error);
@@ -124,6 +133,10 @@ const BannerList = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
       setOpen(false);
       reset();
+      toast({
+        title: "update banner",
+        description: "update banner successfully",
+      });
     },
     onError: (error: ErrorType) => {
       console.log(error);
