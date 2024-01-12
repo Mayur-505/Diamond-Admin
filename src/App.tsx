@@ -3,7 +3,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./components/Layout/RootLayout";
 import OrderHistory from "./components/Ecommerce/OrderHistory";
 import NewProduct from "./components/Ecommerce/NewProduct";
-import ProductOverview from "./components/Ecommerce/ProductOverview";
 import ProductList from "./components/Ecommerce/ProductList";
 import Dashboard from "./components/Dashboard";
 import Customers from "./components/Customers";
@@ -28,11 +27,8 @@ import { Toaster } from "./components/ui/toaster";
 import User from "./components/User";
 import AdminUser from "./components/User/AdminUser";
 import BlogList from "./components/blog/BlogList";
-<<<<<<< Updated upstream
 import BannerList from "./components/banner/BannerList";
-=======
 import MyProfile from "./components/MyProfile/MyProfile";
->>>>>>> Stashed changes
 
 const router = createBrowserRouter([
   {
