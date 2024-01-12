@@ -14,7 +14,7 @@ const AddParentCategory = () => {
   const [category, setCategory] = useState({
     name: "",
     description: "",
-    image: null,
+    image: "",
   });
 
   const handleChange = (name: string, value: string | Date | undefined) => {
@@ -36,6 +36,9 @@ const AddParentCategory = () => {
 
   const handleSubmit = () => {
     const payload = new FormData();
+    if (category.image) {
+      payload.append("image", category.image);
+    }
     if (category.name) {
       payload.append("name", category.name);
     }
@@ -46,7 +49,7 @@ const AddParentCategory = () => {
     setCategory({
       name: "",
       description: "",
-      image: null,
+      image: "",
     });
   };
 

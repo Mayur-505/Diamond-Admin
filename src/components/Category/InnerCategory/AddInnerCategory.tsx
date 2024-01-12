@@ -19,7 +19,7 @@ const AddInnerCategory = () => {
     name: "",
     description: "",
     category: "",
-    image: null,
+    image: "",
   });
 
   const { data: InnercategoryData } = useQuery({
@@ -70,7 +70,7 @@ const AddInnerCategory = () => {
       name: "",
       description: "",
       category: "",
-      image: null,
+      image: "",
     });
   };
 

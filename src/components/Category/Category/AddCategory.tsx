@@ -16,7 +16,7 @@ const AddCategory = () => {
     name: "",
     description: "",
     category: "",
-    image: null,
+    image: "",
   });
 
   const { data: subcategoryData } = useQuery({
@@ -68,7 +68,7 @@ const AddCategory = () => {
       name: "",
       description: "",
       category: "",
-      image: null,
+      image: "",
     });
   };
 

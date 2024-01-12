@@ -99,13 +99,6 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
               <LuHistory />
               Order History
             </Link>
-            <Link
-              to={"/gems/order-summary"}
-              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
-            >
-              <FaRegFile />
-              Order Summary
-            </Link>
           </ul>
         </div>
         <div className="border-b-[1px] pb-[14px] mb-[14px] border-solid border-[#ffffff33]">

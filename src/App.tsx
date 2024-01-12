@@ -1,12 +1,7 @@
 import "./App.css";
-import {
-  RouterProvider,
-  createBrowserRouter,
-  useNavigate,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./components/Layout/RootLayout";
 import OrderHistory from "./components/Ecommerce/OrderHistory";
-import OrderSummary from "./components/Ecommerce/OrderSummary";
 import NewProduct from "./components/Ecommerce/NewProduct";
 import ProductOverview from "./components/Ecommerce/ProductOverview";
 import ProductList from "./components/Ecommerce/ProductList";
@@ -106,10 +101,6 @@ const router = createBrowserRouter([
       {
         path: "order-history",
         element: <OrderHistory />,
-      },
-      {
-        path: "order-summary",
-        element: <OrderSummary />,
       },
     ],
   },
