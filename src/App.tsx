@@ -86,10 +86,10 @@ const router = createBrowserRouter([
         path: "shape",
         element: <Shape />,
       },
-      {
-        path: "product-overview",
-        element: <ProductOverview />,
-      },
+      // {
+      //   path: "product-overview/:id",
+      //   element: <ProductOverview />,
+      // },
       {
         path: "product-list",
         element: <ProductList />,

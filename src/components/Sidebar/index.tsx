@@ -13,9 +13,8 @@ import { Link } from "react-router-dom";
 const Index = ({ collapsed }: { collapsed: boolean }) => {
   return (
     <div
-      className={`max-w-[224px] fixed ${
-        !collapsed ? "left-[-224px]" : "left-0"
-      } transition-all duration-[0.5s] lg:block hidden w-full bg-[#343a40] p-[14px] h-[100vh] z-50`}
+      className={`max-w-[224px] fixed ${!collapsed ? "left-[-224px]" : "left-0"
+        } transition-all duration-[0.5s] lg:block hidden w-full bg-[#343a40] p-[14px] h-[100vh] z-50`}
     >
       <div className="flex gap-[7px] justify-center items-center border-b-[1px] mb-[14px] pb-[14px] border-solid border-[#ffffff33]">
         <img src={WhiteLogo} alt="WhiteLogo" className="max-w-[28px]" />
@@ -71,13 +70,13 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
               <CiImageOn />
               Shape
             </Link>
-            <Link
-              to={"/gems/product-overview"}
+            {/* <Link
+              to={"/gems/product-overview/:id"}
               className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
             >
               <CiImageOn />
               Product Overview
-            </Link>
+            </Link> */}
             <Link
               to={"/gems/product-list"}
               className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
@@ -85,13 +84,13 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
               <FaListUl />
               Product List
             </Link>
-            <Link
+            {/* <Link
               to={"/gems/new-product"}
               className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
             >
               <FaPlus />
               New Product
-            </Link>
+            </Link> */}
             <Link
               to={"/gems/order-history"}
               className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"

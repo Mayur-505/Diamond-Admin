@@ -18,6 +18,16 @@ export type Clarity = {
   updatedAt: string;
 };
 
+export type Products = {
+  id: string;
+  title: string;
+  maintitle: string,
+  price: string,
+  disccount_price: string,
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type Cut = {
   id: string;
   name: string;

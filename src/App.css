@@ -40,3 +40,8 @@
     rgba(33, 150, 243, 0) 50%
   );
 }
+
+.dialog {
+  max-height: 90vh;
+  overflow-y: auto;
+}

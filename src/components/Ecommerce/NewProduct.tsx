@@ -17,9 +17,11 @@ import { getClarity } from "@/services/clarityService";
 import { getCut } from "@/services/cutServices";
 import { toast } from "../ui/use-toast";
 import { addProduct } from "@/services/newproductService";
+import { useNavigate } from "react-router-dom";
 
 const NewProduct = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate()
   const [activePage, setActivePage] = useState(1);
   const [formValues, setFormValues] = useState({
     maintitle: "",
@@ -64,9 +66,9 @@ const NewProduct = () => {
 
   const categoryOptions = categoryData?.data?.modifiedCategories
     ? categoryData?.data?.modifiedCategories?.map((item) => ({
-        label: item.name,
-        value: item.id,
-      }))
+      label: item.name,
+      value: item.id,
+    }))
     : [];
 
   const { data: subcategoryData } = useQuery({
@@ -81,9 +83,9 @@ const NewProduct = () => {
 
   const categorySubOptions = subcategoryData?.data?.data?.categories
     ? subcategoryData?.data?.data?.categories?.map((item) => ({
-        label: item.name,
-        value: item.id,
-      }))
+      label: item.name,
+      value: item.id,
+    }))
     : [];
 
   const { data: InnercategoryData } = useQuery({
@@ -96,9 +98,9 @@ const NewProduct = () => {
 
   const categoryInnerOptions = InnercategoryData?.data?.data?.innercategories
     ? InnercategoryData?.data?.data?.innercategories?.map((item) => ({
-        label: item.name,
-        value: item.id,
-      }))
+      label: item.name,
+      value: item.id,
+    }))
     : [];
 
   const { data: shapeData } = useQuery({
@@ -108,9 +110,9 @@ const NewProduct = () => {
 
   const shapeOptions = shapeData?.Shapedata
     ? shapeData?.Shapedata?.map((item) => ({
-        label: item.name,
-        value: item.name,
-      }))
+      label: item.name,
+      value: item.name,
+    }))
     : [];
 
   const { data: colorData } = useQuery({
@@ -120,9 +122,9 @@ const NewProduct = () => {
 
   const colorOptions = colorData?.data?.Colordata
     ? colorData?.data?.Colordata?.map((item) => ({
-        label: item.name,
-        value: item.name,
-      }))
+      label: item.name,
+      value: item.name,
+    }))
     : [];
 
   const { data: clarityData } = useQuery({
@@ -131,9 +133,9 @@ const NewProduct = () => {
   });
   const clarityOptions = clarityData?.data?.Claritydata
     ? clarityData?.data?.Claritydata?.map((item) => ({
-        label: item.name,
-        value: item.name,
-      }))
+      label: item.name,
+      value: item.name,
+    }))
     : [];
 
   const { data: cutData } = useQuery({
@@ -143,9 +145,9 @@ const NewProduct = () => {
 
   const cutOptions = cutData?.data?.Cutdata
     ? cutData?.data?.Cutdata?.map((item) => ({
-        label: item.name,
-        value: item.name,
-      }))
+      label: item.name,
+      value: item.name,
+    }))
     : [];
   const handleChange = (name: string, value: string | number) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
@@ -169,6 +171,7 @@ const NewProduct = () => {
       toast({
         description: "Sub category Created Successfully.",
       });
+      navigate('/gems/product-list')
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: () => {

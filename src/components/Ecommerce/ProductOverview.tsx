@@ -4,14 +4,57 @@ import Product3 from "../../assets/Image/product-overview--3.png";
 import Product4 from "../../assets/Image/product-overview-4.png";
 import Product2 from "../../assets/Image/product-overview-3-4.png";
 import Product5 from "../../assets/Image/product-overview-3-2.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { LuMinus } from "react-icons/lu";
+import { useQuery } from "@tanstack/react-query";
+import { getProduct } from "@/services/productService";
 
 const ProductOverview = () => {
-  const [selectedImage, setSelectedImage] = useState<string>(Product4);
   const [count, setCount] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<string>("details"); // Set the initial active tab
+  const currentURL = window.location.href;
+  const [productData, setproductData] = useState({})
+  const [selectedImage, setSelectedImage] = useState<string>([]);
+  const [filter, setFilter] = useState({
+    subcategoryid: "",
+    innnercategoryid: "",
+    categoryid: "",
+    minPrice: "",
+    maxPrice: "",
+    sort: "",
+    mincarat: "",
+    maxcarat: "",
+    Clarity: [],
+    Cuts: [],
+    Color: [],
+    shape: "",
+  });
+  console.log('productData', productData);
+
+  useEffect(() => {
+    if (productData?.productimage?.length) {
+      setSelectedImage(productData?.productimage[0])
+    }
+  }, [productData])
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["GET_CUT", { filter }],
+    queryFn: () => getProduct(filter),
+  });
+  console.log('data', data)
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      const productId = currentURL.split('/').pop();
+      const productData = data.product.find((product: any) => product.id === productId);
+      if (productData) {
+        setproductData(productData)
+      } else {
+        console.log("Product not found");
+      }
+    }
+  }, [data, isLoading, currentURL]);
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
@@ -25,7 +68,9 @@ const ProductOverview = () => {
     setCount(count + 1);
   };
   const handleDecrement = () => {
-    setCount(count - 1);
+    if (count > 0) {
+      setCount(count - 1);
+    }
   };
   return (
     <div className="custom_contener !pb-[28px] !px-[28px]">
@@ -35,7 +80,7 @@ const ProductOverview = () => {
             <div className="lg:w-[58.33%] w-full p-[16px] ">
               <div className="flex">
                 <div className="w-[16.6667%] flex gap-x-[16px] justify-between flex-col ">
-                  {[Product1, Product2, Product3, Product5].map(
+                  {[productData?.productimage, productData?.diamond_clarity?.clarityimage, productData?.diamond_color?.colorimage, productData?.diamond_cut?.cutimage, productData?.diamond_size?.sizeimages].map(
                     (thumbnail, index) => (
                       <img
                         key={index}
@@ -58,11 +103,11 @@ const ProductOverview = () => {
             </div>
             <div className="lg:py-[14px] p-[16px] lg:pl-[42px] lg:pr-[14px] lg:w-[33.33%] w-full">
               <div className="flex items-center mb-[21px] text-[#000] font-medium text-[17.5px] font-Nunito">
-                Product Title Placeholder
+                {productData?.maintitle}
               </div>
               <div className="flex items-center justify-between mb-[28px] ">
                 <span className="text-[#000] font-medium text-[24.5px] font-Nunito">
-                  $120
+                  {productData?.price}
                 </span>
                 <div className="flex items-center ">
                   <span className="mr-3">
@@ -152,11 +197,10 @@ const ProductOverview = () => {
                 <div className="scroll-p-[37.712px]">
                   <ul className="bg-[#fff] border-b-[2px] flex min-w-[100%] border-[#dee2e6] cursor-pointer m-0 p-0 list-none h-[42px]">
                     <li
-                      className={`mr-0 ${
-                        activeTab === "details"
-                          ? "border-b-[2px] border-[#2196F3] text-[#2196F3]"
-                          : "text-[#6c757d] hover:border-[#6c757d] hover:border-b-[2px]"
-                      }`}
+                      className={`mr-0 ${activeTab === "details"
+                        ? "border-b-[2px] border-[#2196F3] text-[#2196F3]"
+                        : "text-[#6c757d] hover:border-[#6c757d] hover:border-b-[2px]"
+                        }`}
                     >
                       <Link
                         to={""}
@@ -167,11 +211,10 @@ const ProductOverview = () => {
                       </Link>
                     </li>
                     <li
-                      className={`mr-0 ${
-                        activeTab === "reviews"
-                          ? "border-b-[2px] border-[#2196F3] text-[#2196F3]"
-                          : "text-[#6c757d] hover:border-[#6c757d] hover:border-b-[2px]"
-                      }`}
+                      className={`mr-0 ${activeTab === "reviews"
+                        ? "border-b-[2px] border-[#2196F3] text-[#2196F3]"
+                        : "text-[#6c757d] hover:border-[#6c757d] hover:border-b-[2px]"
+                        }`}
                     >
                       <Link
                         to={""}
@@ -182,11 +225,10 @@ const ProductOverview = () => {
                       </Link>
                     </li>
                     <li
-                      className={`mr-0 ${
-                        activeTab === "shipping"
-                          ? "border-b-[2px] border-[#2196F3] text-[#2196F3]"
-                          : "text-[#6c757d] hover:border-[#6c757d] hover:border-b-[2px]"
-                      }`}
+                      className={`mr-0 ${activeTab === "shipping"
+                        ? "border-b-[2px] border-[#2196F3] text-[#2196F3]"
+                        : "text-[#6c757d] hover:border-[#6c757d] hover:border-b-[2px]"
+                        }`}
                     >
                       <Link
                         to={""}
