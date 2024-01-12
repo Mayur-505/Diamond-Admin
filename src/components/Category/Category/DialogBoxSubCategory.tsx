@@ -87,16 +87,15 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }) {
               onChange={(e) => handelchange("description", e)}
             />
           </div>
-          {/* <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username">Username</Label>
-            <Input
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="image">Image</Label>
+            <input
               id="image"
               type="file"
-              // defaultValue={formValues.image}
               className="col-span-3"
-              onChange={(e) => handelchange("image", e)}
+              onChange={(e) => handelchange("image", e.target.files[0])}
             />
-          </div> */}
+          </div>
         </div>
         <DialogFooter>
           <Button type="submit" onClick={editFuction}>

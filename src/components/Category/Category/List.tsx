@@ -128,6 +128,18 @@ const List = () => {
 
   const columns: Column<Customer>[] = [
     {
+      accessorKey: "image",
+      header: <div className="text-left">Image</div>,
+      cell: ({ row }) => {
+        return (
+          <img
+            src={row?.original?.image}
+            className="w-[40px] h-[40px] object-cover rounded"
+          />
+        );
+      },
+    },
+    {
       accessorKey: "name",
       header: ({ column }) => {
         return (
@@ -159,42 +171,6 @@ const List = () => {
       },
       cell: ({ row }) => (
         <div className="capitalize">{row?.original?.categoryid?.name}</div>
-      ),
-    },
-    {
-      accessorKey: "metatitle",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Meta Title
-            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.metatitle}</div>
-      ),
-    },
-    {
-      accessorKey: "metakeyword",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Meta Keyword
-            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.metakeyword}</div>
       ),
     },
     {

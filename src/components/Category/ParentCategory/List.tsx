@@ -66,6 +66,18 @@ const List = () => {
 
   const columns: Column<Customer>[] = [
     {
+      accessorKey: "image",
+      header: <div className="text-left">Image</div>,
+      cell: ({ row }) => {
+        return (
+          <img
+            src={row?.original?.image}
+            className="w-[40px] h-[40px] object-cover rounded"
+          />
+        );
+      },
+    },
+    {
       accessorKey: "name",
       header: ({ column }) => {
         return (

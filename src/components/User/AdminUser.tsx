@@ -151,12 +151,24 @@ const AdminUser: React.FC = () => {
   ];
 
   return (
-    <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
-      <div>
+    <>
+      <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
+        <DataTableDemo
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          data={adminData?.data?.admindata || []}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          columns={columns}
+          setActivePage={setActivePage}
+          pageCount={adminData?.data?.admindata?.total}
+          filterable={"name"}
+        />
+      </div>
+      <div className="custom_contener flex items-center justify-center !mb-[28px] !p-[17.5px] customShadow">
         <InputWithLabel
           id="email"
           placeholder="Assign Email"
-          className="h-[35px] mb-[10px] w-[280px] p-[7px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+          className="h-[35px] mr-4 w-[500px] p-[7px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
           value={formValues.email}
           onChange={(e) => handleChange("email", e.target.value)}
         />
@@ -164,21 +176,12 @@ const AdminUser: React.FC = () => {
           className="px-5 h-[35px] bg-[#2796ef] rounded-[4px] text-[#ffffff] border border-transparent font-Nunito font-[600]"
           type="button"
           onClick={handleAssign}
+          disabled={!formValues.email.length}
         >
           Assign Admin
         </button>
       </div>
-      <DataTableDemo
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        data={adminData?.data?.admindata || []}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        columns={columns}
-        setActivePage={setActivePage}
-        pageCount={adminData?.data?.admindata?.total}
-        filterable={"name"}
-      />
-    </div>
+    </>
   );
 };
 

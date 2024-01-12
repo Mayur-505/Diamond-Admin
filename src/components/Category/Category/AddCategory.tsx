@@ -1,10 +1,9 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
 import SelectMenu from "@/components/Common/SelectMenu";
 import TextAreaWithLabel from "@/components/Common/TextAreaWithLabel";
-import toast from "react-hot-toast";
 import { AddSubCategory, getSubCategory } from "@/services/subcategoryService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -17,6 +16,7 @@ const AddCategory = () => {
     name: "",
     description: "",
     category: "",
+    image: null,
   });
 
   const { data: subcategoryData } = useQuery({
@@ -60,11 +60,15 @@ const AddCategory = () => {
     if (formValues.description) {
       payload.append("description", formValues.description);
     }
+    if (formValues.image) {
+      payload.append("image", formValues.image);
+    }
     createSubCategory(payload);
     setFormValues({
       name: "",
       description: "",
       category: "",
+      image: null,
     });
   };
 
@@ -86,11 +90,6 @@ const AddCategory = () => {
               value={formValues.category}
               onChange={(e) => handleChange("category", e)}
             />
-            {/* <InputWithLabel
-              id="parent-category"
-              placeholder="Parent Category Name"
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
-            /> */}
           </div>
           <div className="col-span-4">
             <InputWithLabel
@@ -102,17 +101,11 @@ const AddCategory = () => {
             />
           </div>
           <div className="col-span-4">
-            <InputWithLabel
-              id="meta-title"
-              placeholder="Meta Title"
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
-            />
-          </div>
-          <div className="col-span-4">
-            <InputWithLabel
-              id="meta-keyword"
-              placeholder="Meta Keyword"
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
+            <input
+              id="image"
+              type="file"
+              className="col-span-3"
+              onChange={(e) => handleChange("image", e.target.files[0])}
             />
           </div>
           <div className="col-span-12">

@@ -69,13 +69,6 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name">Name</Label>
-            {/* <Input
-              id="name"
-              type="text"
-              defaultValue={item.name}
-              className="col-span-3 border-[#ccc] border-[1px] border-solid rounded-[5px]"
-              onChange={(e) => handelchange("name", e)}
-            /> */}
             <InputWithLabel
               id="title"
               placeholder="Title"
@@ -94,16 +87,15 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
               onChange={(e) => handelchange("description", e)}
             />
           </div>
-          {/* <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="image">Image</Label>
-            <Input
+            <input
               id="image"
               type="file"
-              // defaultValue={formValues.image}
               className="col-span-3"
-              onChange={(e) => handelchange("image", e)}
+              onChange={(e) => handelchange("image", e.target.files[0])}
             />
-          </div> */}
+          </div>
         </div>
         <DialogFooter>
           <Button type="submit" onClick={editFuction}>

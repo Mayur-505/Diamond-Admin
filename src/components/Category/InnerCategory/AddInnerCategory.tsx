@@ -19,6 +19,7 @@ const AddInnerCategory = () => {
     name: "",
     description: "",
     category: "",
+    image: null,
   });
 
   const { data: InnercategoryData } = useQuery({
@@ -41,13 +42,12 @@ const AddInnerCategory = () => {
     mutationFn: addInnerCategory,
     onSuccess: () => {
       toast({
-        variant: "success",
         description: "Inner category Created Successfully.",
       });
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: () => {
-      toast({ variant: "error", description: "Something went wrong." });
+      toast({ description: "Something went wrong." });
     },
   });
 
@@ -62,11 +62,15 @@ const AddInnerCategory = () => {
     if (formValues.description) {
       payload.append("description", formValues.description);
     }
+    if (formValues.image) {
+      payload.append("image", formValues.image);
+    }
     createInnerCategory(payload);
     setFormValues({
       name: "",
       description: "",
       category: "",
+      image: null,
     });
   };
 
@@ -121,6 +125,14 @@ const AddInnerCategory = () => {
               textAreaClassName="h-[210px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
               className="md:col-span-2"
               onChange={(e) => handleChange("description", e.target.value)}
+            />
+          </div>
+          <div className="col-span-4">
+            <input
+              id="image"
+              type="file"
+              className="col-span-3"
+              onChange={(e) => handleChange("image", e.target.files[0])}
             />
           </div>
           <div className="col-span-12 flex items-center gap-4">

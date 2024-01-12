@@ -39,9 +39,9 @@ export const ResendOtp = (data: any) => {
 export const newPassword = (data: any) => {
   const method = "post",
     url = "/user/create_password";
-  const token = localStorage.ForgetPasswordToken;
+  const token = localStorage.token;
   const headers = {
     Authorization: `Bearer ${token}`,
   };
-  return api({ method, url, headers, data, isFormData: true });
+  return api({ method, url, headers, data });
 };

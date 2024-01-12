@@ -14,27 +14,23 @@ const AddParentCategory = () => {
   const [category, setCategory] = useState({
     name: "",
     description: "",
+    image: null,
   });
 
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setCategory((prevCategory) => ({
-      ...prevCategory,
-      [id]: value,
-    }));
+  const handleChange = (name: string, value: string | Date | undefined) => {
+    setCategory((prev) => ({ ...prev, [name]: value }));
   };
 
   const { mutate: createCategory } = useMutation({
     mutationFn: AddCategory,
     onSuccess: () => {
       toast({
-        variant: "success",
         description: "Parent category Created Successfully.",
       });
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: (error: ErrorType) => {
-      toast({ variant: "error", description: "Something went wrong." });
+      toast({ description: "Something went wrong." });
     },
   });
 
@@ -50,6 +46,7 @@ const AddParentCategory = () => {
     setCategory({
       name: "",
       description: "",
+      image: null,
     });
   };
 
@@ -64,7 +61,7 @@ const AddParentCategory = () => {
             id="name"
             placeholder="Category Name"
             value={category.name}
-            onChange={handleInputChange}
+            onChange={(e) => handleChange("name", e.target.value)}
             className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
           />
         </div>
@@ -73,8 +70,16 @@ const AddParentCategory = () => {
             id="description"
             placeholder="Description"
             value={category.description}
-            onChange={handleInputChange}
+            onChange={(e) => handleChange("description", e.target.value)}
             className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
+          />
+        </div>
+        <div className="col-span-4">
+          <input
+            id="image"
+            type="file"
+            className="col-span-3"
+            onChange={(e) => handleChange("image", e.target.files[0])}
           />
         </div>
         <div className="col-span-12 flex items-center gap-4">
