@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createProduct, deleteProduct, getProduct, getSingleProduct, updateProduct } from "@/services/productService";
+import {
+  createProduct,
+  deleteProduct,
+  getProduct,
+  getSingleProduct,
+  updateProduct,
+} from "@/services/productService";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DataTableDemo } from "../Common/DataTable";
@@ -47,7 +53,7 @@ interface data {
   cut_desc: string;
   productId: string;
   sizeproductimage: string;
-  productimage: File[],
+  productimage: File[];
 }
 
 const schema = yup.object({
@@ -62,9 +68,8 @@ const schema = yup.object({
   //   }),
 });
 
-
 const ProductList = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // const [filter, setFilter] = useState({
   //   subcategoryid: "",
   //   innnercategoryid: "",
@@ -112,7 +117,7 @@ const ProductList = () => {
   const [openview, setOpenView] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const [selectedImage, setSelectedImage] = useState<string>();
-  console.log('singleProductData', singleProductData);
+  console.log("singleProductData", singleProductData);
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -128,19 +133,17 @@ const ProductList = () => {
     watch,
     getValues,
   } = methods;
-  const image = watch("productimage");
 
   const { data } = useQuery({
-    queryKey: ["GET_CUT", { activePage }],
+    queryKey: ["GET_PRODUCT", { activePage }],
     queryFn: () => getProduct({ page: activePage, pageSize: 10 }),
   });
-  console.log("+++++++++++++++", data);
 
   useEffect(() => {
     if (singleProductData?.productimage?.length) {
-      setSelectedImage(singleProductData?.productimage[0])
+      setSelectedImage(singleProductData?.productimage[0]);
     }
-  }, [singleProductData])
+  }, [singleProductData]);
 
   useEffect(() => {
     if (data && isEdit) {
@@ -221,11 +224,10 @@ const ProductList = () => {
     }
   }, [data, isEdit]);
 
-
   const { mutate: addProduct, isPending } = useMutation({
     mutationFn: createProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
       setOpen(false);
       reset();
     },
@@ -237,8 +239,8 @@ const ProductList = () => {
   const { mutate: ViewProduct } = useMutation({
     mutationFn: getSingleProduct,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
-      setOpenView(true)
+      queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
+      setOpenView(true);
       setSingleProductData(data.data);
     },
     onError: (error: ErrorType) => {
@@ -249,7 +251,7 @@ const ProductList = () => {
   const { mutate: removeProduct } = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
     },
     onError: (error: ErrorType) => {
       console.log(error);
@@ -259,7 +261,7 @@ const ProductList = () => {
   const { mutate: editProduct } = useMutation({
     mutationFn: updateProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
+      queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
       setOpen(false);
       reset();
     },
@@ -295,7 +297,9 @@ const ProductList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="capitalize">{row?.original.maintitle}</div>,
+      cell: ({ row }) => (
+        <div className="capitalize">{row?.original.maintitle}</div>
+      ),
     },
     {
       accessorKey: "price",
@@ -396,8 +400,8 @@ const ProductList = () => {
             <button
               type="button"
               onClick={() => {
-                ViewProduct(row?.original?.id)
-                setOpenView(true)
+                ViewProduct(row?.original?.id);
+                setOpenView(true);
               }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
@@ -432,7 +436,7 @@ const ProductList = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setOpenView(false)
+    setOpenView(false);
   };
 
   const onSubmit = (data: FieldValues) => {
@@ -566,7 +570,7 @@ const ProductList = () => {
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
               multiple
             />
-            { }
+            {}
           </div>
           <div className="flex justify-end gap-4 mt-5">
             <Button
@@ -586,7 +590,7 @@ const ProductList = () => {
           </div>
         </form>
       </FormProvider>
-    </div >
+    </div>
   );
 
   const handleThumbnailClick = (thumbnailImage: string) => {
@@ -603,17 +607,21 @@ const ProductList = () => {
         <div className="lg:w-[100%] w-full">
           <div className="flex">
             <div className="w-[16.6667%] h-[100px] flex gap-x-[16px] justify-between flex-col ">
-              {[singleProductData?.productimage, singleProductData?.diamond_clarity?.clarityimage, singleProductData?.diamond_color?.colorimage, singleProductData?.diamond_cut?.cutimage, singleProductData?.diamond_size?.sizeimages].map(
-                (thumbnail, index) => (
-                  <img
-                    key={index}
-                    src={thumbnail}
-                    alt={`Product${index + 1}`}
-                    className="cursor-pointer w-full rounded-[4px] border-[2px] border-transparent transition-all"
-                    onClick={() => handleThumbnailClick(thumbnail)}
-                  />
-                )
-              )}
+              {[
+                singleProductData?.productimage,
+                singleProductData?.diamond_clarity?.clarityimage,
+                singleProductData?.diamond_color?.colorimage,
+                singleProductData?.diamond_cut?.cutimage,
+                singleProductData?.diamond_size?.sizeimages,
+              ].map((thumbnail, index) => (
+                <img
+                  key={index}
+                  src={thumbnail}
+                  alt={`Product${index + 1}`}
+                  className="cursor-pointer w-full rounded-[4px] border-[2px] border-transparent transition-all"
+                  onClick={() => handleThumbnailClick(thumbnail)}
+                />
+              ))}
             </div>
             <div className="pl-3 w-[83.3333%] h-[250px] flex">
               <img
@@ -651,40 +659,72 @@ const ProductList = () => {
         <div className="pb-4">
           <strong>Flourescence:</strong> {singleProductData?.flourescence}
         </div>
-        {singleProductData?.categoryid?.name && <div className="pb-4">
-          <strong>Category:</strong> {singleProductData?.categoryid?.name}
-        </div>}
-        {singleProductData?.innercategoryid?.name && <div className="pb-4">
-          <strong>Inner Category:</strong> {singleProductData?.innercategoryid?.name}
-        </div>}
-        {singleProductData?.subcategoryid?.name && <div className="pb-4">
-          <strong>Subcategory:</strong> {singleProductData?.subcategoryid?.name}
-        </div>}
+        {singleProductData?.categoryid?.name && (
+          <div className="pb-4">
+            <strong>Category:</strong> {singleProductData?.categoryid?.name}
+          </div>
+        )}
+        {singleProductData?.innercategoryid?.name && (
+          <div className="pb-4">
+            <strong>Inner Category:</strong>{" "}
+            {singleProductData?.innercategoryid?.name}
+          </div>
+        )}
+        {singleProductData?.subcategoryid?.name && (
+          <div className="pb-4">
+            <strong>Subcategory:</strong>{" "}
+            {singleProductData?.subcategoryid?.name}
+          </div>
+        )}
         <div className="pb-4">
-          <div className="pb-2"><strong>Diamond Size:</strong></div>
+          <div className="pb-2">
+            <strong>Diamond Size:</strong>
+          </div>
           <div className="flex items-center">
-            <img src={singleProductData?.diamond_size?.sizeimages} alt="" className="rounded-[4px] h-[80px] min-w-[100px] me-4" />
+            <img
+              src={singleProductData?.diamond_size?.sizeimages}
+              alt=""
+              className="rounded-[4px] h-[80px] min-w-[100px] me-4"
+            />
             <div>{singleProductData?.diamond_size?.size_desc}</div>
           </div>
         </div>
         <div className="pb-4">
-          <div className="pb-2"><strong>Diamond Color:</strong></div>
+          <div className="pb-2">
+            <strong>Diamond Color:</strong>
+          </div>
           <div className="flex items-center">
-            <img src={singleProductData?.diamond_color?.colorimage} alt="" className="rounded-[4px] h-[80px] min-w-[100px] me-4" />
+            <img
+              src={singleProductData?.diamond_color?.colorimage}
+              alt=""
+              className="rounded-[4px] h-[80px] min-w-[100px] me-4"
+            />
             <div>{singleProductData?.diamond_color?.color_desc}</div>
           </div>
         </div>
         <div className="pb-4">
-          <div className="pb-2"><strong>Diamond Clarity:</strong></div>
+          <div className="pb-2">
+            <strong>Diamond Clarity:</strong>
+          </div>
           <div className="flex items-center">
-            <img src={singleProductData?.diamond_clarity?.clarityimage} alt="" className="rounded-[4px] h-[80px] min-w-[100px] me-4" />
+            <img
+              src={singleProductData?.diamond_clarity?.clarityimage}
+              alt=""
+              className="rounded-[4px] h-[80px] min-w-[100px] me-4"
+            />
             <div>{singleProductData?.diamond_clarity?.clarity_desc}</div>
           </div>
         </div>
         <div className="pb-4">
-          <div className="pb-2"><strong>Diamond Cut:</strong></div>
+          <div className="pb-2">
+            <strong>Diamond Cut:</strong>
+          </div>
           <div className="flex items-center">
-            <img src={singleProductData?.diamond_cut?.cutimage} alt="" className="rounded-[4px] h-[80px] min-w-[100px] me-4" />
+            <img
+              src={singleProductData?.diamond_cut?.cutimage}
+              alt=""
+              className="rounded-[4px] h-[80px] min-w-[100px] me-4"
+            />
             <div>{singleProductData?.diamond_cut?.cut_desc}</div>
           </div>
         </div>
@@ -699,7 +739,7 @@ const ProductList = () => {
         </Button>
       </div>
     </div>
-  )
+  );
 
   return (
     <div className="custom_contener !py-[28px] !px-[28px]">
@@ -715,7 +755,7 @@ const ProductList = () => {
               <Button
                 variant={"outline"}
                 className="w-full bg-[#343a40] text-white"
-                onClick={() => navigate('/gems/new-product')}
+                onClick={() => navigate("/gems/new-product")}
               >
                 Add
               </Button>

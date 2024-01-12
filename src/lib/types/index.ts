@@ -50,3 +50,13 @@ export type Shape = {
   description: string;
   image: string;
 };
+export type Blog = {
+  id: string;
+  title: string;
+  heading: string;
+  description: string;
+  image: string;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
+};

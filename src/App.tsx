@@ -27,6 +27,7 @@ import Shape from "./components/Shape";
 import { Toaster } from "./components/ui/toaster";
 import User from "./components/User";
 import AdminUser from "./components/User/AdminUser";
+import BlogList from "./components/blog/BlogList";
 
 const router = createBrowserRouter([
   {
@@ -86,10 +87,10 @@ const router = createBrowserRouter([
         path: "shape",
         element: <Shape />,
       },
-      // {
-      //   path: "product-overview/:id",
-      //   element: <ProductOverview />,
-      // },
+      {
+        path: "blog",
+        element: <BlogList />,
+      },
       {
         path: "product-list",
         element: <ProductList />,
@@ -101,6 +102,10 @@ const router = createBrowserRouter([
       {
         path: "order-history",
         element: <OrderHistory />,
+      },
+      {
+        path: "blog",
+        element: <BlogList />,
       },
     ],
   },
