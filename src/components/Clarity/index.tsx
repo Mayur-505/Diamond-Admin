@@ -46,6 +46,8 @@ const Index = () => {
   const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [edit, setEdit] = React.useState<string>("");
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [deleteID, setDeleteID] = React.useState("");
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -124,6 +126,39 @@ const Index = () => {
     setOpen(true);
   };
 
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
+
+  const handleDeleteClarity = () => {
+    removeClarity(deleteID);
+    setOpenDelete(false);
+  };
+
+  const Deletebody = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteClarity}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
   const columns: Column<Clarity>[] = [
     {
       accessorKey: "name",
@@ -139,7 +174,7 @@ const Index = () => {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="capitalize">{row?.original.name}</div>,
+      cell: ({ row }) => <div className="">{row?.original.name}</div>,
     },
     {
       accessorKey: "Action",
@@ -156,7 +191,7 @@ const Index = () => {
             </button>
             <button
               type="button"
-              onClick={() => removeClarity(row?.original?.id)}
+              onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -259,6 +294,12 @@ const Index = () => {
           setOpen(false), setEdit(""), reset();
         }}
         children={body}
+        className="!p-[20px]"
+      />
+      <Modal
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        children={Deletebody}
         className="!p-[20px]"
       />
     </div>

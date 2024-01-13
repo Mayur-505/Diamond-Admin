@@ -28,10 +28,12 @@ const ProductList = () => {
   const [activePage, setActivePage] = useState<number>(1);
   const [singleProductData, setSingleProductData] = useState(null);
   const [openview, setOpenView] = useState<boolean>(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [deleteID, setDeleteID] = useState("");
   const queryClient = useQueryClient();
   const [selectedImage, setSelectedImage] = useState<string>();
 
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["GET_PRODUCT", { activePage }],
     queryFn: () => getProduct({ page: activePage, pageSize: 10 }),
   });
@@ -64,6 +66,40 @@ const ProductList = () => {
     },
   });
 
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
+
+  const handleDeleteBlog = () => {
+    removeProduct(deleteID);
+    setOpenDelete(false);
+  };
+
+  const Deletebody = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteBlog}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
+
   const columns: Column<Products>[] = [
     {
       accessorKey: "productimage",
@@ -91,9 +127,7 @@ const ProductList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.maintitle}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.maintitle}</div>,
     },
     {
       accessorKey: "price",
@@ -109,9 +143,7 @@ const ProductList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.price}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.price}</div>,
     },
     {
       accessorKey: "shape",
@@ -127,9 +159,7 @@ const ProductList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.shape}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.shape}</div>,
     },
     {
       accessorKey: "category",
@@ -146,7 +176,7 @@ const ProductList = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row?.original?.categoryid?.name}</div>
+        <div className="">{row?.original?.categoryid?.name}</div>
       ),
     },
     {
@@ -164,7 +194,7 @@ const ProductList = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row?.original?.innercategoryid?.name}</div>
+        <div className="">{row?.original?.innercategoryid?.name}</div>
       ),
     },
     {
@@ -182,7 +212,7 @@ const ProductList = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row?.original?.subcategoryid?.name}</div>
+        <div className="">{row?.original?.subcategoryid?.name}</div>
       ),
     },
     {
@@ -212,7 +242,7 @@ const ProductList = () => {
             </button>
             <button
               type="button"
-              onClick={() => removeProduct(row?.original?.id)}
+              onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -402,6 +432,12 @@ const ProductList = () => {
           open={openview}
           onClose={() => setOpenView(false)}
           children={ProductViewBody}
+          className="!p-[20px]"
+        />
+        <Modal
+          open={openDelete}
+          onClose={() => setOpenDelete(false)}
+          children={Deletebody}
           className="!p-[20px]"
         />
       </div>

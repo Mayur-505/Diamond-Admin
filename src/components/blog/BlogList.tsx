@@ -59,6 +59,8 @@ const BlogList = () => {
   const [activePage, setActivePage] = React.useState<number>(1);
   const [isEdit, setIsEdit] = React.useState<string>("");
   const [imageUrl, setImageUrl] = React.useState<string>("");
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [deleteID, setDeleteID] = React.useState("");
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -82,7 +84,6 @@ const BlogList = () => {
     queryKey: ["GET_BLOG", { activePage }],
     queryFn: () => getBlog({ page: activePage, pageSize: 10 }),
   });
-  console.log("data?.Blogdata", data?.Blogdata);
 
   useEffect(() => {
     if (data && isEdit) {
@@ -127,9 +128,11 @@ const BlogList = () => {
         title: "delete blog",
         description: "delete blog successfully",
       });
+      setIsOpen(false);
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -197,7 +200,7 @@ const BlogList = () => {
       },
     },
     {
-      accessorKey: "Blog",
+      accessorKey: "title",
       header: ({ column }) => {
         return (
           <Button
@@ -210,9 +213,7 @@ const BlogList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.title}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.title}</div>,
     },
     {
       accessorKey: "Heading",
@@ -228,9 +229,7 @@ const BlogList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.heading}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.heading}</div>,
     },
     {
       accessorKey: "description",
@@ -246,9 +245,7 @@ const BlogList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.description}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.description}</div>,
     },
     {
       accessorKey: "Action",
@@ -278,7 +275,7 @@ const BlogList = () => {
             </button>
             <button
               type="button"
-              onClick={() => removeBlog(row?.original?.id)}
+              onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -315,6 +312,17 @@ const BlogList = () => {
     }
     setIsOpen(true);
     setIsEdit("");
+  };
+
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
+
+  const handleDeleteBlog = () => {
+    removeBlog(deleteID);
+    setOpenDelete(false);
+    setIsOpen(true);
   };
 
   const body = (
@@ -404,6 +412,31 @@ const BlogList = () => {
       </FormProvider>
     </div>
   );
+
+  const Deletebody = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteBlog}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
+
   const BlogViewBody = (
     <div>
       {isPending && <Loading />}
@@ -466,7 +499,7 @@ const BlogList = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         columns={columns}
-        filterName={"name"}
+        filterName={"title"}
         customButton={
           <div className="flex justify-end gap-4">
             <Button
@@ -493,6 +526,12 @@ const BlogList = () => {
         open={openview}
         onClose={() => setOpenView(false)}
         children={BlogViewBody}
+        className="!p-[20px]"
+      />
+      <Modal
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        children={Deletebody}
         className="!p-[20px]"
       />
     </div>

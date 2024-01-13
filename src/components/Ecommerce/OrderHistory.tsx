@@ -130,7 +130,7 @@ const OrderHistory = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">
+        <div className="">
           {row?.original?.productResponse?.[0]?.product?.title}
         </div>
       ),
@@ -149,9 +149,7 @@ const OrderHistory = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original?.payment}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original?.payment}</div>,
     },
     {
       accessorKey: "Quantity",
@@ -168,9 +166,7 @@ const OrderHistory = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">
-          {row?.original?.productResponse?.[0]?.quantity}
-        </div>
+        <div className="">{row?.original?.productResponse?.[0]?.quantity}</div>
       ),
     },
     {

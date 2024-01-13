@@ -9,7 +9,8 @@ import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "../ui/use-toast";
 import { AiOutlineEdit } from "react-icons/ai";
 import InputWithLabel from "../Common/InputWithLabel";
-import { error } from "console";
+import Modal from "../Common/Model";
+import Loading from "../Common/Loading";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -21,11 +22,13 @@ interface Column<T> {
 const AdminUser: React.FC = () => {
   const queryClient = useQueryClient();
   const [activePage, setActivePage] = useState(1);
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [deleteID, setDeleteID] = React.useState("");
   const [formValues, setFormValues] = useState({
     email: "",
   });
 
-  const { data: adminData } = useQuery({
+  const { data: adminData, isPending } = useQuery({
     queryKey: ["GET_ADMIN", { activePage }],
     queryFn: () => getAdmin({ page: activePage, pageSize: 10 }),
   });
@@ -60,6 +63,15 @@ const AdminUser: React.FC = () => {
     setFormValues({
       email: "",
     });
+  };
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
+
+  const handleDeleteAdmin = () => {
+    removeadmin(deleteID);
+    setOpenDelete(false);
   };
   const columns: Column<Admin>[] = [
     {
@@ -110,7 +122,7 @@ const AdminUser: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <div className="capitalize">{row.original.email}</div>
+          <div className="">{row.original.email}</div>
         </div>
       ),
     },
@@ -139,7 +151,7 @@ const AdminUser: React.FC = () => {
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => removeadmin(row?.original?.id)}
+              onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -149,6 +161,29 @@ const AdminUser: React.FC = () => {
       },
     },
   ];
+  const Deletebody = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteAdmin}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -162,6 +197,12 @@ const AdminUser: React.FC = () => {
           setActivePage={setActivePage}
           pageCount={adminData?.data?.admindata?.total}
           filterable={"name"}
+        />
+        <Modal
+          open={openDelete}
+          onClose={() => setOpenDelete(false)}
+          children={Deletebody}
+          className="!p-[20px]"
         />
       </div>
       <div className="custom_contener flex items-center justify-center !mb-[28px] !p-[17.5px] customShadow">

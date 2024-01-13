@@ -37,6 +37,10 @@ export const updateCut = async ({ data }: { data: { name: string } }) => {
 export const deleteCut = async (id: string) => {
   const url = `/cut/delete/${id}`;
   const method = "delete";
-  const res = await api({ url, method, data: {} });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, headers, data: {} });
   return res.data;
 };

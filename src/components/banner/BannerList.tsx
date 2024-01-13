@@ -57,6 +57,8 @@ const BannerList = () => {
   const [singleBlogData, setSingleBlogData] = React.useState(null);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [isEdit, setIsEdit] = React.useState<string>("");
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [deleteID, setDeleteID] = React.useState("");
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -79,7 +81,6 @@ const BannerList = () => {
     queryKey: ["GET_BANNERDATA", { activePage }],
     queryFn: () => getBanner({ page: activePage, pageSize: 10 }),
   });
-  console.log("data?.Blogdata", data?.Blogdata);
 
   useEffect(() => {
     if (data && isEdit) {
@@ -114,7 +115,7 @@ const BannerList = () => {
     },
   });
 
-  const { mutate: removeBlog } = useMutation({
+  const { mutate: removeBanner } = useMutation({
     mutationFn: deleteBanner,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
@@ -122,9 +123,11 @@ const BannerList = () => {
         title: "delete banner",
         description: "delete banner successfully",
       });
+      setIsOpen(false);
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -157,7 +160,16 @@ const BannerList = () => {
       console.log(error);
     },
   });
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
 
+  const handleDeleteBanner = () => {
+    setIsOpen(true);
+    removeBanner(deleteID);
+    setOpenDelete(false);
+  };
   const columns: Column<Shape>[] = [
     {
       accessorKey: "image",
@@ -172,7 +184,7 @@ const BannerList = () => {
       },
     },
     {
-      accessorKey: "Banner",
+      accessorKey: "title",
       header: ({ column }) => {
         return (
           <Button
@@ -185,9 +197,7 @@ const BannerList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.title}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.title}</div>,
     },
     {
       accessorKey: "description",
@@ -203,9 +213,7 @@ const BannerList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.description}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.description}</div>,
     },
     {
       accessorKey: "Action",
@@ -235,7 +243,7 @@ const BannerList = () => {
             </button>
             <button
               type="button"
-              onClick={() => removeBlog(row?.original?.id)}
+              onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -363,6 +371,29 @@ const BannerList = () => {
       </FormProvider>
     </div>
   );
+  const Deletebody = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteBanner}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
   const BannerViewBody = (
     <div>
       {isPending && <Loading />}
@@ -419,7 +450,7 @@ const BannerList = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         columns={columns}
-        filterName={"name"}
+        filterName={"title"}
         customButton={
           <div className="flex justify-end gap-4">
             <Button
@@ -446,6 +477,12 @@ const BannerList = () => {
         open={openview}
         onClose={() => setOpenView(false)}
         children={BannerViewBody}
+        className="!p-[20px]"
+      />
+      <Modal
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        children={Deletebody}
         className="!p-[20px]"
       />
     </div>

@@ -154,7 +154,7 @@ const Index = () => {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="capitalize">{row?.original.name}</div>,
+      cell: ({ row }) => <div className="">{row?.original.name}</div>,
     },
     {
       accessorKey: "description",
@@ -170,9 +170,7 @@ const Index = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="capitalize">{row?.original.description}</div>
-      ),
+      cell: ({ row }) => <div className="">{row?.original.description}</div>,
     },
     {
       accessorKey: "Action",

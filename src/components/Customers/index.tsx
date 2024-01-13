@@ -15,6 +15,7 @@ import { toast } from "../ui/use-toast";
 import { MdDeleteOutline } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
 import Loading from "../Common/Loading";
+import Modal from "../Common/Model";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -27,6 +28,8 @@ const Index: React.FC = () => {
   const [activePage, setActivePage] = useState(1);
   const [inActivePage, setInActivePage] = useState(1);
   const [active, setActive] = useState("active");
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [deleteID, setDeleteID] = React.useState("");
   const queryClient = useQueryClient();
 
   const { data: ActiveContactData, isLoading } = useQuery({
@@ -42,7 +45,10 @@ const Index: React.FC = () => {
     mutationFn: deleteContact,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["ACTIVE_CONTACT", "INACTIVE_CONTACT"],
+        queryKey: ["ACTIVE_CONTACT"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["INACTIVE_CONTACT"],
       });
     },
     onError: () => {
@@ -61,6 +67,41 @@ const Index: React.FC = () => {
       toast({ description: "Not deleted" });
     },
   });
+
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
+
+  const handleDeleteContact = () => {
+    removeContact(deleteID);
+    setOpenDelete(false);
+  };
+
+  const Deletebody = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteContact}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
+
   const columns: Column<Payment>[] = [
     {
       accessorKey: "name",
@@ -94,7 +135,7 @@ const Index: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <div className="capitalize">{row.original.email}</div>
+          <div className="">{row.original.email}</div>
         </div>
       ),
     },
@@ -161,7 +202,7 @@ const Index: React.FC = () => {
             )}
             <button
               type="button"
-              onClick={() => removeContact(row?.original?.id)}
+              onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -210,6 +251,12 @@ const Index: React.FC = () => {
           />
         </TabsContent>
       </Tabs>
+      <Modal
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        children={Deletebody}
+        className="!p-[20px]"
+      />
     </div>
   );
 };

@@ -72,7 +72,7 @@ const Index: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <div className="capitalize">{row.original.email}</div>
+          <div className="">{row.original.email}</div>
         </div>
       ),
     },

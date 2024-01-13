@@ -42,7 +42,12 @@ export const getSingleProduct = async (id: string) => {
 export const deleteProduct = async (id: string) => {
   const url = `/product/delete/${id}`;
   const method = "delete";
-  const res = await api({ url, method, data: {} });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/x-www-form-urlencoded",
+  };
+  const res = await api({ url, method, headers, data: {} });
   return res.data;
 };
 
@@ -52,7 +57,7 @@ export const updateProduct = async ({ data }: { data: FormData }) => {
   const token = localStorage.token;
   const headers = {
     Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/x-www-form-urlencoded',
+    "Content-Type": "application/x-www-form-urlencoded",
   };
   const res = await api({ url, method, data, headers, isFormData: false });
   return res.data;

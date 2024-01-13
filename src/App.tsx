@@ -15,7 +15,6 @@ import InnerCategoryList from "./components/Category/InnerCategory/InnerCategory
 import AddInnerCategory from "./components/Category/InnerCategory/AddInnerCategory";
 import AuthLayout from "./components/Layout/AuthLayout";
 import Login from "./components/LoginPage/Login";
-import SignUp from "./components/LoginPage/SignUp";
 import ForgotPassword from "./components/LoginPage/ForgotPassword";
 import NewPassword from "./components/LoginPage/NewPassword";
 import Verification from "./components/LoginPage/Verification";
@@ -39,10 +38,6 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
-      },
-      {
-        path: "signup",
-        element: <SignUp />,
       },
       {
         path: "forgot-password",

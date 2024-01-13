@@ -95,7 +95,7 @@ const InnerCategoryList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="capitalize">{row?.original.name}</div>,
+      cell: ({ row }) => <div className="">{row?.original.name}</div>,
     },
     {
       accessorKey: "subCategory",
@@ -112,7 +112,7 @@ const InnerCategoryList = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row?.original?.subcategoryid?.name}</div>
+        <div className="">{row?.original?.subcategoryid?.name}</div>
       ),
     },
     {

@@ -93,7 +93,7 @@ const List = () => {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="capitalize">{row?.original.name}</div>,
+      cell: ({ row }) => <div className="">{row?.original.name}</div>,
     },
     {
       accessorKey: "parentCategory",
@@ -110,7 +110,7 @@ const List = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="capitalize">{row?.original?.categoryid?.name}</div>
+        <div className="">{row?.original?.categoryid?.name}</div>
       ),
     },
     {
