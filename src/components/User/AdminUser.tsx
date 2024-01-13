@@ -28,7 +28,7 @@ const AdminUser: React.FC = () => {
     email: "",
   });
 
-  const { data: adminData, isPending } = useQuery({
+  const { data: adminData, isLoading } = useQuery({
     queryKey: ["GET_ADMIN", { activePage }],
     queryFn: () => getAdmin({ page: activePage, pageSize: 10 }),
   });
@@ -44,7 +44,7 @@ const AdminUser: React.FC = () => {
       toast({ description: "Not deleted" });
     },
   });
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: assignAdmin,
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -188,6 +188,8 @@ const AdminUser: React.FC = () => {
   return (
     <>
       <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
+        {isLoading && <Loading />}
+        {isPending && <Loading />}
         <DataTableDemo
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           data={adminData?.data?.admindata || []}

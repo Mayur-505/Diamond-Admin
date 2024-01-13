@@ -14,6 +14,8 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { ErrorType, Products } from "@/lib/types";
 import { EyeIcon } from "lucide-react";
+import Loading from "../Common/Loading";
+import { toast } from "../ui/use-toast";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -33,7 +35,7 @@ const ProductList = () => {
   const queryClient = useQueryClient();
   const [selectedImage, setSelectedImage] = useState<string>();
 
-  const { data, isPending } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["GET_PRODUCT", { activePage }],
     queryFn: () => getProduct({ page: activePage, pageSize: 10 }),
   });
@@ -60,6 +62,9 @@ const ProductList = () => {
     mutationFn: deleteProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
+      toast({
+        description: "Product deleted successfully.",
+      });
     },
     onError: (error: ErrorType) => {
       console.log(error);
@@ -264,6 +269,7 @@ const ProductList = () => {
 
   const ProductViewBody = (
     <div>
+      {isLoading && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {singleProductData?.maintitle}
       </h2>
@@ -407,6 +413,7 @@ const ProductList = () => {
 
   return (
     <div className="custom_contener !py-[28px] !px-[28px]">
+      {isLoading && <Loading />}
       <div>
         <DataTableDemo
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
