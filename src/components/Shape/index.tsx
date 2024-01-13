@@ -52,6 +52,8 @@ const Index = () => {
   const [imageUrl, setImageUrl] = React.useState<string>("");
   const [activePage, setActivePage] = React.useState<number>(1);
   const [isEdit, setIsEdit] = React.useState<string>("");
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [deleteID, setDeleteID] = React.useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const methods = useForm({
@@ -112,12 +114,14 @@ const Index = () => {
     mutationFn: deleteShape,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
+      setIsOpen(false);
     },
     onError: (error: ErrorType) => {
       console.log(error);
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      setIsOpen(false);
     },
   });
 
@@ -137,6 +141,39 @@ const Index = () => {
       }
     },
   });
+  const handleDelete = (id: string) => {
+    setOpenDelete(true);
+    setDeleteID(id);
+  };
+
+  const handleDeleteShape = () => {
+    removeShape(deleteID);
+    setOpenDelete(false);
+    setIsOpen(true);
+  };
+  const Deletebody = (
+    <div>
+      {isPending && <Loading />}
+      <div>Are you Sure you want to delete data?</div>
+      <div className="flex justify-end gap-4 mt-5">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => setOpenDelete(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant={"outline"}
+          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+          onClick={handleDeleteShape}
+        >
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
 
   const columns: Column<Shape>[] = [
     {
@@ -201,7 +238,7 @@ const Index = () => {
             </button>
             <button
               type="button"
-              onClick={() => removeShape(row?.original?.id)}
+              onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
@@ -363,6 +400,12 @@ const Index = () => {
           setOpen(false), setIsEdit("");
         }}
         children={body}
+        className="!p-[20px]"
+      />
+      <Modal
+        open={openDelete}
+        onClose={() => setOpenDelete(false)}
+        children={Deletebody}
         className="!p-[20px]"
       />
     </div>

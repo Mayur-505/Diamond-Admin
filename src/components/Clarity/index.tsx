@@ -99,12 +99,14 @@ const Index = () => {
         title: "Clarity Deleted successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
+      setIsOpen(false);
     },
     onError: (error: ErrorType) => {
       console.log(error);
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      setIsOpen(false);
     },
   });
 
@@ -142,6 +144,7 @@ const Index = () => {
   const handleDeleteClarity = () => {
     removeClarity(deleteID);
     setOpenDelete(false);
+    setIsOpen(true);
   };
 
   const Deletebody = (

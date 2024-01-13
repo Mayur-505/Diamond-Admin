@@ -4,7 +4,7 @@ import {
   getProduct,
   getSingleProduct,
 } from "@/services/productService";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
@@ -28,6 +28,7 @@ const ProductList = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const [activePage, setActivePage] = useState<number>(1);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [singleProductData, setSingleProductData] = useState(null);
   const [openview, setOpenView] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -35,7 +36,7 @@ const ProductList = () => {
   const queryClient = useQueryClient();
   const [selectedImage, setSelectedImage] = useState<string>();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isPending } = useQuery({
     queryKey: ["GET_PRODUCT", { activePage }],
     queryFn: () => getProduct({ page: activePage, pageSize: 10 }),
   });
@@ -52,9 +53,11 @@ const ProductList = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
       setOpenView(true);
       setSingleProductData(data.data);
+      setIsOpen(false);
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -62,6 +65,7 @@ const ProductList = () => {
     mutationFn: deleteProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
+      setIsOpen(false);
       toast({
         description: "Product deleted successfully.",
       });
@@ -70,6 +74,7 @@ const ProductList = () => {
       console.log(error);
       if (error.code == 401) {
         navigate("/auth/login");
+        setIsOpen(false);
       }
     },
   });
@@ -79,7 +84,8 @@ const ProductList = () => {
     setDeleteID(id);
   };
 
-  const handleDeleteBlog = () => {
+  const handleDeleteProduct = () => {
+    setIsOpen(true);
     removeProduct(deleteID);
     setOpenDelete(false);
   };
@@ -100,7 +106,7 @@ const ProductList = () => {
           type="submit"
           variant={"outline"}
           className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
-          onClick={handleDeleteBlog}
+          onClick={handleDeleteProduct}
         >
           Delete
         </Button>
@@ -234,6 +240,7 @@ const ProductList = () => {
               onClick={() => {
                 ViewProduct(row?.original?.id);
                 setOpenView(true);
+                setIsOpen(true);
               }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
