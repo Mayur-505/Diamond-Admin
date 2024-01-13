@@ -1,8 +1,7 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { FaChevronLeft, FaRegBell } from "react-icons/fa6";
 import { LuSearch } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
-import ProfileImage from "../../assets/Image/profileImage.jpg";
 import { GrTextAlignRight } from "react-icons/gr";
 import { ProfileDropDown } from "../Common/ProfileDropDown";
 
@@ -36,9 +35,6 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
           >
             <FaChevronLeft />
           </button>
-          {/* <div className="h-[35px] w-[35px] bg-[#f8f9fa] mr-[14px] flex items-center justify-center lg:hidden ">
-            <MenubarDrawer />
-          </div> */}
         </div>
         <h1 className="font-Nunito font-[600] text-[#6c757d] uppercase text-[14px]">
           {path == "/dashboard"

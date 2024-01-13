@@ -15,12 +15,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
 import {
-  createCut,
-  deleteCut,
-  getCut,
-  updateCut,
-} from "@/services/cutServices";
-import {
   createColor,
   deleteColor,
   getColor,
@@ -64,7 +58,6 @@ const Index = () => {
     formState: { errors },
   } = methods;
 
-  const navigate = useNavigate();
   const { data: colorData } = useQuery({
     queryKey: ["GET_COLOR", { activePage }],
     queryFn: () => getColor({ page: activePage, pageSize: 10 }),
@@ -77,7 +70,6 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_COLOR"] });
       toast({
-        variant: "success",
         title: "Color created successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
@@ -94,7 +86,6 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_COLOR"] });
       toast({
-        variant: "success",
         title: "Color Deleted successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
@@ -176,7 +167,6 @@ const Index = () => {
   };
 
   const onSubmit = (data: data) => {
-    // setOpen(false);
     const { name } = data;
     if (edit) {
       const payload = {

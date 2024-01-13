@@ -14,12 +14,12 @@ import InputWithLabel from "../Common/InputWithLabel";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import Modal from "../Common/Model";
 import Loading from "../Common/Loading";
-import { MdDeleteOutline, MdPanoramaFishEye } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 import { DialogBoxShape } from "../Shape/DialogBoxShape";
 import { AiOutlineEdit } from "react-icons/ai";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ErrorType, Products, Shape } from "@/lib/types";
+import { ErrorType, Products } from "@/lib/types";
 import * as yup from "yup";
 import { EyeIcon } from "lucide-react";
 
@@ -60,30 +60,10 @@ const schema = yup.object({
   maintitle: yup.string().required(),
   title: yup.string().required(),
   price: yup.string().required(),
-  // productimage: yup
-  //   .mixed()
-  //   .test("fileSize", "The file is too large", (value: any) => {
-  //     if (!value.length) return true; // attachment is optional
-  //     return value[0].size <= 2000000;
-  //   }),
 });
 
 const ProductList = () => {
   const navigate = useNavigate();
-  // const [filter, setFilter] = useState({
-  //   subcategoryid: "",
-  //   innnercategoryid: "",
-  //   categoryid: "",
-  //   minPrice: "",
-  //   maxPrice: "",
-  //   sort: "",
-  //   mincarat: "",
-  //   maxcarat: "",
-  //   Clarity: [],
-  //   Cuts: [],
-  //   Color: [],
-  //   shape: "",
-  // });
   const [filter, setFilter] = useState({
     maintitle: "",
     title: "",

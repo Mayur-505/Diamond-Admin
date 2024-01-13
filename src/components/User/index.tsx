@@ -92,23 +92,6 @@ const Index: React.FC = () => {
         );
       },
     },
-    // {
-    //   accessorKey: "Action",
-    //   header: () => <div className="text-left">Action</div>,
-    //   cell: ({ row }) => {
-    //     return (
-    //       <div className="flex gap-2">
-    //         <button
-    //           type="button"
-    //           // onClick={() => removeContact(row?.original?.id)}
-    //           className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
-    //         >
-    //           <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
-    //         </button>
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
 
   return (

@@ -5,7 +5,7 @@ import {
   UploadImage,
 } from "@/services/adminService";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "../ui/use-toast";
 import { useAppSelector } from "@/hooks/use-redux";
 

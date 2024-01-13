@@ -22,7 +22,6 @@ import {
 import { useAppSelector } from "@/hooks/use-redux";
 import { EyeIcon } from "lucide-react";
 import { toast } from "../ui/use-toast";
-// import { DialogBoxShape } from "./DialogBoxShape";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -74,7 +73,6 @@ const BlogList = () => {
     reset,
     formState: { errors },
     setValue,
-    getValues,
   } = methods;
 
   const { data } = useQuery({
@@ -289,12 +287,6 @@ const BlogList = () => {
       payload.append("author", user?.qurey?.id);
       addBlog(payload);
     }
-
-    // if (edit) {
-    //   editClarity({ name, id: edit });
-    // } else {
-    //   addClarity(name);
-    // }
   };
 
   const body = (

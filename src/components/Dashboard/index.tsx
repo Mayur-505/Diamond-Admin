@@ -93,18 +93,11 @@ const invoices2 = [
 ];
 
 const Index = () => {
-  // const [dataArray, setDataArray] = useState<number[]>([2, 7, 20, 9, 16, 9, 5]);
-  // const [color, setColor] = useState<string>("#e3f2fd66");
-  // const [bgColor, setBgColor] = useState<string>("#9bddff");
   const handelchangegraph = (
     array: number[],
     color: string,
     bgcolor: string
-  ) => {
-    // setDataArray(array);
-    // setColor(color);
-    // setBgColor(bgcolor);
-  };
+  ) => {};
 
   return (
     <div className="custom_contener !px-[28px]">
@@ -313,96 +306,6 @@ const Index = () => {
             <p className="text-[#495057] font-Nunito font-normal text-[14px]">
               Your sales activity over time.
             </p>
-          </div>
-          <div className="pt-[14px]">
-            {/* <DataTable
-              value={customers}
-              paginator
-              rows={5}
-              selectionMode="single"
-              dataKey="id"
-              stateStorage="session"
-              stateKey="dt-state-demo-local"
-              emptyMessage="No customers found."
-              tableStyle={{ minWidth: "100%" }}
-            >
-              <Column
-                field="id"
-                header="ID"
-                sortable
-                filterPlaceholder="Search"
-                style={{
-                  width: "4%",
-                  padding: "14px",
-                  fontSize: "14px",
-                  color: "#495057",
-                  fontFamily: "Nunito",
-                  fontWeight: 400,
-                  borderBottom: "1px solid #e9ecef",
-                  height: "64px",
-                }}
-              ></Column>
-              <Column
-                header="Category"
-                field="country.name"
-                sortable
-                filterPlaceholder="Search"
-                style={{
-                  width: "16%",
-                  padding: "14px",
-                  fontSize: "14px",
-                  color: "#495057",
-                  fontFamily: "Nunito",
-                  fontWeight: 400,
-                  borderBottom: "1px solid #e9ecef",
-                  height: "64px",
-                }}
-              ></Column>
-              <Column
-                header="Price"
-                sortable
-                field="balance"
-                style={{
-                  width: "10.5%",
-                  padding: "14px",
-                  fontSize: "14px",
-                  color: "#495057",
-                  fontFamily: "Nunito",
-                  fontWeight: 400,
-                  borderBottom: "1px solid #e9ecef",
-                  height: "64px",
-                }}
-              ></Column>
-              <Column
-                field="status"
-                header="Status"
-                body={statusBodyTemplate}
-                sortable
-                style={{
-                  width: "16%",
-                  padding: "14px",
-                  fontSize: "14px",
-                  color: "#495057",
-                  fontFamily: "Nunito",
-                  fontWeight: 400,
-                  borderBottom: "1px solid #e9ecef",
-                  height: "64px",
-                }}
-              ></Column>
-              <Column
-                body={searchTemplate}
-                className="p-sortable-column"
-                style={{
-                  width: "4%",
-                  padding: "14px",
-                  fontSize: "14px",
-                  color: "#495057",
-                  fontFamily: "Nunito",
-                  fontWeight: 400,
-                  borderBottom: "1px solid #e9ecef",
-                }}
-              ></Column>
-            </DataTable> */}
           </div>
         </div>
       </div>

@@ -65,7 +65,6 @@ const Index = () => {
     formState: { errors },
     setValue,
     watch,
-    getValues,
   } = methods;
 
   const image = watch("images");
@@ -225,12 +224,6 @@ const Index = () => {
     } else {
       addShape(payload);
     }
-
-    // if (edit) {
-    //   editClarity({ name, id: edit });
-    // } else {
-    //   addClarity(name);
-    // }
   };
 
   const body = (

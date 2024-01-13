@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { EditInnerCategory } from "@/services/innercateGoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";

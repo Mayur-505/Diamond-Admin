@@ -8,7 +8,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { ExportExcelButton } from "@/components/Common/ExportButton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteCategory, getCategory } from "@/services/categoryService";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxCategory } from "./DialogBoxCategory";
@@ -27,36 +27,8 @@ interface Column<T> {
   enableSorting?: boolean;
 }
 
-// const data: Customer[] = [
-//   {
-//     id: 1,
-//     name: "Category 1",
-//     description: "Description 1",
-//     status: "Active",
-//   },
-//   {
-//     id: 2,
-//     name: "Category 2",
-//     description: "Description 2",
-//     status: "Inactive",
-//   },
-//   {
-//     id: 3,
-//     name: "Category 3",
-//     description: "Description 3",
-//     status: "Active",
-//   },
-//   {
-//     id: 4,
-//     name: "Category 4",
-//     description: "Description 4",
-//     status: "Inactive",
-//   },
-// ];
-
 const List = () => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   const [activePage, setActivePage] = useState(1);
   const queryClient = useQueryClient();
 

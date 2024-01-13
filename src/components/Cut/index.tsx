@@ -1,7 +1,6 @@
 import React from "react";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { Cut, ErrorType } from "@/lib/types";
@@ -58,7 +57,6 @@ const Index = () => {
     formState: { errors },
   } = methods;
 
-  const navigate = useNavigate();
   const { data: cutData } = useQuery({
     queryKey: ["GET_CUT", { activePage }],
     queryFn: () => getCut({ page: activePage, pageSize: 10 }),
@@ -168,7 +166,6 @@ const Index = () => {
   };
 
   const onSubmit = (data: data) => {
-    // setOpen(false);
     const { name } = data;
     if (edit) {
       const payload = {

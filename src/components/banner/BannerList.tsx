@@ -19,11 +19,9 @@ import {
   getSingleBanner,
   updateBanner,
 } from "@/services/bannerService";
-import { useAppSelector } from "@/hooks/use-redux";
 import { EyeIcon } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { toast } from "../ui/use-toast";
-// import { DialogBoxShape } from "./DialogBoxShape";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -50,7 +48,6 @@ const schema = yup.object({
 });
 
 const BannerList = () => {
-  const { user } = useAppSelector((state) => state.auth);
   const loction = useLocation();
   const [open, setOpen] = React.useState<boolean>(false);
   const [openview, setOpenView] = React.useState<boolean>(false);
@@ -267,12 +264,6 @@ const BannerList = () => {
     } else {
       addBlog(payload);
     }
-
-    // if (edit) {
-    //   editClarity({ name, id: edit });
-    // } else {
-    //   addClarity(name);
-    // }
   };
 
   const body = (
@@ -286,8 +277,6 @@ const BannerList = () => {
           <div className="mt-1">
             <InputWithLabel
               type="text"
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-expect-error
               name="title"
               id="title"
               label="Banner"

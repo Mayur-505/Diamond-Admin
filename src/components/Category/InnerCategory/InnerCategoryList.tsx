@@ -26,36 +26,6 @@ interface Customer {
   status: string;
 }
 
-// const data: Customer[] = [
-//   {
-//     id: 1,
-//     name: "Category 1",
-//     subCategory: "Parent Category 1",
-//     metatitle: "Meta Title 1",
-//     metakeyword: "Meta Keyword 1",
-//     description: "Description 1",
-//     status: "Active",
-//   },
-//   {
-//     id: 2,
-//     name: "Category 2",
-//     subCategory: "Parent Category 2",
-//     metatitle: "Meta Title 2",
-//     metakeyword: "Meta Keyword 2",
-//     description: "Description 2",
-//     status: "InActive",
-//   },
-//   {
-//     id: 3,
-//     name: "Category 3",
-//     subCategory: "Parent Category 3",
-//     metatitle: "Meta Title 3",
-//     metakeyword: "Meta Keyword 3",
-//     description: "Description 3",
-//     status: "Active",
-//   },
-// ];
-
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
   header: React.ReactNode | ((args: { column: any }) => React.ReactNode);
@@ -71,24 +41,6 @@ const InnerCategoryList = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteID, setDeleteID] = useState("");
 
-  // const actionBodyTemplate = (rowData) => {
-  //   return (
-  //     <div className="flex gap-2">
-  //       <button
-  //         type="button"
-  //         className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
-  //       >
-  //         <AiOutlineEdit className="text-[#fff] text-[16px]" />
-  //       </button>
-  //       <button
-  //         type="button"
-  //         className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
-  //       >
-  //         <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
-  //       </button>
-  //     </div>
-  //   );
-  // };
   const [activePage, setActivePage] = useState(1);
   const { data: InnercategoryData } = useQuery({
     queryKey: ["GET_INNERCATEGORY", { activePage }],

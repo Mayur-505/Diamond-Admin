@@ -27,7 +27,6 @@ const Index: React.FC = () => {
   const [activePage, setActivePage] = useState(1);
   const [inActivePage, setInActivePage] = useState(1);
   const [active, setActive] = useState("active");
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { data: ActiveContactData } = useQuery({
@@ -95,11 +94,6 @@ const Index: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          {/* <img
-            src={getCountryCode(row.getValue("country")?.code)}
-            alt="img"
-            className="w-[24px] h-[20px]"
-          /> */}
           <div className="capitalize">{row.original.email}</div>
         </div>
       ),
