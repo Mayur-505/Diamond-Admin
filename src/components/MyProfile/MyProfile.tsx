@@ -33,6 +33,7 @@ const MyProfile = () => {
         title: "Reset Password",
         description: "Password changes successfully",
       });
+      setDataObject({ old_pass: "", new_pass: "", confirm_pass: "" });
     },
     onError: (error) => {
       toast({

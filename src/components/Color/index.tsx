@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ import {
   getColor,
   updateColor,
 } from "@/services/colorServices";
+import Loading from "../Common/Loading";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -42,8 +43,10 @@ const initialValues: data = {
 
 const Index = () => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [edit, setEdit] = React.useState<string>("");
+  const queryClient = useQueryClient();
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -58,17 +61,16 @@ const Index = () => {
     formState: { errors },
   } = methods;
 
-  const { data: colorData } = useQuery({
+  const { data: colorData, isPending } = useQuery({
     queryKey: ["GET_COLOR", { activePage }],
     queryFn: () => getColor({ page: activePage, pageSize: 10 }),
   });
-
-  const queryClient = useQueryClient();
 
   const { mutate: addColor } = useMutation({
     mutationFn: createColor,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_COLOR"] });
+      setIsOpen(false);
       toast({
         title: "Color created successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
@@ -78,6 +80,7 @@ const Index = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -100,18 +103,19 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_COLOR"] });
       setOpen(false);
+      setIsOpen(false);
       setEdit("");
       reset();
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
   const handleEdit = (id: string) => {
     const allData: Color[] = colorData?.data?.Colordata;
     const data = allData?.find((item: Color) => item.id === id);
-
     setEdit(id);
     setValue("name", data?.name);
     setOpen(true);
@@ -177,10 +181,13 @@ const Index = () => {
     } else {
       addColor(data);
     }
+    setIsOpen(true);
   };
 
   const body = (
     <div>
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {edit ? "Edit" : "Add"} Color
       </h2>
@@ -223,6 +230,8 @@ const Index = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

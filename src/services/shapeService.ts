@@ -33,6 +33,10 @@ export const deleteShape = async (id: string) => {
 export const updateShape = async ({ data }: { data: FormData }) => {
   const url = `/shape/update`;
   const method = "patch";
-  const res = await api({ url, method, data });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, data, headers });
   return res.data;
 };

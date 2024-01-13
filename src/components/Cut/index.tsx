@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
 import { AiOutlineEdit } from "react-icons/ai";
@@ -19,6 +19,7 @@ import {
   getCut,
   updateCut,
 } from "@/services/cutServices";
+import Loading from "../Common/Loading";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -41,6 +42,7 @@ const initialValues: data = {
 
 const Index = () => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [edit, setEdit] = React.useState<string>("");
   const methods = useForm({
@@ -57,7 +59,7 @@ const Index = () => {
     formState: { errors },
   } = methods;
 
-  const { data: cutData } = useQuery({
+  const { data: cutData, isPending } = useQuery({
     queryKey: ["GET_CUT", { activePage }],
     queryFn: () => getCut({ page: activePage, pageSize: 10 }),
   });
@@ -67,6 +69,7 @@ const Index = () => {
   const { mutate: addCut } = useMutation({
     mutationFn: createCut,
     onSuccess: () => {
+      setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
         title: "Cut created successfully",
@@ -75,6 +78,7 @@ const Index = () => {
       reset();
     },
     onError: (error: ErrorType) => {
+      setIsOpen(false);
       console.log(error);
     },
   });
@@ -84,7 +88,6 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
-        variant: "success",
         title: "Cut Deleted successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
@@ -99,11 +102,17 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       setOpen(false);
+      setIsOpen(false);
+      toast({
+        title: "Cut edit successfully",
+        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+      });
       setEdit("");
       reset();
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -172,6 +181,7 @@ const Index = () => {
         name,
         cutid: edit,
       };
+      setIsOpen(true);
       editCut({ data: payload });
     } else {
       addCut(data);
@@ -180,6 +190,8 @@ const Index = () => {
 
   const body = (
     <div>
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {edit ? "Edit" : "Add"} Cut
       </h2>
@@ -222,6 +234,8 @@ const Index = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

@@ -15,14 +15,22 @@ export const getCut = async ({
 export const createCut = async (data: string) => {
   const url = "/cut/create";
   const method = "post";
-  const res = await api({ url, method, data });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, data, headers });
   return res.data;
 };
 
 export const updateCut = async ({ data }: { data: { name: string } }) => {
   const url = `/cut/update`;
   const method = "patch";
-  const res = await api({ url, method, data });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, data, headers });
   return res.data;
 };
 

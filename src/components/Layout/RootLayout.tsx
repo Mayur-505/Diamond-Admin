@@ -20,14 +20,14 @@ const RootLayout = () => {
       } transition-all duration-[0.5s]`}
     >
       <Sidebar collapsed={collapsed} />
+      <Toaster />
       <div
         className={`relative ${
           collapsed ? "pl-[224px]" : "pl-0"
-        } h-[100vh] transition-all duration-[0.5s] overflow-y-auto pt-[54px] w-full`}
+        } h-[100vh] transition-all duration-[0.5s] overflow-y-auto pt-[54px] w-full `}
       >
         <TopBar collapsed={collapsed} setCollapsed={setCollapsed} />
         <Outlet />
-        <Toaster />
         <Footer />
       </div>
     </div>

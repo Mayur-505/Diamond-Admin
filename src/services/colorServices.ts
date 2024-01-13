@@ -13,20 +13,32 @@ export const getColor = async (params: {
 export const createColor = async (data: string) => {
   const url = "/color/create";
   const method = "post";
-  const res = await api({ url, method, data });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, data, headers });
   return res.data;
 };
 
 export const updateColor = async ({ data }: { data: string }) => {
   const url = "/color/update";
   const method = "patch";
-  const res = await api({ url, method, data });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, data, headers });
   return res.data;
 };
 
 export const deleteColor = async (id: string) => {
   const url = `/color/delete/${id}`;
   const method = "delete";
-  const res = await api({ url, method, data: {} });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, data: {}, headers });
   return res.data;
 };

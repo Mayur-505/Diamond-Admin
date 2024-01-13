@@ -18,6 +18,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Modal from "../Common/Model";
 import Loading from "../Common/Loading";
+import { DialogBoxShape } from "./DialogBoxShape";
+import { UploadImage } from "@/services/adminService";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -45,6 +47,8 @@ const schema = yup.object({
 
 const Index = () => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
+  const [imageUrl, setImageUrl] = React.useState<string>("");
   const [activePage, setActivePage] = React.useState<number>(1);
   const [isEdit, setIsEdit] = React.useState<string>("");
   const queryClient = useQueryClient();
@@ -65,7 +69,7 @@ const Index = () => {
     setValue,
   } = methods;
 
-  const { data } = useQuery({
+  const { data: data, isPending } = useQuery({
     queryKey: ["GET_SHAPE", { activePage }],
     queryFn: () => getShape({ page: activePage, pageSize: 10 }),
   });
@@ -85,15 +89,17 @@ const Index = () => {
     }
   }, [data, isEdit]);
 
-  const { mutate: addShape, isPending } = useMutation({
+  const { mutate: addShape } = useMutation({
     mutationFn: createShape,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
+      setIsOpen(false);
       setOpen(false);
       reset();
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -110,12 +116,14 @@ const Index = () => {
   const { mutate: editShape } = useMutation({
     mutationFn: updateShape,
     onSuccess: () => {
+      setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
       setOpen(false);
       reset();
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -199,6 +207,13 @@ const Index = () => {
     setOpen(false);
   };
 
+  const { mutate: UploadImagedata } = useMutation({
+    mutationFn: UploadImage,
+    onSuccess: (res) => {
+      setImageUrl(res?.data?.data?.image);
+    },
+  });
+
   const onSubmit = (data: FieldValues) => {
     // setOpen(false);
     const payload = new FormData();
@@ -208,6 +223,7 @@ const Index = () => {
       payload.append("image", data.images[0]);
     }
     if (isEdit) {
+      payload.append("image", imageUrl);
       payload.append("shapeid", isEdit);
     }
 
@@ -216,11 +232,17 @@ const Index = () => {
     } else {
       addShape(payload);
     }
+    setIsOpen(true);
+  };
+
+  const handlechangeImage = (e: any) => {
+    UploadImagedata(e.target.files[0]);
   };
 
   const body = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {isEdit ? "Edit" : "Add"} Shape
       </h2>
@@ -264,6 +286,7 @@ const Index = () => {
               label="Image"
               placeholder="Image"
               error={errors?.images?.message}
+              onInput={handlechangeImage}
               {...register("images")}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
             />
@@ -292,6 +315,8 @@ const Index = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

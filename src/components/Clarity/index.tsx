@@ -20,6 +20,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
+import Loading from "../Common/Loading";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -42,6 +43,7 @@ const initialValues: data = {
 
 const Index = () => {
   const [open, setOpen] = React.useState<boolean>(false);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [edit, setEdit] = React.useState<string>("");
   const methods = useForm({
@@ -59,7 +61,7 @@ const Index = () => {
   } = methods;
 
   const navigate = useNavigate();
-  const { data: clarityData } = useQuery({
+  const { data: clarityData, isPending } = useQuery({
     queryKey: ["GET_CLARITY", { activePage }],
     queryFn: () => getClarity({ page: activePage, pageSize: 10 }),
   });
@@ -70,8 +72,8 @@ const Index = () => {
     mutationFn: createClarity,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
+      setIsOpen(false);
       toast({
-        variant: "success",
         title: "Clarity created successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
@@ -80,6 +82,7 @@ const Index = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -101,6 +104,7 @@ const Index = () => {
   const { mutate: editClarity } = useMutation({
     mutationFn: updateClarity,
     onSuccess: () => {
+      setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
       setOpen(false);
       setEdit("");
@@ -108,6 +112,7 @@ const Index = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -171,14 +176,17 @@ const Index = () => {
     // setOpen(false);
     const { name } = data;
     if (edit) {
-      editClarity({ name, id: edit });
+      editClarity({ name, clarityid: edit });
     } else {
-      addClarity(name);
+      addClarity({ name: name });
     }
+    setIsOpen(true);
   };
 
   const body = (
     <div>
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         Add Clarity
       </h2>
@@ -221,6 +229,8 @@ const Index = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
