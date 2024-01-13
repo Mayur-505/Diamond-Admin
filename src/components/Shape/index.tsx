@@ -219,12 +219,12 @@ const Index = () => {
     const payload = new FormData();
     payload.append("name", data.name);
     payload.append("description", data.description);
-    if (data?.images && data?.images?.length > 0) {
-      payload.append("image", data.images[0]);
-    }
     if (isEdit) {
+      console.log("imageUrl", imageUrl);
       payload.append("image", imageUrl);
       payload.append("shapeid", isEdit);
+    } else {
+      payload.append("image", data.images[0]);
     }
 
     if (isEdit) {
@@ -236,7 +236,10 @@ const Index = () => {
   };
 
   const handlechangeImage = (e: any) => {
-    UploadImagedata(e.target.files[0]);
+    const { files } = e.target;
+    const payload = new FormData();
+    payload.append("image", files[0]);
+    UploadImagedata(payload);
   };
 
   const body = (

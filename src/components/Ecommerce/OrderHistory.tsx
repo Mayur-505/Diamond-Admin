@@ -178,7 +178,7 @@ const OrderHistory = () => {
   return (
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
       <DataTableDemo
-        data={orderHistoryData?.data?.Orderdata || []}
+        data={orderHistoryData?.data?.responceData || []}
         columns={columns}
         filterName={"title"}
         setActivePage={setActivePage}
