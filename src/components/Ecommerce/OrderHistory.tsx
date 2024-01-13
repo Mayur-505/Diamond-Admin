@@ -49,7 +49,7 @@ const OrderHistory = () => {
     setValue,
   } = methods;
 
-  const { data: orderHistoryData } = useQuery({
+  const { data: orderHistoryData, isPending } = useQuery({
     queryKey: ["GET_ORDER_HISTORY", { active }],
     queryFn: () => getOrderHistory({ orderstatus: active }),
   });
