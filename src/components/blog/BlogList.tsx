@@ -383,7 +383,7 @@ const BlogList = () => {
       <div>
         <div className="lg:w-[100%] w-full">
           <div className="flex">
-            <div className="pl-4 w-full h-[250px] flex">
+            <div className="w-full h-[250px] flex">
               <img
                 src={singleBlogData?.image}
                 alt="Selected Product"
@@ -392,24 +392,39 @@ const BlogList = () => {
             </div>
           </div>
         </div>
-        <div className="py-4">
-          <strong>Title:</strong> {singleBlogData?.title}
-        </div>
-        <div className="pb-4">
-          <strong>Description:</strong> {singleBlogData?.description}
-        </div>
-        <div className="pb-4">
-          <div className="pb-2">
-            <strong>author:</strong>
+        <div className="bg-grey py-4">
+          <div className="grid grid-cols-3 gap-4 border-b py-2">
+            <strong>Title</strong>
+            <div className="grid grid-cols-subgrid gap-4 col-span-2">
+              {singleBlogData?.title}
+            </div>
           </div>
-          <div className="pb-4">
-            <strong>Firstname:</strong> {singleBlogData?.author?.firstname}
+          <div className="grid grid-cols-3 gap-4 border-b py-2">
+            <strong>Description</strong>
+            <div className="grid grid-cols-subgrid gap-4 col-span-2">
+              {singleBlogData?.description}
+            </div>
           </div>
-          <div className="pb-4">
-            <strong>Lastname:</strong> {singleBlogData?.author?.lastname}
+          <div className="grid grid-cols-3 gap-4 border-b py-2">
+            <strong>Author</strong>
           </div>
-          <div className="pb-4">
-            <strong>email:</strong> {singleBlogData?.author?.email}
+          <div className="grid grid-cols-3 gap-4 border-b py-2">
+            <strong>First Name</strong>
+            <div className="grid grid-cols-subgrid gap-4 col-span-2">
+              {singleBlogData?.author?.firstname}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4 border-b py-2">
+            <strong>Last Name</strong>
+            <div className="grid grid-cols-subgrid gap-4 col-span-2">
+              {singleBlogData?.author?.lastname}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4 border-b py-2">
+            <strong>Email</strong>
+            <div className="grid grid-cols-subgrid gap-4 col-span-2">
+              {singleBlogData?.author?.email}
+            </div>
           </div>
         </div>
       </div>

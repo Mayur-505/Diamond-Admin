@@ -71,10 +71,11 @@ const OrderHistory = () => {
       cell: ({ row }) => {
         return (
           <span
-            className={`badge text-white px-1 py-0.5 text-[12px] rounded ${row?.original?.status === "Active"
-              ? "bg-[#28a745]"
-              : "bg-[#dc3545]"
-              }`}
+            className={`badge text-white px-1 py-0.5 text-[12px] rounded ${
+              row?.original?.status === "Active"
+                ? "bg-[#28a745]"
+                : "bg-[#dc3545]"
+            }`}
           >
             {row?.original?.order_item?.[0]?.status == "0"
               ? "Inactive"
@@ -91,8 +92,8 @@ const OrderHistory = () => {
           <div className="flex gap-2">
             <Button
               onClick={() => {
-                handleView(row?.original?.id)
-                setOpenView(true)
+                handleView(row?.original?.id);
+                setOpenView(true);
               }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
@@ -105,7 +106,7 @@ const OrderHistory = () => {
   ];
 
   const handleClose = () => {
-    setOpenView(false)
+    setOpenView(false);
   };
 
   const OrderViewBody = (
@@ -116,35 +117,51 @@ const OrderHistory = () => {
       <div className="bg-grey">
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Oder Id</strong>
-          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.orderDetails?.id}</div>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">
+            {summaryData?.orderDetails?.id}
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Product</strong>
-          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.order_item[0]?.title}</div>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">
+            {summaryData?.order_item[0]?.title}
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Colour</strong>
-          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.order_item[0]?.colour}</div>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">
+            {summaryData?.order_item[0]?.colour}
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Currency</strong>
-          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.orderDetails?.currency}</div>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">
+            {summaryData?.orderDetails?.currency}
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Shape</strong>
-          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.order_item[0]?.shape}</div>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">
+            {summaryData?.order_item[0]?.shape}
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Order Receipt</strong>
-          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.orderDetails?.receipt}</div>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">
+            {summaryData?.orderDetails?.receipt}
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Amount</strong>
-          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.orderDetails?.amount}</div>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">
+            {summaryData?.orderDetails?.amount}
+          </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Quantity</strong>
-          <div className="grid grid-cols-subgrid gap-4 col-span-2">{summaryData?.quantity[0]}</div>
+          <div className="grid grid-cols-subgrid gap-4 col-span-2">
+            {summaryData?.quantity[0]}
+          </div>
         </div>
       </div>
       <div className="flex justify-end gap-4 mt-5">
@@ -157,7 +174,7 @@ const OrderHistory = () => {
         </Button>
       </div>
     </div>
-  )
+  );
   return (
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
       <DataTableDemo

@@ -18,7 +18,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Modal from "../Common/Model";
 import Loading from "../Common/Loading";
-import { DialogBoxShape } from "./DialogBoxShape";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -64,10 +63,7 @@ const Index = () => {
     reset,
     formState: { errors },
     setValue,
-    watch,
   } = methods;
-
-  const image = watch("images");
 
   const { data } = useQuery({
     queryKey: ["GET_SHAPE", { activePage }],
@@ -184,11 +180,7 @@ const Index = () => {
               }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
-              <DialogBoxShape
-                icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
-                mainTitle="Edit Shape"
-                item={row?.original}
-              />
+              <AiOutlineEdit className="text-[#fff] text-[16px]" />
             </button>
             <button
               type="button"

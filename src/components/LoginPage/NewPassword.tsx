@@ -24,9 +24,8 @@ const NewPassword = () => {
 
   const onSubmit = (values: FieldValues) => {
     const payload = new FormData();
-    payload.append("old_pass", values.old_pass);
-    payload.append("confirm_pass", values.confirm_pass);
     payload.append("new_pass", values.new_pass);
+    payload.append("confirm_pass", values.confirm_pass);
     NewPass(payload);
   };
   return (
@@ -42,12 +41,6 @@ const NewPassword = () => {
               Lorem ipsum dolor sit amet
             </p>
           </div>
-          <InputWithLabel
-            id="old_pass"
-            placeholder="Old Password"
-            className="h-[35px] w-[280px] p-[7px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-            {...register("old_pass", { required: "This field is required." })}
-          />
           <InputWithLabel
             id="new_pass"
             placeholder="Password"

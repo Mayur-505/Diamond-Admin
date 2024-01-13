@@ -70,7 +70,6 @@ const BannerList = () => {
     reset,
     formState: { errors },
     setValue,
-    getValues,
   } = methods;
 
   const { data } = useQuery({
@@ -245,7 +244,6 @@ const BannerList = () => {
   };
 
   const onSubmit = (data: FieldValues) => {
-    // setOpen(false);
     const payload = new FormData();
     payload.append("title", data.title);
     payload.append("description", data.description);
@@ -335,7 +333,7 @@ const BannerList = () => {
       </FormProvider>
     </div>
   );
-  const BlogViewBody = (
+  const BannerViewBody = (
     <div>
       {isPending && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
@@ -344,7 +342,7 @@ const BannerList = () => {
       <div>
         <div className="lg:w-[100%] w-full">
           <div className="flex">
-            <div className="pl-4 w-full h-[250px] flex">
+            <div className="w-full h-[250px] flex">
               <img
                 src={singleBlogData?.image}
                 alt="Selected Product"
@@ -353,11 +351,19 @@ const BannerList = () => {
             </div>
           </div>
         </div>
-        <div className="py-4">
-          <strong>Title:</strong> {singleBlogData?.title}
-        </div>
-        <div className="pb-4">
-          <strong>Description:</strong> {singleBlogData?.description}
+        <div className="bg-grey py-4">
+          <div className="grid grid-cols-3 gap-4 border-b py-2">
+            <strong>Title</strong>
+            <div className="grid grid-cols-subgrid gap-4 col-span-2">
+              {singleBlogData?.title}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4 border-b py-2">
+            <strong>Description</strong>
+            <div className="grid grid-cols-subgrid gap-4 col-span-2">
+              {singleBlogData?.description}
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex justify-end gap-4 mt-5">
@@ -404,7 +410,7 @@ const BannerList = () => {
       <Modal
         open={openview}
         onClose={() => setOpenView(false)}
-        children={BlogViewBody}
+        children={BannerViewBody}
         className="!p-[20px]"
       />
     </div>

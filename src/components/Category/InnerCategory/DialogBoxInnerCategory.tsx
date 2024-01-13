@@ -37,8 +37,8 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
     },
   });
 
-  const handelchange = (name, e) => {
-    setFormValues((prev) => ({ ...prev, [name]: e.target.value }));
+  const handleChange = (name: string, value: string | number) => {
+    setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
   const editFuction = () => {
@@ -74,7 +74,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
               placeholder="Title"
               defaultValue={item.name}
               className="border border-[#ced4da] w-[277px] rounded-[4px] placeholder:opacity-[0.6] "
-              onChange={(e) => handelchange("name", e)}
+              onChange={(e) => handleChange("name", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -84,7 +84,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
               type="text"
               defaultValue={item.description}
               className="col-span-3 border-[#ccc] border-[1px] border-solid rounded-[5px]"
-              onChange={(e) => handelchange("description", e)}
+              onChange={(e) => handleChange("description", e.target.value)}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
