@@ -11,7 +11,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxSubCategory } from "./DialogBoxSubCategory";
@@ -35,7 +35,6 @@ interface Column<T> {
 
 const List = () => {
   const navigate = useNavigate();
-  const toast = useToast();
   const queryClient = useQueryClient();
 
   const [openDelete, setOpenDelete] = useState(false);
@@ -51,8 +50,11 @@ const List = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SUBCATEGORY"] });
     },
-    onError: () => {
+    onError: (error) => {
       toast({ description: "Not deleted" });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

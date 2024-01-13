@@ -53,8 +53,11 @@ const InnerCategoryList = () => {
       setOpenDelete(false);
       queryClient.invalidateQueries({ queryKey: ["GET_INNERCATEGORY"] });
     },
-    onError: () => {
+    onError: (error) => {
       toast({ description: "Not deleted" });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

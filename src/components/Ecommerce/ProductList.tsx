@@ -68,6 +68,9 @@ const ProductList = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

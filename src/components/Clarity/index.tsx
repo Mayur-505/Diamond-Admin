@@ -85,6 +85,9 @@ const Index = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -93,13 +96,15 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CLARITY"] });
       toast({
-        variant: "success",
         title: "Clarity Deleted successfully",
         action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -115,6 +120,9 @@ const Index = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

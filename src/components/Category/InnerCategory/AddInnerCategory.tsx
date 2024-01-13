@@ -48,8 +48,11 @@ const AddInnerCategory = () => {
       });
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
-    onError: () => {
+    onError: (error) => {
       toast({ description: "Something went wrong." });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

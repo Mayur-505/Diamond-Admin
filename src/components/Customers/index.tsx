@@ -63,8 +63,11 @@ const Index: React.FC = () => {
         queryKey: ["ACTIVE_CONTACT"],
       });
     },
-    onError: () => {
+    onError: (error) => {
       toast({ description: "Not deleted" });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

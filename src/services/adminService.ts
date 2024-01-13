@@ -39,6 +39,17 @@ export const ChangePassword = (data: any) => {
   return api({ url, method, headers, data });
 };
 
+export const GetOneUser = (id: any) => {
+  const url = `/user/fetch_user/${id}`,
+    method = "get";
+  const token = localStorage.token;
+  const headers = {
+    "Content-Type": "application/x-www-form-urlencoded",
+    Authorization: `Bearer ${token}`,
+  };
+  return api({ url, method, headers });
+};
+
 export const UploadImage = (data: any) => {
   const url = `/product/updatefile`,
     method = "post";

@@ -7,7 +7,6 @@ export const getCut = async ({
 }) => {
   const url = "/cut/fetch";
   const method = "get";
-
   const res = await api({ url, method, params });
   return res.data;
 };

@@ -49,6 +49,7 @@ const Index = () => {
   const [openDelete, setOpenDelete] = React.useState(false);
   const [deleteID, setDeleteID] = React.useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -83,6 +84,9 @@ const Index = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -99,6 +103,9 @@ const Index = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -114,6 +121,9 @@ const Index = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

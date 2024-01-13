@@ -20,7 +20,7 @@ import {
   updateBanner,
 } from "@/services/bannerService";
 import { EyeIcon } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import { UploadImage } from "@/services/adminService";
 
@@ -59,6 +59,7 @@ const BannerList = () => {
   const [isEdit, setIsEdit] = React.useState<string>("");
   const [openDelete, setOpenDelete] = React.useState(false);
   const [deleteID, setDeleteID] = React.useState("");
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -112,6 +113,9 @@ const BannerList = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -128,6 +132,9 @@ const BannerList = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -146,6 +153,9 @@ const BannerList = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

@@ -49,8 +49,10 @@ export const newPassword = (data: any) => {
 export const LogOutAPI = (data: any) => {
   const method = "post",
     url = "/user/logout";
+  const token = localStorage.token;
   const headers = {
     "Content-Type": "application/x-www-form-urlencoded",
+    Authorization: `Bearer ${token}`,
   };
   return api({ method, url, headers, data });
 };

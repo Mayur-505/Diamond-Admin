@@ -23,6 +23,7 @@ import { useAppSelector } from "@/hooks/use-redux";
 import { EyeIcon } from "lucide-react";
 import { toast } from "../ui/use-toast";
 import { UploadImage } from "@/services/adminService";
+import { useNavigate } from "react-router-dom";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -62,6 +63,7 @@ const BlogList = () => {
   const [openDelete, setOpenDelete] = React.useState(false);
   const [deleteID, setDeleteID] = React.useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -117,6 +119,9 @@ const BlogList = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -133,6 +138,9 @@ const BlogList = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -151,6 +159,9 @@ const BlogList = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

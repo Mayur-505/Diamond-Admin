@@ -20,6 +20,7 @@ import Modal from "../Common/Model";
 import Loading from "../Common/Loading";
 import { DialogBoxShape } from "./DialogBoxShape";
 import { UploadImage } from "@/services/adminService";
+import { useNavigate } from "react-router-dom";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -51,6 +52,7 @@ const Index = () => {
   const [imageUrl, setImageUrl] = React.useState<string>("");
   const [activePage, setActivePage] = React.useState<number>(1);
   const [isEdit, setIsEdit] = React.useState<string>("");
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -100,6 +102,9 @@ const Index = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -110,6 +115,9 @@ const Index = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 
@@ -124,6 +132,9 @@ const Index = () => {
     onError: (error: ErrorType) => {
       console.log(error);
       setIsOpen(false);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

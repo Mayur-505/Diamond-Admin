@@ -11,6 +11,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import InputWithLabel from "../Common/InputWithLabel";
 import Modal from "../Common/Model";
 import Loading from "../Common/Loading";
+import { useNavigate } from "react-router-dom";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -20,6 +21,7 @@ interface Column<T> {
 }
 
 const AdminUser: React.FC = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [activePage, setActivePage] = useState(1);
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -40,8 +42,11 @@ const AdminUser: React.FC = () => {
         queryKey: ["GET_ADMIN"],
       });
     },
-    onError: () => {
+    onError: (error) => {
       toast({ description: "Not deleted" });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
   const { mutate, isPending } = useMutation({
@@ -53,6 +58,9 @@ const AdminUser: React.FC = () => {
     },
     onError: (error) => {
       toast({ description: error?.data?.message });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
   const handleChange = (name: string, value: string | undefined) => {

@@ -91,8 +91,11 @@ const OrderHistory = () => {
       navigate("/gems/order-history");
       queryClient.invalidateQueries({ queryKey: ["GET_ORDER_HISTORY"] });
     },
-    onError: () => {
+    onError: (error) => {
       toast({ description: "Something went wrong." });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

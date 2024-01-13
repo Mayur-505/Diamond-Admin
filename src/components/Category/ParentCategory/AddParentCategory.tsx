@@ -33,6 +33,9 @@ const AddParentCategory = () => {
     },
     onError: (error: ErrorType) => {
       toast({ description: "Something went wrong." });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

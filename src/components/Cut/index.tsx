@@ -20,6 +20,7 @@ import {
   updateCut,
 } from "@/services/cutServices";
 import Loading from "../Common/Loading";
+import { useNavigate } from "react-router-dom";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -47,6 +48,7 @@ const Index = () => {
   const [edit, setEdit] = React.useState<string>("");
   const [openDelete, setOpenDelete] = React.useState(false);
   const [deleteID, setDeleteID] = React.useState("");
+  const navigate = useNavigate();
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: initialValues,
@@ -70,7 +72,7 @@ const Index = () => {
 
   const { mutate: addCut } = useMutation({
     mutationFn: createCut,
-    onSuccess: () => {
+    onSuccess: (res) => {
       setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
@@ -81,7 +83,10 @@ const Index = () => {
     },
     onError: (error: ErrorType) => {
       setIsOpen(false);
-      console.log(error);
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
+      console.log(error, "error");
     },
   });
 
@@ -96,6 +101,9 @@ const Index = () => {
       setIsOpen(false);
     },
     onError: (error: ErrorType) => {
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
       console.log(error);
       setIsOpen(false);
     },
@@ -116,6 +124,9 @@ const Index = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      if (error.code == 401) {
+        navigate("/auth/login");
+      }
       setIsOpen(false);
     },
   });

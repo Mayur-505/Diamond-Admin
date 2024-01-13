@@ -122,8 +122,11 @@ const List = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
     },
-    onError: () => {
+    onError: (error) => {
       toast({ description: "Not deleted" });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
     },
   });
 

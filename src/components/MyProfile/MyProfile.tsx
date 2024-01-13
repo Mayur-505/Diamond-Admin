@@ -1,13 +1,16 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ChangePassword,
+  GetOneUser,
   UpdateProfile,
   UploadImage,
 } from "@/services/adminService";
-import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { toast } from "../ui/use-toast";
 import { useAppSelector } from "@/hooks/use-redux";
+import { getCategory } from "@/services/categoryService";
+import Loading from "../Common/Loading";
 
 const MyProfile = () => {
   const [dataObject, setDataObject] = useState({
@@ -16,11 +19,27 @@ const MyProfile = () => {
     confirm_pass: "",
   });
   const { user } = useAppSelector((state) => state.auth);
-  const [userdata, setUserData] = useState(user?.qurey || {});
+  const [userdata, setUserData] = useState({});
+  const [userID, setUserId] = useState(user?.query?.id || "");
+  const queryClient = useQueryClient();
   const handaleUpdate = () => {
     changepass(dataObject);
   };
 
+  useEffect(() => {
+    if (user?.qurey?.id) setUserId(user?.qurey?.id);
+  }, [user]);
+
+  const { data: categoryData } = useQuery({
+    queryKey: ["GET_ONEUSER", { userID }],
+    queryFn: () => GetOneUser(userID),
+  });
+
+  useEffect(() => {
+    setUserData(categoryData?.data?.data);
+  }, [categoryData]);
+
+  console.log(categoryData, userID, "categoryData");
   const handalechange = (e: any) => {
     const { name, value } = e.target;
     setDataObject((prev) => ({ ...prev, [name]: value }));
@@ -46,6 +65,7 @@ const MyProfile = () => {
   const { mutate: UpdateUser } = useMutation({
     mutationFn: UpdateProfile,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["GET_ONEUSER"] });
       toast({
         title: "profile image change",
         description: "user profile image change successfully",
@@ -72,7 +92,7 @@ const MyProfile = () => {
     UpdateUser(payload);
   };
 
-  const { mutate: UploadImagedata } = useMutation({
+  const { mutate: UploadImagedata, isPending } = useMutation({
     mutationFn: UploadImage,
     onSuccess: (res) => {
       heandelImageIpdate(res?.data?.data?.image);
@@ -87,6 +107,7 @@ const MyProfile = () => {
   };
   return (
     <div className="custom_contener !px-[28px] !mt-[50px]">
+      {isPending && <Loading />}
       <Tabs defaultValue="account" className="w-full">
         <TabsList className="grid w-full grid-cols-2 max-w-[400px] bg-[#343A4030]">
           <TabsTrigger value="account">My Account</TabsTrigger>
