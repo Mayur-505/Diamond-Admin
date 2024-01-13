@@ -22,6 +22,7 @@ import {
 import { useAppSelector } from "@/hooks/use-redux";
 import { EyeIcon } from "lucide-react";
 import { toast } from "../ui/use-toast";
+import { UploadImage } from "@/services/adminService";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -52,10 +53,12 @@ const schema = yup.object({
 const BlogList = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [open, setOpen] = React.useState<boolean>(false);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [openview, setOpenView] = React.useState<boolean>(false);
   const [singleBlogData, setSingleBlogData] = React.useState(null);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [isEdit, setIsEdit] = React.useState<string>("");
+  const [imageUrl, setImageUrl] = React.useState<string>("");
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -75,7 +78,7 @@ const BlogList = () => {
     setValue,
   } = methods;
 
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["GET_BLOG", { activePage }],
     queryFn: () => getBlog({ page: activePage, pageSize: 10 }),
   });
@@ -98,11 +101,12 @@ const BlogList = () => {
     }
   }, [data, isEdit]);
 
-  const { mutate: addBlog, isPending } = useMutation({
+  const { mutate: addBlog } = useMutation({
     mutationFn: createBlog,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
       setOpen(false);
+      setIsOpen(false);
       reset();
       toast({
         title: "create blog",
@@ -111,6 +115,7 @@ const BlogList = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -132,6 +137,7 @@ const BlogList = () => {
     mutationFn: updateBlog,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
+      setIsOpen(false);
       setOpen(false);
       reset();
       toast({
@@ -141,8 +147,29 @@ const BlogList = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
+
+  const { mutate: UploadImagedata } = useMutation({
+    mutationFn: UploadImage,
+    onSuccess: (res) => {
+      setImageUrl(res?.data?.data?.image);
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      console.log(error);
+      setIsOpen(false);
+    },
+  });
+
+  const handlechangeImage = (e: any) => {
+    const { files } = e.target;
+    const payload = new FormData();
+    payload.append("image", files[0]);
+    setIsOpen(true);
+    UploadImagedata(payload);
+  };
 
   const { mutate: ViewBlog } = useMutation({
     mutationFn: getSingleBlog,
@@ -271,13 +298,12 @@ const BlogList = () => {
     const payload = new FormData();
     payload.append("title", data.title);
     payload.append("description", data.description);
-    if (data?.images && data?.images?.length > 0) {
-      payload.append("image", data.images[0]);
-    }
-    console.log("data?.images", data?.images);
 
     if (isEdit) {
+      payload.append("image", imageUrl);
       payload.append("blogid", isEdit);
+    } else {
+      payload.append("image", data?.images?.[0] || "");
     }
 
     if (isEdit) {
@@ -287,11 +313,14 @@ const BlogList = () => {
       payload.append("author", user?.qurey?.id);
       addBlog(payload);
     }
+    setIsOpen(true);
+    setIsEdit("");
   };
 
   const body = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {isEdit ? "Edit" : "Add"} Blog
       </h2>
@@ -349,6 +378,7 @@ const BlogList = () => {
               label="Image"
               placeholder="Image"
               error={errors?.images?.message}
+              onInput={handlechangeImage}
               {...register("images")}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
             />
@@ -377,6 +407,7 @@ const BlogList = () => {
   const BlogViewBody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {singleBlogData?.heading}
       </h2>
@@ -441,6 +472,8 @@ const BlogList = () => {
   );
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -465,7 +498,9 @@ const BlogList = () => {
       />
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false), setIsEdit("");
+        }}
         children={body}
         className="!p-[20px]"
       />

@@ -211,6 +211,11 @@ const Index = () => {
     mutationFn: UploadImage,
     onSuccess: (res) => {
       setImageUrl(res?.data?.data?.image);
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -224,7 +229,7 @@ const Index = () => {
       payload.append("image", imageUrl);
       payload.append("shapeid", isEdit);
     } else {
-      payload.append("image", data.images[0]);
+      payload.append("image", data.images?.[0] || "");
     }
 
     if (isEdit) {
@@ -239,6 +244,7 @@ const Index = () => {
     const { files } = e.target;
     const payload = new FormData();
     payload.append("image", files[0]);
+    setIsOpen(true);
     UploadImagedata(payload);
   };
 
@@ -344,7 +350,9 @@ const Index = () => {
       />
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false), setIsEdit("");
+        }}
         children={body}
         className="!p-[20px]"
       />

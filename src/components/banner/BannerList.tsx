@@ -22,6 +22,7 @@ import {
 import { EyeIcon } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { toast } from "../ui/use-toast";
+import { UploadImage } from "@/services/adminService";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -50,6 +51,8 @@ const schema = yup.object({
 const BannerList = () => {
   const loction = useLocation();
   const [open, setOpen] = React.useState<boolean>(false);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
+  const [imageUrl, setImageUrl] = React.useState<string>("");
   const [openview, setOpenView] = React.useState<boolean>(false);
   const [singleBlogData, setSingleBlogData] = React.useState(null);
   const [activePage, setActivePage] = React.useState<number>(1);
@@ -72,7 +75,7 @@ const BannerList = () => {
     setValue,
   } = methods;
 
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["GET_BANNERDATA", { activePage }],
     queryFn: () => getBanner({ page: activePage, pageSize: 10 }),
   });
@@ -93,9 +96,10 @@ const BannerList = () => {
     }
   }, [data, isEdit]);
 
-  const { mutate: addBlog, isPending } = useMutation({
+  const { mutate: addBlog } = useMutation({
     mutationFn: createBanner,
     onSuccess: () => {
+      setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
       setOpen(false);
       reset();
@@ -106,6 +110,7 @@ const BannerList = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -128,6 +133,7 @@ const BannerList = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
       setOpen(false);
+      setIsOpen(false);
       reset();
       toast({
         title: "update banner",
@@ -136,6 +142,7 @@ const BannerList = () => {
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
     },
   });
 
@@ -243,18 +250,37 @@ const BannerList = () => {
     setOpen(false);
   };
 
+  const { mutate: UploadImagedata } = useMutation({
+    mutationFn: UploadImage,
+    onSuccess: (res) => {
+      setImageUrl(res?.data?.data?.image);
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      console.log(error);
+      setIsOpen(false);
+    },
+  });
+
+  const handlechangeImage = (e: any) => {
+    const { files } = e.target;
+    const payload = new FormData();
+    payload.append("image", files[0]);
+    setIsOpen(true);
+    UploadImagedata(payload);
+  };
+
   const onSubmit = (data: FieldValues) => {
     const payload = new FormData();
     payload.append("title", data.title);
     payload.append("description", data.description);
     payload.append("redirectUrl", loction.pathname);
-    if (data?.images && data?.images?.length > 0) {
-      payload.append("image", data.images[0]);
-    }
-    console.log("data?.images", data?.images);
 
     if (isEdit) {
       payload.append("bannerid", isEdit);
+      payload.append("image", imageUrl);
+    } else {
+      payload.append("image", data.images?.[0] || "");
     }
 
     if (isEdit) {
@@ -262,11 +288,14 @@ const BannerList = () => {
     } else {
       addBlog(payload);
     }
+    setIsOpen(true);
+    setIsEdit("");
   };
 
   const body = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {isEdit ? "Edit" : "Add"} Banner
       </h2>
@@ -309,6 +338,7 @@ const BannerList = () => {
               placeholder="Image"
               error={errors?.images?.message}
               {...register("images")}
+              onInput={handlechangeImage}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
             />
             {}
@@ -336,6 +366,7 @@ const BannerList = () => {
   const BannerViewBody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {singleBlogData?.heading}
       </h2>
@@ -379,6 +410,8 @@ const BannerList = () => {
   );
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
+      {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -403,7 +436,9 @@ const BannerList = () => {
       />
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false), setIsEdit("");
+        }}
         children={body}
         className="!p-[20px]"
       />

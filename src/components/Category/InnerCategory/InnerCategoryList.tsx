@@ -42,12 +42,12 @@ const InnerCategoryList = () => {
   const [deleteID, setDeleteID] = useState("");
 
   const [activePage, setActivePage] = useState(1);
-  const { data: InnercategoryData } = useQuery({
+  const { data: InnercategoryData, isLoading } = useQuery({
     queryKey: ["GET_INNERCATEGORY", { activePage }],
     queryFn: () => getInnerCategory({ page: activePage, pageSize: 10 }),
   });
 
-  const { mutate: removeCategory, isPending } = useMutation({
+  const { mutate: removeCategory } = useMutation({
     mutationFn: deleteInnerCategory,
     onSuccess: () => {
       setOpenDelete(false);
@@ -163,7 +163,7 @@ const InnerCategoryList = () => {
   ];
   const body = (
     <div>
-      {isPending && <Loading />}
+      {isLoading && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -186,9 +186,11 @@ const InnerCategoryList = () => {
   );
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isLoading && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
+
         data={InnercategoryData?.data?.responseData || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

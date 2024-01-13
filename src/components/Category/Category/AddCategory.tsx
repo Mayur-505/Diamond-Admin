@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import Loading from "@/components/Common/Loading";
 
 const AddCategory = () => {
   const navigate = useNavigate();
@@ -35,12 +36,13 @@ const AddCategory = () => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { mutate: createSubCategory } = useMutation({
+  const { mutate: createSubCategory, isPending } = useMutation({
     mutationFn: AddSubCategory,
     onSuccess: () => {
       toast({
         description: "Sub category Created Successfully.",
       });
+      navigate("/category/sub-category");
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: () => {
@@ -73,6 +75,7 @@ const AddCategory = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-2">
           <h3 className="text-[17.5px] font-Nunito font-[700] mb-[21px]">

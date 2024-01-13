@@ -6,6 +6,7 @@ import { Progress } from "../ui/progress";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "@/services/userService";
+import Loading from "../Common/Loading";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -18,7 +19,7 @@ const Index: React.FC = () => {
   const [activePage, setActivePage] = useState(1);
   const navigate = useNavigate();
 
-  const { data: UserData } = useQuery({
+  const { data: UserData, isLoading } = useQuery({
     queryKey: ["GET_USER", { activePage }],
     queryFn: () => getUser({ page: activePage, pageSize: 10 }),
   });
@@ -96,6 +97,7 @@ const Index: React.FC = () => {
 
   return (
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
+      {isLoading && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         data={UserData?.data?.userdata || []}
@@ -103,7 +105,7 @@ const Index: React.FC = () => {
         // @ts-expect-error
         columns={columns}
         setActivePage={setActivePage}
-        pageCount={UserData?.data?.userdata?.total}
+        pageCount={UserData?.data?.total}
         filterable={"name"}
       />
     </div>

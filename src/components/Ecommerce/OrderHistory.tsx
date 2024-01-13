@@ -32,14 +32,14 @@ const OrderHistory = () => {
   const [filter, setFilter] = useState({
     orderstatus: "",
     orderNote: "",
-    Address: "",
     payment: "",
+    orderid: "",
   });
   const schema = yup.object({
     orderstatus: yup.string().required(),
     orderNote: yup.string().required(),
-    Address: yup.string().required(),
     payment: yup.string().required(),
+    orderid: yup.string().required(),
   });
 
   const methods = useForm({
@@ -55,9 +55,10 @@ const OrderHistory = () => {
     setValue,
   } = methods;
 
-  const { data: orderHistoryData, isPending } = useQuery({
-    queryKey: ["GET_ORDER_HISTORY", { active }],
-    queryFn: () => getOrderHistory({ orderstatus: active }),
+  const { data: orderHistoryData, isLoading } = useQuery({
+    queryKey: ["GET_ORDER_HISTORY", { activePage, active }],
+    queryFn: () =>
+      getOrderHistory({ page: activePage, pageSize: 10, orderstatus: active }),
   });
   console.log("orderHistoryData", orderHistoryData);
 
@@ -66,38 +67,26 @@ const OrderHistory = () => {
       const findData = orderHistoryData?.data?.responceData?.find(
         (item) => item.id === isEdit
       );
-      console.log("orderHistoryData", findData);
-      console.log("orderHistoryData", isEdit);
 
-      // setValue("maintitle", findData?.maintitle || "");
+      console.log("datata", findData);
       setValue("orderstatus", findData?.orderstatus || "");
       setValue("orderNote", findData?.orderNote || "");
-      setValue("Address", findData?.Address || "");
-      setValue("payment", findData?.payment || "");
+      setValue("payment", String(findData?.payment) || "");
+      setValue("orderid", findData?.id || "");
     } else {
       setValue("orderstatus", "");
       setValue("orderNote", "");
-      setValue("Address", "");
       setValue("payment", "");
     }
   }, [orderHistoryData, isEdit]);
 
-  // const { mutate: orderSummaryData, isPending } = useMutation({
-  //   mutationFn: (id) => getOrderSummary(id),
-  //   onSuccess: (res) => {
-  //     setSummaryData(res?.data?.data);
-  //   },
-  // });
-  // const handleView = (id: any) => {
-  //   orderSummaryData(id);
-  // };
-
-  const { mutate: updateOrder } = useMutation({
+  const { mutate: updateOrder, isPending } = useMutation({
     mutationFn: updateOrderHistory,
     onSuccess: () => {
       toast({
         description: "Order updated successfully.",
       });
+      setOpen(false);
       reset();
       navigate("/gems/order-history");
       queryClient.invalidateQueries({ queryKey: ["GET_ORDER_HISTORY"] });
@@ -108,10 +97,7 @@ const OrderHistory = () => {
   });
 
   const onSubmit = (data: FieldValues) => {
-    // setOpen(false);
-    const payload = new FormData();
-    // payload.append("maintitle", data.maintitle);
-    updateOrder(payload);
+    updateOrder(data);
   };
 
   const columns: Column<Customer>[] = [
@@ -245,6 +231,7 @@ const OrderHistory = () => {
   const body = (
     <div>
       {isPending && <Loading />}
+      {isLoading && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {isEdit ? "Edit" : "Add"} Product
       </h2>
@@ -259,18 +246,6 @@ const OrderHistory = () => {
               placeholder="order note"
               error={errors?.orderNote?.message}
               {...register("orderNote")}
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
-            />
-          </div>
-          <div className="mt-1">
-            <InputWithLabel
-              type="text"
-              name="Address"
-              id="Address"
-              label="Address"
-              placeholder="address"
-              error={errors?.Address?.message}
-              {...register("Address")}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
             />
           </div>
@@ -386,6 +361,8 @@ const OrderHistory = () => {
   );
   return (
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
+      {isPending && <Loading />}
+      {isLoading && <Loading />}
       <Tabs defaultValue="Processing" className="">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="Processing" onClick={() => setActive(0)}>

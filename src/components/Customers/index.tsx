@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { toast } from "../ui/use-toast";
 import { MdDeleteOutline } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
+import Loading from "../Common/Loading";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -28,11 +29,11 @@ const Index: React.FC = () => {
   const [active, setActive] = useState("active");
   const queryClient = useQueryClient();
 
-  const { data: ActiveContactData } = useQuery({
+  const { data: ActiveContactData, isLoading } = useQuery({
     queryKey: ["ACTIVE_CONTACT", { activePage }],
     queryFn: () => getActiveContact({ page: activePage, pageSize: 10 }),
   });
-  const { data: InActiveContactData } = useQuery({
+  const { data: InActiveContactData, isPending } = useQuery({
     queryKey: ["INACTIVE_CONTACT", { inActivePage }],
     queryFn: () => getInActiveContact({ page: inActivePage, pageSize: 10 }),
   });
@@ -173,6 +174,8 @@ const Index: React.FC = () => {
 
   return (
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
+      {isLoading && <Loading />}
+      {isPending && <Loading />}
       <Tabs defaultValue="Active" className="">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="Active" onClick={() => setActive("active")}>

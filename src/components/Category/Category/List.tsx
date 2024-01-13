@@ -41,12 +41,12 @@ const List = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteID, setDeleteID] = useState("");
   const [activePage, setActivePage] = useState(1);
-  const { data: subcategoryData } = useQuery({
+  const { data: subcategoryData, isLoading } = useQuery({
     queryKey: ["GET_SUBCATEGORY", { activePage }],
     queryFn: () => getSubCategory({ page: activePage, pageSize: 10 }),
   });
 
-  const { mutate: removeCategory, isPending } = useMutation({
+  const { mutate: removeCategory } = useMutation({
     mutationFn: deleteSubCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SUBCATEGORY"] });
@@ -162,7 +162,7 @@ const List = () => {
 
   const body = (
     <div>
-      {isPending && <Loading />}
+      {isLoading && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button

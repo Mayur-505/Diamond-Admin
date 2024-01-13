@@ -256,7 +256,9 @@ const Index = () => {
       />
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false), setEdit(""), reset();
+        }}
         children={body}
         className="!p-[20px]"
       />

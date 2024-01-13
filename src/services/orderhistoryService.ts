@@ -33,7 +33,7 @@ export const getOrderSummary = async (id: string) => {
   return api({ url, method, headers });
 };
 
-export const updateOrderHistory = async ({ data }: { data: FormData }) => {
+export const updateOrderHistory = async (data) => {
   const url = `/order/update`;
   const method = "patch";
   const token = localStorage.token;

@@ -1,4 +1,5 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
+import Loading from "@/components/Common/Loading";
 import SelectMenu from "@/components/Common/SelectMenu";
 import TextAreaWithLabel from "@/components/Common/TextAreaWithLabel";
 import { useToast } from "@/components/ui/use-toast";
@@ -38,9 +39,10 @@ const AddInnerCategory = () => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { mutate: createInnerCategory } = useMutation({
+  const { mutate: createInnerCategory, isPending } = useMutation({
     mutationFn: addInnerCategory,
     onSuccess: () => {
+      navigate("/category/inner-category");
       toast({
         description: "Inner category Created Successfully.",
       });
@@ -76,6 +78,7 @@ const AddInnerCategory = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-2">
           <h3 className="text-[17.5px] font-Nunito font-[700] mb-[21px]">

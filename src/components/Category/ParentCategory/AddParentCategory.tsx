@@ -1,4 +1,5 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
+import Loading from "@/components/Common/Loading";
 import { useToast } from "@/components/ui/use-toast";
 import { ErrorType } from "@/lib/types";
 import { AddCategory } from "@/services/categoryService";
@@ -21,12 +22,13 @@ const AddParentCategory = () => {
     setCategory((prev) => ({ ...prev, [name]: value }));
   };
 
-  const { mutate: createCategory } = useMutation({
+  const { mutate: createCategory, isPending } = useMutation({
     mutationFn: AddCategory,
     onSuccess: () => {
       toast({
         description: "Parent category Created Successfully.",
       });
+      navigate("/category/category");
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: (error: ErrorType) => {
@@ -55,6 +57,7 @@ const AddParentCategory = () => {
 
   return (
     <div className="w-full max-w-2xl rounded p-6 mx-auto mb-8 customShadow">
+      {isPending && <Loading />}
       <h2 className="text-[20px] font-[600] mb-4 font-Nunito">
         Add Parent Category
       </h2>

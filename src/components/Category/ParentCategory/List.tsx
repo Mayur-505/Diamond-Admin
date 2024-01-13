@@ -12,6 +12,7 @@ import { toast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxCategory } from "./DialogBoxCategory";
+import { createPortal } from "react-dom";
 
 interface Customer {
   id: number;
@@ -111,12 +112,12 @@ const List = () => {
     },
   ];
 
-  const { data: categoryData } = useQuery({
+  const { data: categoryData, isLoading } = useQuery({
     queryKey: ["GET_CATEGORY", { activePage }],
     queryFn: () => getCategory({ page: activePage, pageSize: 10 }),
   });
 
-  const { mutate: removeCategory, isPending } = useMutation({
+  const { mutate: removeCategory } = useMutation({
     mutationFn: deleteCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
@@ -137,7 +138,7 @@ const List = () => {
   };
   const body = (
     <div>
-      {isPending && <Loading />}
+      {createPortal(<>{isLoading && <Loading />}</>, document.body)}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -161,6 +162,9 @@ const List = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {/* {isopen && <Loading />} */}
+      {/* {isPending && <Loading />} */}
+      {createPortal(<>{isLoading && <Loading />}</>, document.body)}
       <DataTableDemo
         data={categoryData?.data?.modifiedCategories || []}
         columns={columns}

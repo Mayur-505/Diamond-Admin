@@ -188,7 +188,7 @@ const Index = () => {
       {isPending && <Loading />}
       {isopen && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
-        Add Clarity
+        {edit ? "Edit" : "Add"} Clarity
       </h2>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -255,7 +255,9 @@ const Index = () => {
       />
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false), setEdit(""), reset();
+        }}
         children={body}
         className="!p-[20px]"
       />
