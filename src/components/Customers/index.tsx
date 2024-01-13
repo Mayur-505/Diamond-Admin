@@ -3,7 +3,6 @@ import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { Progress } from "../ui/progress";
-import { useNavigate } from "react-router-dom";
 import {
   EditContact,
   deleteContact,

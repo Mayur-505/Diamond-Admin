@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
+import { UploadImage } from "@/services/adminService";
 import { EditInnerCategory } from "@/services/innercateGoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -36,6 +37,19 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
       toast({ description: "Something went wrong." });
     },
   });
+
+  const { mutate: UploadImagedata } = useMutation({
+    mutationFn: UploadImage,
+    onSuccess: (res) => {
+      setFormValues((prev) => ({ ...prev, image: res?.data?.data?.image }));
+    },
+  });
+  const handlechangeImage = (e: any) => {
+    const { files } = e.target;
+    const payload = new FormData();
+    payload.append("image", files[0]);
+    UploadImagedata(payload);
+  };
 
   const handleChange = (name: string, value: string | number) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
@@ -93,7 +107,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
               id="image"
               type="file"
               className="col-span-3"
-              onChange={(e) => handelchange("image", e.target.files[0])}
+              onChange={handlechangeImage}
             />
           </div>
         </div>
