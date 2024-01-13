@@ -1,7 +1,7 @@
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { Button } from "../ui/button";
 import { DataTableDemo } from "../Common/DataTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getOrderHistory,
@@ -11,6 +11,10 @@ import { EyeIcon } from "lucide-react";
 import Modal from "../Common/Model";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { AiOutlineEdit } from "react-icons/ai";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import InputWithLabel from "../Common/InputWithLabel";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const OrderHistory = () => {
   const [activePage, setActivePage] = useState(1);
@@ -19,23 +23,74 @@ const OrderHistory = () => {
   const [summaryData, setSummaryData] = useState(null);
   const [active, setActive] = useState(0);
   const [openview, setOpenView] = useState<boolean>(false);
+  const [filter, setFilter] = useState({
+    orderstatus: "",
+    orderNote: "",
+    Address: "",
+    payment: "",
+  });
+  const schema = yup.object({
+    orderstatus: yup.string().required(),
+    orderNote: yup.string().required(),
+    Address: yup.string().required(),
+    payment: yup.string().required(),
+  });
+
+  const methods = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: filter,
+  });
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    setValue,
+  } = methods;
 
   const { data: orderHistoryData } = useQuery({
     queryKey: ["GET_ORDER_HISTORY", { active }],
     queryFn: () => getOrderHistory({ orderstatus: active }),
   });
+  console.log("orderHistoryData", orderHistoryData);
 
-  const { mutate: orderSummaryData } = useMutation({
-    mutationFn: (id) => getOrderSummary(id),
-    onSuccess: (res) => {
-      setSummaryData(res?.data?.data);
-    },
-  });
-  const handleView = (id: any) => {
-    orderSummaryData(id);
+  useEffect(() => {
+    if (orderHistoryData && isEdit) {
+      const findData = orderHistoryData?.data?.responceData?.find(
+        (item) => item.id === isEdit
+      );
+      console.log("orderHistoryData", findData);
+      console.log("orderHistoryData", isEdit);
+
+      // setValue("maintitle", findData?.maintitle || "");
+      setValue("orderstatus", findData?.orderstatus || "");
+      setValue("orderNote", findData?.orderNote || "");
+      setValue("Address", findData?.Address || "");
+      setValue("payment", findData?.payment || "");
+    } else {
+      setValue("orderstatus", "");
+      setValue("orderNote", "");
+      setValue("Address", "");
+      setValue("payment", "");
+    }
+  }, [orderHistoryData, isEdit]);
+
+  // const { mutate: orderSummaryData, isPending } = useMutation({
+  //   mutationFn: (id) => getOrderSummary(id),
+  //   onSuccess: (res) => {
+  //     setSummaryData(res?.data?.data);
+  //   },
+  // });
+  // const handleView = (id: any) => {
+  //   orderSummaryData(id);
+  // };
+
+  const onSubmit = (data: FieldValues) => {
+    // setOpen(false);
+    const payload = new FormData();
+    // payload.append("maintitle", data.maintitle);
   };
-
-  console.log("summaryData", summaryData);
 
   const columns: Column<Customer>[] = [
     {
@@ -44,7 +99,9 @@ const OrderHistory = () => {
       cell: ({ row }) => {
         return (
           <img
-            src={row?.original?.order_item?.[0]?.productimage?.[0]}
+            src={
+              row?.original?.productResponse?.[0]?.product?.productimage?.[0]
+            }
             className="w-[40px] h-[40px] object-cover rounded"
           />
         );
@@ -66,7 +123,45 @@ const OrderHistory = () => {
       },
       cell: ({ row }) => (
         <div className="capitalize">
-          {row?.original?.order_item?.[0]?.title}
+          {row?.original?.productResponse?.[0]?.product?.title}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "payment",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            payment
+            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="capitalize">{row?.original?.payment}</div>
+      ),
+    },
+    {
+      accessorKey: "Quantity",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Quantity
+            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="capitalize">
+          {row?.original?.productResponse?.[0]?.quantity}
         </div>
       ),
     },
@@ -82,7 +177,7 @@ const OrderHistory = () => {
                 : "bg-[#dc3545]"
             }`}
           >
-            {row?.original?.order_item?.[0]?.status == "0"
+            {row?.original?.productResponse?.[0]?.status == "0"
               ? "Inactive"
               : "Active"}
           </span>
@@ -90,8 +185,8 @@ const OrderHistory = () => {
       },
     },
     {
-      accessorKey: "Summary",
-      header: () => <div className="text-left">Summary</div>,
+      accessorKey: "Action",
+      header: () => <div className="text-left">Action</div>,
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
@@ -104,20 +199,18 @@ const OrderHistory = () => {
             >
               <EyeIcon className="text-[#fff] text-[16px]" />
             </Button> */}
-            <button
-              type="button"
-              onClick={() => {
-                setIsEdit(row?.original?.id);
-                setOpen(true);
-              }}
-              className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
-            >
-              <DialogBoxShape
-                icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
-                mainTitle="Edit Product"
-                item={row?.original}
-              />
-            </button>
+            {active !== 2 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setIsEdit(row?.original?.id);
+                  setOpen(true);
+                }}
+                className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
+              >
+                <AiOutlineEdit className="text-[#fff] text-[16px]" />
+              </button>
+            )}
           </div>
         );
       },
@@ -127,7 +220,82 @@ const OrderHistory = () => {
   const handleClose = () => {
     setOpenView(false);
   };
-
+  const body = (
+    <div>
+      {isPending && <Loading />}
+      <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
+        {isEdit ? "Edit" : "Add"} Product
+      </h2>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mt-1">
+            <InputWithLabel
+              type="text"
+              name="orderNote"
+              id="orderNote"
+              label="Order Note"
+              placeholder="order note"
+              error={errors?.orderNote?.message}
+              {...register("orderNote")}
+              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
+            />
+          </div>
+          <div className="mt-1">
+            <InputWithLabel
+              type="text"
+              name="Address"
+              id="Address"
+              label="Address"
+              placeholder="address"
+              error={errors?.Address?.message}
+              {...register("Address")}
+              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
+            />
+          </div>
+          <div className="mt-1">
+            <InputWithLabel
+              type="text"
+              name="payment"
+              id="payment"
+              label="Payment"
+              placeholder="Payment"
+              error={errors?.price?.message}
+              {...register("payment")}
+              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
+            />
+          </div>
+          <div className="mt-1">
+            <InputWithLabel
+              type="text"
+              name="orderstatus"
+              id="orderstatus"
+              label="Order Status"
+              placeholder="order status"
+              error={errors?.orderstatus?.message}
+              {...register("orderstatus")}
+              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
+            />
+          </div>
+          <div className="flex justify-end gap-4 mt-5">
+            <Button
+              variant={"outline"}
+              className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+              onClick={() => handleClose()}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant={"outline"}
+              className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+            >
+              Save
+            </Button>
+          </div>
+        </form>
+      </FormProvider>
+    </div>
+  );
   const OrderViewBody = (
     <div>
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
@@ -143,13 +311,13 @@ const OrderHistory = () => {
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Product</strong>
           <div className="grid grid-cols-subgrid gap-4 col-span-2">
-            {summaryData?.order_item[0]?.title}
+            {summaryData?.productResponse[0]?.title}
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Colour</strong>
           <div className="grid grid-cols-subgrid gap-4 col-span-2">
-            {summaryData?.order_item[0]?.colour}
+            {summaryData?.productResponse[0]?.colour}
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
@@ -161,7 +329,7 @@ const OrderHistory = () => {
         <div className="grid grid-cols-3 gap-4 border-b py-2">
           <strong>Shape</strong>
           <div className="grid grid-cols-subgrid gap-4 col-span-2">
-            {summaryData?.order_item[0]?.shape}
+            {summaryData?.productResponse[0]?.shape}
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4 border-b py-2">
@@ -233,7 +401,7 @@ const OrderHistory = () => {
           <DataTableDemo
             data={orderHistoryData?.data?.responceData || []}
             columns={columns}
-            filterName={"title"}
+            filterName={"name"}
             setActivePage={setActivePage}
             pageCount={orderHistoryData?.data?.total}
             customButton={
@@ -272,13 +440,18 @@ const OrderHistory = () => {
           />
         </TabsContent>
       </Tabs>
-
       <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        children={body}
+        className="!p-[20px]"
+      />
+      {/* <Modal
         open={openview}
         onClose={() => setOpenView(false)}
         children={OrderViewBody}
         className="!p-[20px]"
-      />
+      /> */}
     </div>
   );
 };
