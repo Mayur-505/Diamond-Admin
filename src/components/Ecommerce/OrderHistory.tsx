@@ -2,10 +2,11 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { Button } from "../ui/button";
 import { DataTableDemo } from "../Common/DataTable";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getOrderHistory,
   getOrderSummary,
+  updateOrderHistory,
 } from "@/services/orderhistoryService";
 import { EyeIcon } from "lucide-react";
 import Modal from "../Common/Model";
@@ -15,6 +16,9 @@ import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import InputWithLabel from "../Common/InputWithLabel";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Loading from "../Common/Loading";
+import { toast } from "../ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const OrderHistory = () => {
   const [activePage, setActivePage] = useState(1);
@@ -23,6 +27,8 @@ const OrderHistory = () => {
   const [summaryData, setSummaryData] = useState(null);
   const [active, setActive] = useState(0);
   const [openview, setOpenView] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState({
     orderstatus: "",
     orderNote: "",
@@ -86,10 +92,26 @@ const OrderHistory = () => {
   //   orderSummaryData(id);
   // };
 
+  const { mutate: updateOrder } = useMutation({
+    mutationFn: updateOrderHistory,
+    onSuccess: () => {
+      toast({
+        description: "Order updated successfully.",
+      });
+      reset();
+      navigate("/gems/order-history");
+      queryClient.invalidateQueries({ queryKey: ["GET_ORDER_HISTORY"] });
+    },
+    onError: () => {
+      toast({ description: "Something went wrong." });
+    },
+  });
+
   const onSubmit = (data: FieldValues) => {
     // setOpen(false);
     const payload = new FormData();
     // payload.append("maintitle", data.maintitle);
+    updateOrder(payload);
   };
 
   const columns: Column<Customer>[] = [

@@ -32,3 +32,15 @@ export const getOrderSummary = async (id: string) => {
 
   return api({ url, method, headers });
 };
+
+export const updateOrderHistory = async ({ data }: { data: FormData }) => {
+  const url = `/order/update`;
+  const method = "patch";
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/x-www-form-urlencoded",
+  };
+  const res = await api({ url, method, data, headers, isFormData: false });
+  return res.data;
+};
