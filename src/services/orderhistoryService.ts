@@ -1,5 +1,16 @@
 import api from "./api";
 
+export enum Order_Status {
+  Processing,
+  Ongoing,
+  Delivered,
+}
+export enum payment_Status {
+  Pendding,
+  Processing,
+  Complete,
+}
+
 export const getOrderHistory = async (params) => {
   const url = "/order/getall";
   const method = "get";

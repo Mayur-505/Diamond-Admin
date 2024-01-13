@@ -9,15 +9,20 @@ import {
 } from "@/services/orderhistoryService";
 import { EyeIcon } from "lucide-react";
 import Modal from "../Common/Model";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { AiOutlineEdit } from "react-icons/ai";
 
 const OrderHistory = () => {
   const [activePage, setActivePage] = useState(1);
-  const [summaryData, setSummaryData] = useState();
+  const [isEdit, setIsEdit] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [summaryData, setSummaryData] = useState(null);
+  const [active, setActive] = useState(0);
   const [openview, setOpenView] = useState<boolean>(false);
 
   const { data: orderHistoryData } = useQuery({
-    queryKey: ["GET_ORDER_HISTORY", { activePage }],
-    queryFn: () => getOrderHistory({ page: activePage, pageSize: 10 }),
+    queryKey: ["GET_ORDER_HISTORY", { active }],
+    queryFn: () => getOrderHistory({ orderstatus: active }),
   });
 
   const { mutate: orderSummaryData } = useMutation({
@@ -90,7 +95,7 @@ const OrderHistory = () => {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            <Button
+            {/* <Button
               onClick={() => {
                 handleView(row?.original?.id);
                 setOpenView(true);
@@ -98,7 +103,21 @@ const OrderHistory = () => {
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <EyeIcon className="text-[#fff] text-[16px]" />
-            </Button>
+            </Button> */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsEdit(row?.original?.id);
+                setOpen(true);
+              }}
+              className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
+            >
+              <DialogBoxShape
+                icon={<AiOutlineEdit className="text-[#fff] text-[16px]" />}
+                mainTitle="Edit Product"
+                item={row?.original}
+              />
+            </button>
           </div>
         );
       },
@@ -177,25 +196,83 @@ const OrderHistory = () => {
   );
   return (
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
-      <DataTableDemo
-        data={orderHistoryData?.data?.responceData || []}
-        columns={columns}
-        filterName={"title"}
-        setActivePage={setActivePage}
-        pageCount={orderHistoryData?.data?.total}
-        customButton={
-          <div className="flex justify-end gap-4">
-            <div className="flex flex-col text-center md:text-left">
-              <span className="text-900 text-[21px] font-Nunito mb-2">
-                My Orders
-              </span>
-              <span className="text-700 text-[16px] text-[#616161] font-Nunito">
-                Dignissim diam quis enim lobortis.
-              </span>
-            </div>
-          </div>
-        }
-      />
+      <Tabs defaultValue="Processing" className="">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="Processing" onClick={() => setActive(0)}>
+            Processing
+          </TabsTrigger>
+          <TabsTrigger value="Ongoing" onClick={() => setActive(1)}>
+            Ongoing
+          </TabsTrigger>
+          <TabsTrigger value="Delivered" onClick={() => setActive(2)}>
+            Delivered
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="Processing">
+          <DataTableDemo
+            data={orderHistoryData?.data?.responceData || []}
+            columns={columns}
+            filterName={"title"}
+            setActivePage={setActivePage}
+            pageCount={orderHistoryData?.data?.total}
+            customButton={
+              <div className="flex justify-end gap-4">
+                <div className="flex flex-col text-center md:text-left">
+                  <span className="text-900 text-[21px] font-Nunito mb-2">
+                    My Orders
+                  </span>
+                  <span className="text-700 text-[16px] text-[#616161] font-Nunito">
+                    Dignissim diam quis enim lobortis.
+                  </span>
+                </div>
+              </div>
+            }
+          />
+        </TabsContent>
+        <TabsContent value="Ongoing">
+          <DataTableDemo
+            data={orderHistoryData?.data?.responceData || []}
+            columns={columns}
+            filterName={"title"}
+            setActivePage={setActivePage}
+            pageCount={orderHistoryData?.data?.total}
+            customButton={
+              <div className="flex justify-end gap-4">
+                <div className="flex flex-col text-center md:text-left">
+                  <span className="text-900 text-[21px] font-Nunito mb-2">
+                    My Orders
+                  </span>
+                  <span className="text-700 text-[16px] text-[#616161] font-Nunito">
+                    Dignissim diam quis enim lobortis.
+                  </span>
+                </div>
+              </div>
+            }
+          />
+        </TabsContent>
+        <TabsContent value="Delivered">
+          <DataTableDemo
+            data={orderHistoryData?.data?.responceData || []}
+            columns={columns}
+            filterName={"title"}
+            setActivePage={setActivePage}
+            pageCount={orderHistoryData?.data?.total}
+            customButton={
+              <div className="flex justify-end gap-4">
+                <div className="flex flex-col text-center md:text-left">
+                  <span className="text-900 text-[21px] font-Nunito mb-2">
+                    My Orders
+                  </span>
+                  <span className="text-700 text-[16px] text-[#616161] font-Nunito">
+                    Dignissim diam quis enim lobortis.
+                  </span>
+                </div>
+              </div>
+            }
+          />
+        </TabsContent>
+      </Tabs>
+
       <Modal
         open={openview}
         onClose={() => setOpenView(false)}
