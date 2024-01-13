@@ -29,6 +29,7 @@ import AdminUser from "./components/User/AdminUser";
 import BlogList from "./components/blog/BlogList";
 import BannerList from "./components/banner/BannerList";
 import MyProfile from "./components/MyProfile/MyProfile";
+import EditProduct from "./components/Ecommerce/EditProduct";
 
 const router = createBrowserRouter([
   {
@@ -107,6 +108,10 @@ const router = createBrowserRouter([
       {
         path: "new-product",
         element: <NewProduct />,
+      },
+      {
+        path: "edit-product/:id",
+        element: <EditProduct />,
       },
       {
         path: "order-history",

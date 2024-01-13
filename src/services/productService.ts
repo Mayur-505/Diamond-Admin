@@ -49,6 +49,11 @@ export const deleteProduct = async (id: string) => {
 export const updateProduct = async ({ data }: { data: FormData }) => {
   const url = `/product/update`;
   const method = "patch";
-  const res = await api({ url, method, data });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+  const res = await api({ url, method, data, headers, isFormData: false });
   return res.data;
 };
