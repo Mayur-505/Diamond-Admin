@@ -15,6 +15,7 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { ErrorType, Products } from "@/lib/types";
 import { EyeIcon } from "lucide-react";
 import Loading from "../Common/Loading";
+import { toast } from "../ui/use-toast";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -59,6 +60,9 @@ const ProductList = () => {
     mutationFn: deleteProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
+      toast({
+        description: "Product deleted successfully.",
+      });
     },
     onError: (error: ErrorType) => {
       console.log(error);

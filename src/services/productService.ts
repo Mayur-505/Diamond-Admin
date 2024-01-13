@@ -42,7 +42,11 @@ export const getSingleProduct = async (id: string) => {
 export const deleteProduct = async (id: string) => {
   const url = `/product/delete/${id}`;
   const method = "delete";
-  const res = await api({ url, method, data: {} });
+  const token = localStorage.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  const res = await api({ url, method, headers, data: {} });
   return res.data;
 };
 
