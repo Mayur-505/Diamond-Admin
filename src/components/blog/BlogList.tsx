@@ -438,21 +438,6 @@ const BlogList = () => {
           </div>
           <div className="grid grid-cols-3 gap-4 border-b py-2">
             <strong>Author</strong>
-          </div>
-          <div className="grid grid-cols-3 gap-4 border-b py-2">
-            <strong>First Name</strong>
-            <div className="grid grid-cols-subgrid gap-4 col-span-2">
-              {singleBlogData?.author?.firstname}
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-4 border-b py-2">
-            <strong>Last Name</strong>
-            <div className="grid grid-cols-subgrid gap-4 col-span-2">
-              {singleBlogData?.author?.lastname}
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-4 border-b py-2">
-            <strong>Email</strong>
             <div className="grid grid-cols-subgrid gap-4 col-span-2">
               {singleBlogData?.author?.email}
             </div>
