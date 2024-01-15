@@ -21,6 +21,7 @@ import {
 } from "@/services/cutServices";
 import Loading from "../Common/Loading";
 import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -76,6 +77,7 @@ const Index = () => {
       setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
+        variant: "success",
         title: "Cut created successfully",
       });
       setOpen(false);
@@ -86,7 +88,10 @@ const Index = () => {
       if (error?.code == 401) {
         navigate("/auth/login");
       }
-      console.log(error, "error");
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -95,17 +100,21 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
-        title: "Cut Deleted successfully",
-        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+        variant: "success",
+        title: "Cut deleted successfully",
       });
       setIsOpen(false);
+      setOpenDelete(false);
     },
     onError: (error: ErrorType) => {
+      setIsOpen(false);
       if (error?.code == 401) {
         navigate("/auth/login");
       }
-      console.log(error);
-      setIsOpen(false);
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -116,8 +125,8 @@ const Index = () => {
       setOpen(false);
       setIsOpen(false);
       toast({
+        variant: "success",
         title: "Cut edit successfully",
-        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
       setEdit("");
       reset();
@@ -127,6 +136,10 @@ const Index = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       setIsOpen(false);
     },
   });
@@ -196,11 +209,11 @@ const Index = () => {
         name,
         cutid: edit,
       };
-      setIsOpen(true);
       editCut({ data: payload });
     } else {
       addCut(data);
     }
+    setIsOpen(true);
   };
 
   const handleDelete = (id: string) => {
@@ -210,13 +223,13 @@ const Index = () => {
 
   const handleDeleteCut = () => {
     removeCut(deleteID);
-    setOpenDelete(false);
     setIsOpen(true);
   };
 
   const Deletebody = (
     <div>
-      {isPending && <Loading />}
+      {createPortal(<>{isopen && <Loading />}</>, document.body)}
+      {createPortal(<>{isPending && <Loading />}</>, document.body)}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -240,8 +253,8 @@ const Index = () => {
 
   const body = (
     <div>
-      {isPending && <Loading />}
-      {isopen && <Loading />}
+      {createPortal(<>{isPending && <Loading />}</>, document.body)}
+      {createPortal(<>{isopen && <Loading />}</>, document.body)}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
         {edit ? "Edit" : "Add"} Cut
       </h2>
@@ -284,8 +297,8 @@ const Index = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
-      {isPending && <Loading />}
-      {isopen && <Loading />}
+      {createPortal(<>{isopen && <Loading />}</>, document.body)}
+      {createPortal(<>{isPending && <Loading />}</>, document.body)}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

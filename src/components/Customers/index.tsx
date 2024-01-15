@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
 import { RiArrowUpDownFill } from "react-icons/ri";
+import { IoMdCheckmark } from "react-icons/io";
 import { Progress } from "../ui/progress";
 import {
   EditContact,
@@ -16,6 +17,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { AiOutlineEdit } from "react-icons/ai";
 import Loading from "../Common/Loading";
 import Modal from "../Common/Model";
+import { useNavigate } from "react-router-dom";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -29,8 +31,10 @@ const Index: React.FC = () => {
   const [inActivePage, setInActivePage] = useState(1);
   const [active, setActive] = useState("active");
   const [openDelete, setOpenDelete] = React.useState(false);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [deleteID, setDeleteID] = React.useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data: ActiveContactData, isLoading } = useQuery({
     queryKey: ["ACTIVE_CONTACT", { activePage }],
@@ -50,9 +54,21 @@ const Index: React.FC = () => {
       queryClient.invalidateQueries({
         queryKey: ["INACTIVE_CONTACT"],
       });
+      toast({
+        title: "User deleted successfully",
+      });
+      setOpenDelete(false);
+      setIsOpen(false);
     },
-    onError: () => {
-      toast({ description: "Not deleted" });
+    onError: (error) => {
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
+      setIsOpen(false);
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -62,12 +78,20 @@ const Index: React.FC = () => {
       queryClient.invalidateQueries({
         queryKey: ["ACTIVE_CONTACT"],
       });
+      setIsOpen(false);
+      toast({
+        title: "User is Inactive successfully",
+      });
     },
     onError: (error) => {
-      toast({ description: "Not deleted" });
+      setIsOpen(false);
       if (error?.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -78,12 +102,13 @@ const Index: React.FC = () => {
 
   const handleDeleteContact = () => {
     removeContact(deleteID);
-    setOpenDelete(false);
+    setIsOpen(true);
   };
 
   const Deletebody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -195,12 +220,13 @@ const Index: React.FC = () => {
             {active === "active" && (
               <button
                 type="button"
-                onClick={() =>
-                  mutate({ contactid: row?.original?.id, status: 2 })
-                }
+                onClick={() => {
+                  mutate({ contactid: row?.original?.id, status: 2 }),
+                    setIsOpen(true);
+                }}
                 className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
               >
-                <AiOutlineEdit className="text-[#fff] text-[16px]" />
+                <IoMdCheckmark className="text-[#fff] text-[16px]" />
               </button>
             )}
             <button
@@ -220,6 +246,7 @@ const Index: React.FC = () => {
     <div className="custom_contener !mb-[28px] !p-[17.5px] customShadow">
       {isLoading && <Loading />}
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <Tabs defaultValue="Active" className="">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="Active" onClick={() => setActive("active")}>

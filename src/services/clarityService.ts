@@ -1,11 +1,7 @@
 import { Clarity } from "@/lib/types";
 import api from "./api";
 
-export const getClarity = async ({
-  params,
-}: {
-  params: { page: number; pageSize: number };
-}): Promise<Clarity[]> => {
+export const getClarity = async (params): Promise<Clarity[]> => {
   const url = "/clarity/fetch";
   const method = "get";
 

@@ -21,6 +21,7 @@ import Loading from "../Common/Loading";
 import { DialogBoxShape } from "./DialogBoxShape";
 import { UploadImage } from "@/services/adminService";
 import { useNavigate } from "react-router-dom";
+import { toast } from "../ui/use-toast";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -51,9 +52,9 @@ const Index = () => {
   const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [imageUrl, setImageUrl] = React.useState<string>("");
   const [activePage, setActivePage] = React.useState<number>(1);
-  const [isEdit, setIsEdit] = React.useState<string>("");
-  const [openDelete, setOpenDelete] = React.useState(false);
   const [deleteID, setDeleteID] = React.useState("");
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [isEdit, setIsEdit] = React.useState<string>("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const methods = useForm({
@@ -97,8 +98,13 @@ const Index = () => {
     mutationFn: createShape,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
+      toast({
+        variant: "success",
+        title: "Shape add successfully",
+      });
       setIsOpen(false);
       setOpen(false);
+      setImageUrl("");
       reset();
     },
     onError: (error: ErrorType) => {
@@ -107,6 +113,10 @@ const Index = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -114,14 +124,23 @@ const Index = () => {
     mutationFn: deleteShape,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
+      toast({
+        variant: "success",
+        title: "Shape delete successfully",
+      });
       setIsOpen(false);
+      setOpenDelete(false);
     },
     onError: (error: ErrorType) => {
       console.log(error);
+      setIsOpen(false);
       if (error.code == 401) {
         navigate("/auth/login");
       }
-      setIsOpen(false);
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -130,6 +149,11 @@ const Index = () => {
     onSuccess: () => {
       setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
+      toast({
+        variant: "success",
+        title: "Shape edit successfully",
+      });
+      setImageUrl("");
       setOpen(false);
       reset();
     },
@@ -139,6 +163,10 @@ const Index = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
   const handleDelete = (id: string) => {
@@ -151,9 +179,16 @@ const Index = () => {
     setOpenDelete(false);
     setIsOpen(true);
   };
+
+  const handleDeleteClarity = () => {
+    removeShape(deleteID);
+    setIsOpen(true);
+  };
+
   const Deletebody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -167,7 +202,7 @@ const Index = () => {
           type="submit"
           variant={"outline"}
           className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
-          onClick={handleDeleteShape}
+          onClick={handleDeleteClarity}
         >
           Delete
         </Button>
@@ -251,6 +286,7 @@ const Index = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setImageUrl("");
   };
 
   const { mutate: UploadImagedata } = useMutation({
@@ -289,8 +325,8 @@ const Index = () => {
   const handlechangeImage = (e: any) => {
     const { files } = e.target;
     const payload = new FormData();
-    payload.append("image", files[0]);
     setIsOpen(true);
+    payload.append("image", files[0]);
     UploadImagedata(payload);
   };
 
@@ -339,6 +375,7 @@ const Index = () => {
               name="images"
               id="images"
               label="Image"
+              image={imageUrl}
               placeholder="Image"
               error={errors?.images?.message}
               onInput={handlechangeImage}
@@ -350,6 +387,7 @@ const Index = () => {
           <div className="flex justify-end gap-4 mt-5">
             <Button
               variant={"outline"}
+              type="button"
               className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
               onClick={() => handleClose()}
             >
@@ -397,7 +435,7 @@ const Index = () => {
       <Modal
         open={open}
         onClose={() => {
-          setOpen(false), setIsEdit("");
+          setOpen(false), setIsEdit(""), setImageUrl("");
         }}
         children={body}
         className="!p-[20px]"

@@ -85,7 +85,7 @@ const AddInnerCategory = () => {
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-2">
           <h3 className="text-[17.5px] font-Nunito font-[700] mb-[21px]">
-            Create Category
+            Create Inner-Category
           </h3>
         </div>
         <div className="col-span-10 grid grid-cols-12 gap-4">

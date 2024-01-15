@@ -80,16 +80,8 @@ const Index: React.FC = () => {
       accessorKey: "role",
       header: () => <div className="text-left">Role</div>,
       cell: ({ row }) => {
-        return <div className="text-left font-medium">{row.original.role}</div>;
-      },
-    },
-    {
-      accessorKey: "Activity",
-      header: () => <div className="text-left">Activity</div>,
-      cell: ({ row }) => {
         return (
-          <Progress value={row.original.status} className="h-2 w-[100px]" />
-          //   <div className="text-left font-medium">{row.original.activity}</div>
+          <div className="text-left">{row.original.role == 1 && "User"}</div>
         );
       },
     },
@@ -106,7 +98,7 @@ const Index: React.FC = () => {
         columns={columns}
         setActivePage={setActivePage}
         pageCount={UserData?.data?.total}
-        filterable={"name"}
+        filterName={"firstname"}
       />
     </div>
   );

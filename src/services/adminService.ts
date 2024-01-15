@@ -19,7 +19,7 @@ export const assignAdmin = async (data: any) => {
 };
 
 export const removeAdmin = (id: string) => {
-  const url = `/remove/admin/${id}`,
+  const url = `user/remove/admin/${id}`,
     method = "patch";
   const token = localStorage.token;
   const headers = {

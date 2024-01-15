@@ -75,18 +75,21 @@ const Index = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_COLOR"] });
       setIsOpen(false);
       toast({
+        variant: "success",
         title: "Color created successfully",
-        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
       });
       setOpen(false);
       reset();
     },
     onError: (error: ErrorType) => {
-      console.log(error);
       setIsOpen(false);
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -95,17 +98,21 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_COLOR"] });
       toast({
-        title: "Color Deleted successfully",
-        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+        variant: "success",
+        title: "Color deleted successfully",
       });
+      setOpenDelete(false);
       setIsOpen(false);
     },
     onError: (error: ErrorType) => {
-      console.log(error);
       setIsOpen(false);
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -114,6 +121,10 @@ const Index = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_COLOR"] });
       setOpen(false);
+      toast({
+        variant: "success",
+        title: "Color edit successfully",
+      });
       setIsOpen(false);
       setEdit("");
       reset();
@@ -124,6 +135,10 @@ const Index = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -142,7 +157,6 @@ const Index = () => {
 
   const handleDeleteColor = () => {
     removeColor(deleteID);
-    setOpenDelete(false);
     setIsOpen(true);
   };
 
@@ -256,6 +270,7 @@ const Index = () => {
   const Deletebody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button

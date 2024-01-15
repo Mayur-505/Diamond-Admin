@@ -275,6 +275,7 @@ const OrderHistory = () => {
           <div className="flex justify-end gap-4 mt-5">
             <Button
               variant={"outline"}
+              type="button"
               className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
               onClick={() => handleClose()}
             >

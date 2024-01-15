@@ -105,9 +105,9 @@ const BannerList = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
       setOpen(false);
       reset();
+      setImageUrl("");
       toast({
-        title: "create banner",
-        description: "create banner successfully",
+        description: "Create banner successfully",
       });
     },
     onError: (error: ErrorType) => {
@@ -116,6 +116,10 @@ const BannerList = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -123,10 +127,11 @@ const BannerList = () => {
     mutationFn: deleteBanner,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BANNERDATA"] });
+      setOpenDelete(false);
       toast({
-        title: "delete banner",
-        description: "delete banner successfully",
+        description: "Delete banner successfully",
       });
+      setImageUrl("");
       setIsOpen(false);
     },
     onError: (error: ErrorType) => {
@@ -135,6 +140,10 @@ const BannerList = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -146,8 +155,7 @@ const BannerList = () => {
       setIsOpen(false);
       reset();
       toast({
-        title: "update banner",
-        description: "update banner successfully",
+        description: "Update banner successfully",
       });
     },
     onError: (error: ErrorType) => {
@@ -156,6 +164,10 @@ const BannerList = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -178,7 +190,6 @@ const BannerList = () => {
   const handleDeleteBanner = () => {
     setIsOpen(true);
     removeBanner(deleteID);
-    setOpenDelete(false);
   };
   const columns: Column<Shape>[] = [
     {
@@ -307,7 +318,6 @@ const BannerList = () => {
       addBlog(payload);
     }
     setIsOpen(true);
-    setIsEdit("");
   };
 
   const body = (
@@ -353,6 +363,7 @@ const BannerList = () => {
               name="images"
               id="images"
               label="Image"
+              image={imageUrl}
               placeholder="Image"
               error={errors?.images?.message}
               {...register("images")}
@@ -364,6 +375,7 @@ const BannerList = () => {
           <div className="flex justify-end gap-4 mt-5">
             <Button
               variant={"outline"}
+              type="button"
               className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
               onClick={() => handleClose()}
             >
@@ -384,6 +396,7 @@ const BannerList = () => {
   const Deletebody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -478,14 +491,16 @@ const BannerList = () => {
       <Modal
         open={open}
         onClose={() => {
-          setOpen(false), setIsEdit("");
+          setOpen(false), setIsEdit(""), setImageUrl("");
         }}
         children={body}
         className="!p-[20px]"
       />
       <Modal
         open={openview}
-        onClose={() => setOpenView(false)}
+        onClose={() => {
+          setOpenView(false);
+        }}
         children={BannerViewBody}
         className="!p-[20px]"
       />

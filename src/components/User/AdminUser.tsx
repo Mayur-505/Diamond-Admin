@@ -25,6 +25,7 @@ const AdminUser: React.FC = () => {
   const queryClient = useQueryClient();
   const [activePage, setActivePage] = useState(1);
   const [openDelete, setOpenDelete] = React.useState(false);
+  const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [deleteID, setDeleteID] = React.useState("");
   const [formValues, setFormValues] = useState({
     email: "",
@@ -41,12 +42,21 @@ const AdminUser: React.FC = () => {
       queryClient.invalidateQueries({
         queryKey: ["GET_ADMIN"],
       });
+      toast({
+        description: "Admin deleted successfully",
+      });
+      setOpenDelete(false);
+      setIsOpen(false);
     },
     onError: (error) => {
-      toast({ description: "Not deleted" });
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       if (error?.code == 401) {
         navigate("/auth/login");
       }
+      setIsOpen(false);
     },
   });
   const { mutate, isPending } = useMutation({
@@ -55,9 +65,15 @@ const AdminUser: React.FC = () => {
       queryClient.invalidateQueries({
         queryKey: ["GET_ADMIN"],
       });
+      toast({
+        description: "Admin add successfully",
+      });
     },
     onError: (error) => {
-      toast({ description: error?.data?.message });
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       if (error?.code == 401) {
         navigate("/auth/login");
       }
@@ -79,7 +95,7 @@ const AdminUser: React.FC = () => {
 
   const handleDeleteAdmin = () => {
     removeadmin(deleteID);
-    setOpenDelete(false);
+    setIsOpen(true);
   };
   const columns: Column<Admin>[] = [
     {
@@ -138,16 +154,8 @@ const AdminUser: React.FC = () => {
       accessorKey: "role",
       header: () => <div className="text-left">Role</div>,
       cell: ({ row }) => {
-        return <div className="text-left font-medium">{row.original.role}</div>;
-      },
-    },
-    {
-      accessorKey: "Activity",
-      header: () => <div className="text-left">Activity</div>,
-      cell: ({ row }) => {
         return (
-          <Progress value={row.original.status} className="h-2 w-[100px]" />
-          //   <div className="text-left font-medium">{row.original.activity}</div>
+          <div className="text-left">{row.original.role == 2 && "Admin"}</div>
         );
       },
     },
@@ -172,6 +180,7 @@ const AdminUser: React.FC = () => {
   const Deletebody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -204,9 +213,9 @@ const AdminUser: React.FC = () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           columns={columns}
+          filterName="firstname"
           setActivePage={setActivePage}
-          pageCount={adminData?.data?.admindata?.total}
-          filterable={"name"}
+          pageCount={adminData?.data?.total}
         />
         <Modal
           open={openDelete}

@@ -111,8 +111,8 @@ const BlogList = () => {
       setOpen(false);
       setIsOpen(false);
       reset();
+      setImageUrl("");
       toast({
-        title: "create blog",
         description: "create blog successfully",
       });
     },
@@ -122,6 +122,10 @@ const BlogList = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -130,9 +134,9 @@ const BlogList = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
       toast({
-        title: "delete blog",
         description: "delete blog successfully",
       });
+      setOpenDelete(false);
       setIsOpen(false);
     },
     onError: (error: ErrorType) => {
@@ -141,6 +145,10 @@ const BlogList = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -150,9 +158,9 @@ const BlogList = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_BLOG"] });
       setIsOpen(false);
       setOpen(false);
+      setImageUrl("");
       reset();
       toast({
-        title: "update blog",
         description: "update blog successfully",
       });
     },
@@ -162,6 +170,10 @@ const BlogList = () => {
       if (error.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -299,6 +311,7 @@ const BlogList = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setImageUrl("");
   };
 
   const onSubmit = (data: FieldValues) => {
@@ -332,7 +345,6 @@ const BlogList = () => {
 
   const handleDeleteBlog = () => {
     removeBlog(deleteID);
-    setOpenDelete(false);
     setIsOpen(true);
   };
 
@@ -396,6 +408,7 @@ const BlogList = () => {
               id="images"
               label="Image"
               placeholder="Image"
+              image={imageUrl}
               error={errors?.images?.message}
               onInput={handlechangeImage}
               {...register("images")}
@@ -406,6 +419,7 @@ const BlogList = () => {
           <div className="flex justify-end gap-4 mt-5">
             <Button
               variant={"outline"}
+              type="button"
               className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
               onClick={() => handleClose()}
             >
@@ -427,6 +441,7 @@ const BlogList = () => {
   const Deletebody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -528,7 +543,7 @@ const BlogList = () => {
       <Modal
         open={open}
         onClose={() => {
-          setOpen(false), setIsEdit("");
+          setOpen(false), setIsEdit(""), setImageUrl("");
         }}
         children={body}
         className="!p-[20px]"

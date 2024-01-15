@@ -9,10 +9,11 @@ type InputWithLabelProps = InputProps & {
   className?: string;
   id?: number | string;
   name?: string;
+  image?: string;
 };
 
 const InputWithLabel = forwardRef<HTMLInputElement, InputWithLabelProps>(
-  ({ label, className, id, name, error, ...rest }, ref) => {
+  ({ label, className, id, name, error, image, ...rest }, ref) => {
     return (
       <>
         {label && (
@@ -25,6 +26,13 @@ const InputWithLabel = forwardRef<HTMLInputElement, InputWithLabelProps>(
         )}
         <div className={`grid items-center gap-1 overflow-hidden ${className}`}>
           <Input {...rest} id={id} name={name} ref={ref} />
+          {image && (
+            <img
+              src={image}
+              alt="image"
+              className="h-[150px] w-[300px] object-cover"
+            />
+          )}
         </div>
         {error && <FormError message={error} />}
       </>

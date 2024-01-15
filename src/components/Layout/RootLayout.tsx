@@ -3,8 +3,9 @@ import Sidebar from "../Sidebar";
 import TopBar from "../Topbar";
 import Footer from "../Footer";
 import { useState } from "react";
-import { Toaster } from "../ui/toaster";
+// import { Toaster } from "../ui/toaster";
 import { useAppSelector } from "@/hooks/use-redux";
+import { Toaster, toast } from "react-hot-toast";
 
 const RootLayout = () => {
   const [collapsed, setCollapsed] = useState<boolean>(true);
@@ -21,6 +22,7 @@ const RootLayout = () => {
     >
       <Sidebar collapsed={collapsed} />
       <Toaster />
+      {/* <Toaster /> */}
       <div
         className={`relative ${
           collapsed ? "pl-[224px]" : "pl-0"

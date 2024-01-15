@@ -1,10 +1,6 @@
 import api from "./api";
 
-export const getCut = async ({
-  params,
-}: {
-  params: { page: number; pageSize: number };
-}) => {
+export const getCut = async (params) => {
   const url = "/cut/fetch";
   const method = "get";
   const res = await api({ url, method, params });

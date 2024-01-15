@@ -135,7 +135,7 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
         </div>
         <div className="border-b-[1px] pb-[14px] mb-[14px] border-solid border-[#ffffff33]">
           <h2 className="text-[#ffffff99] uppercase font-Nunito pb-[14px] font-[700] text-[12px]">
-            Customer Cantact
+            customer contact
           </h2>
           <ul>
             <Link
