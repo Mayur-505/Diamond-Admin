@@ -37,18 +37,6 @@ const rejectStyle = {
 
 const BulkUpload = () => {
   const navigate = useNavigate();
-  const {
-    getRootProps,
-    getInputProps,
-    isFocused,
-    isDragAccept,
-    isDragReject,
-    acceptedFiles, // This will contain the array of accepted files
-  } = useDropzone({
-    accept: ".xlsx",
-    maxFiles: 1,
-    multiple: false,
-  });
 
   const { mutate: uploadBulk, isPending } = useMutation({
     mutationFn: BulkUploadData,
@@ -68,12 +56,37 @@ const BulkUpload = () => {
     },
   });
 
+  const handleUploadFile = (file: File[]) => {
+    console.log("file6++", file);
+    if (!file.length)
+      return toast({
+        variant: "error",
+        title: "Invalid file",
+        description: "Upload only .xlsx files.",
+      });
+    const payload = new FormData();
+    payload.append("product_exel", file[0]);
+    uploadBulk(payload);
+  };
+
+  const {
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+    acceptedFiles, // This will contain the array of accepted files
+  } = useDropzone({
+    accept: {
+      "file/xlsx": [".xlsx"],
+    },
+    maxFiles: 1,
+    multiple: false,
+    onDrop: handleUploadFile,
+  });
+
   useEffect(() => {
     if (acceptedFiles?.length) {
-      const payload = new FormData();
-      payload.append("product_exel", acceptedFiles[0]);
-      console.log("acceptedFiles", acceptedFiles[0]);
-      uploadBulk(payload);
     }
   }, [acceptedFiles]);
 
@@ -92,7 +105,10 @@ const BulkUpload = () => {
       {isPending && <Loading />}
       <div className=" ml-[30px] mt-[50px] max-w-[400px] bg-[#fafafa] border-[1px] border-solid border-[#0000004f] rounded-[3px] p-[15px]">
         <div {...getRootProps({ style })}>
-          <input {...getInputProps()} />
+          <input
+            {...getInputProps()}
+            accept="application/vnd.ms-excel (.XLS)"
+          />
           <p className="text-[15px] text-[#000]">
             <div className="text-[70px] pb-[10px] text-[] flex items-center w-full justify-center">
               <BiSolidCloudUpload />

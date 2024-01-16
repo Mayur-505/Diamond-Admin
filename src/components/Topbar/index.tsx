@@ -1,9 +1,12 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { FaChevronLeft, FaRegBell } from "react-icons/fa6";
 import { LuSearch } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import { GrTextAlignRight } from "react-icons/gr";
 import { ProfileDropDown } from "../Common/ProfileDropDown";
+import { useQuery } from "@tanstack/react-query";
+import { useAppSelector } from "@/hooks/use-redux";
+import { GetOneUser } from "@/services/adminService";
 
 interface HeaderProps {
   setCollapsed: (collapsed: boolean) => void;
@@ -12,6 +15,10 @@ interface HeaderProps {
 
 const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
   const location = useLocation();
+  const { user } = useAppSelector((state) => state.auth);
+  const [userdata, setUserData] = useState({});
+  const [userID, setUserId] = useState(user?.query?.id || "");
+
   const path = location.pathname;
 
   const cleanedPath = path.replace(/^\/|\/$/g, "").trim();
@@ -20,6 +27,19 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
 
   const firstPart = parts[0];
   const secondPart = parts[1];
+
+  useEffect(() => {
+    if (user?.qurey?.id) setUserId(user?.qurey?.id);
+  }, [user]);
+
+  const { data: categoryData } = useQuery({
+    queryKey: ["GET_ONEUSER", { userID }],
+    queryFn: () => GetOneUser(userID),
+  });
+
+  useEffect(() => {
+    setUserData(categoryData?.data?.data);
+  }, [categoryData]);
   return (
     <div
       className={`${
@@ -47,7 +67,7 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
           <LuSearch style={{ fontSize: "22px" }} />
           <FaRegBell style={{ fontSize: "22px" }} />
         </div>
-        <ProfileDropDown />
+        <ProfileDropDown userdata={userdata} />
         <div className="h-[35px] w-[35px] bg-[#f8f9fa] mr-[14px]  flex items-center justify-center">
           <GrTextAlignRight style={{ fontSize: "20px" }} />
         </div>

@@ -60,9 +60,13 @@ const OrderHistory = () => {
   const { data: orderHistoryData, isLoading } = useQuery({
     queryKey: ["GET_ORDER_HISTORY", { activePage, active }],
     queryFn: () =>
-      getOrderHistory({ page: activePage, pageSize: 10, orderstatus: active }),
+      getOrderHistory({
+        page: activePage,
+        pageSize: 10,
+        orderstatus: active,
+        payment: !active == 1 ? 0 : 2,
+      }),
   });
-  console.log("orderHistoryData", orderHistoryData);
 
   useEffect(() => {
     if (orderHistoryData && isEdit) {
@@ -159,7 +163,11 @@ const OrderHistory = () => {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="">{row?.original?.payment}</div>,
+      cell: ({ row }) => (
+        <div className="">
+          {row?.original?.payment == 2 ? "Success" : "Pendding"}
+        </div>
+      ),
     },
     {
       accessorKey: "Quantity",
@@ -244,7 +252,7 @@ const OrderHistory = () => {
       {isPending && <Loading />}
       {isLoading && <Loading />}
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
-        {isEdit ? "Edit" : "Add"} Product
+        {isEdit ? "Edit" : "Add"} Order
       </h2>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>

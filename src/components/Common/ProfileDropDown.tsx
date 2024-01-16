@@ -38,7 +38,8 @@ import { LogOutAPI } from "@/services/authService";
 import { useAppSelector } from "@/hooks/use-redux";
 import { toast } from "../ui/use-toast";
 
-export function ProfileDropDown() {
+export function ProfileDropDown({ userdata }) {
+  console.log("userdata", userdata);
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
 
@@ -56,7 +57,7 @@ export function ProfileDropDown() {
     },
     onError: (response) => {
       toast({
-        title: "Logout User",
+        variant: "error",
         description: response?.data?.message?.[0]?.msg || "user not found",
       });
     },
@@ -71,12 +72,12 @@ export function ProfileDropDown() {
       <DropdownMenuTrigger asChild>
         <div className="cursor-pointer flex gap-[7px] items-center">
           <img
-            src={user?.qurey?.image || ""}
+            src={userdata?.image}
             alt="ProfileImage"
             className="max-w-[35px] w-full"
           />
           <p className="font-Nunito font-[600] text-[#495057] text-[12px] border-[#dee2e6] border-r-[1px] border-solid pr-[14px]">
-            {user?.qurey?.firstname}
+            {userdata?.firstname}
           </p>
         </div>
       </DropdownMenuTrigger>

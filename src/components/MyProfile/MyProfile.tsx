@@ -146,11 +146,16 @@ const MyProfile = () => {
                     in public
                   </p>
                 </div>
-                <div className="mt-[25px]">
+                <div className="mt-[25px] max-w-[150px] h-[150px] rounded-full relative">
                   <img
-                    src={userdata?.image || ""}
+                    src={imageUrl || userdata?.image}
                     alt="userImage"
-                    className="max-w-[150px] w-full h-[150px] rounded-full object-cover border-[1px] border-solid border-[#0000004D] "
+                    className="w-full h-full rounded-full object-cover border-[1px] border-solid border-[#0000004D] "
+                  />
+                  <input
+                    type="file"
+                    onChange={handaleImageChange}
+                    className="w-full h-full cursor-pointer rounded-full absolute top-0 left-0 opacity-0"
                   />
                 </div>
                 <div className="grid md:grid-cols-3 gap-4 py-8 border-b border-gray-200 dark:border-gray-600 items-center">
@@ -266,18 +271,14 @@ const MyProfile = () => {
                     </div>
                   </div>
                 </div>
-                <div className="grid md:grid-cols-3 gap-4 py-8 border-b border-gray-200 dark:border-gray-600 items-center">
+                {/* <div className="grid md:grid-cols-3 gap-4 py-8 border-b border-gray-200 dark:border-gray-600 items-center">
                   <div className="font-semibold">Avatar</div>
                   <div className="col-span-2">
                     <div className="form-item vertical mb-0 max-w-[700px]">
                       <label className="form-label"></label>
                       <div className="">
                         <div className="upload cursor-pointer">
-                          <input
-                            className="upload-input"
-                            type="file"
-                            onChange={handaleImageChange}
-                          />
+                          <input className="upload-input" type="file" />
                           {imageUrl && (
                             <img
                               src={imageUrl}
@@ -297,7 +298,7 @@ const MyProfile = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="grid md:grid-cols-3 gap-4 py-8 items-center">
                   <div className="font-semibold">Comment</div>
                   <div className="col-span-2">

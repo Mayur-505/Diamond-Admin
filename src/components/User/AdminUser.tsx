@@ -196,7 +196,7 @@ const AdminUser: React.FC = () => {
           className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
           onClick={handleDeleteAdmin}
         >
-          Delete
+          Remove
         </Button>
       </div>
     </div>
