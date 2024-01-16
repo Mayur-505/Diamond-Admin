@@ -7,11 +7,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
+import { UploadImage } from "@/services/adminService";
+import { allgetCategorydata } from "@/services/categoryService";
 
 const AddCategory = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [isopen, setIsOpen] = useState<boolean>(false);
 
   const [formValues, setFormValues] = useState({
     name: "",
@@ -22,18 +26,36 @@ const AddCategory = () => {
 
   const { data: subcategoryData } = useQuery({
     queryKey: ["GET_SUBCATEGORY"],
-    queryFn: getSubCategory,
+    queryFn: allgetCategorydata,
   });
 
-  const categoryOptions = subcategoryData?.data?.responseData
-    ? subcategoryData?.data?.responseData?.map((item) => ({
+  const categoryOptions = subcategoryData?.data?.modifiedCategories
+    ? subcategoryData?.data?.modifiedCategories?.map((item) => ({
         label: item.name,
-        value: item.category,
+        value: item.id,
       }))
     : [];
 
+  const { mutate: UploadImagedata } = useMutation({
+    mutationFn: UploadImage,
+    onSuccess: (res) => {
+      setImageUrl(res?.data?.data?.image);
+      setIsOpen(false);
+    },
+    onError: (error) => {
+      console.log(error);
+      setIsOpen(false);
+    },
+  });
+
   const handleChange = (name: string, value: string | Date | undefined) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
+    if (name == "image") {
+      const payload = new FormData();
+      payload.append("image", value);
+      UploadImagedata(payload);
+      setIsOpen(true);
+    }
   };
 
   const { mutate: createSubCategory, isPending } = useMutation({
@@ -42,11 +64,20 @@ const AddCategory = () => {
       toast({
         description: "Sub category Created Successfully.",
       });
+      setFormValues({
+        name: "",
+        description: "",
+        category: "",
+        image: "",
+      });
       navigate("/category/sub-category");
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: (error) => {
-      toast({ description: "Something went wrong." });
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       if (error?.code == 401) {
         navigate("/auth/login");
       }
@@ -68,50 +99,37 @@ const AddCategory = () => {
       payload.append("image", formValues.image);
     }
     createSubCategory(payload);
-    setFormValues({
-      name: "",
-      description: "",
-      category: "",
-      image: "",
-    });
   };
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <div className="grid grid-cols-12 gap-4">
         <div className="col-span-2">
           <h3 className="text-[17.5px] font-Nunito font-[700] mb-[21px]">
-            Create Category
+            Create Sub-Category
           </h3>
         </div>
         <div className="col-span-10 grid grid-cols-12 gap-4">
-          <div className="col-span-12">
+          <div className="col-span-12 flex gap-[10px]">
             <SelectMenu
               placeholder="Parent Category Name"
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
+              className="border w-[50%] border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
               label=""
               options={categoryOptions}
               value={formValues.category}
               onChange={(e) => handleChange("category", e)}
             />
-          </div>
-          <div className="col-span-4">
-            <InputWithLabel
-              id="title"
-              placeholder="Title"
-              value={formValues.name}
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
-              onChange={(e) => handleChange("name", e.target.value)}
-            />
-          </div>
-          <div className="col-span-4">
-            <input
-              id="image"
-              type="file"
-              className="col-span-3"
-              onChange={(e) => handleChange("image", e.target.files[0])}
-            />
+            <div className="col-span-4 w-[50%]">
+              <InputWithLabel
+                id="title"
+                placeholder="Title"
+                value={formValues.name}
+                className="border border-[#ced4da] h-full rounded-[4px] placeholder:opacity-[0.6] "
+                onChange={(e) => handleChange("name", e.target.value)}
+              />
+            </div>
           </div>
           <div className="col-span-12">
             <TextAreaWithLabel
@@ -123,6 +141,21 @@ const AddCategory = () => {
               className="md:col-span-2"
               onChange={(e) => handleChange("description", e.target.value)}
             />
+          </div>
+          <div className="col-span-4">
+            <input
+              id="image"
+              type="file"
+              className="col-span-3"
+              onChange={(e) => handleChange("image", e.target.files[0])}
+            />
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="images"
+                className="w-[300px] h-[150px] mt-[10px]"
+              />
+            )}
           </div>
           <div className="col-span-12 flex items-center gap-4">
             <button

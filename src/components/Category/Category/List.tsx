@@ -15,6 +15,7 @@ import { toast, useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxSubCategory } from "./DialogBoxSubCategory";
+import { allgetCategorydata } from "@/services/categoryService";
 
 interface Customer {
   id: number;
@@ -44,6 +45,13 @@ const List = () => {
     queryKey: ["GET_SUBCATEGORY", { activePage }],
     queryFn: () => getSubCategory({ page: activePage, pageSize: 10 }),
   });
+
+  const { data: categorylistData } = useQuery({
+    queryKey: ["GET_SUBCATEGORY"],
+    queryFn: allgetCategorydata,
+  });
+
+  console.log("subcategoryData", subcategoryData);
 
   const { mutate: removeCategory } = useMutation({
     mutationFn: deleteSubCategory,
@@ -82,22 +90,6 @@ const List = () => {
       },
     },
     {
-      accessorKey: "name",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Category
-            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => <div className="">{row?.original.name}</div>,
-    },
-    {
       accessorKey: "parentCategory",
       header: ({ column }) => {
         return (
@@ -112,8 +104,30 @@ const List = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="">{row?.original?.categoryid?.name}</div>
+        <div className="">
+          {
+            subcategoryData?.data?.modifiedCategories?.find((item) => {
+              item.id == row?.original?.category;
+            }).name
+          }
+        </div>
       ),
+    },
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sub-Category
+            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => <div className="">{row?.original.name}</div>,
     },
     {
       accessorKey: "Status",

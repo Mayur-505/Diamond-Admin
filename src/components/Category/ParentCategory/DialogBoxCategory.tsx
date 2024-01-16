@@ -16,7 +16,7 @@ import { toast } from "@/components/ui/use-toast";
 import { UploadImage } from "@/services/adminService";
 import { EditCategory } from "@/services/categoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 export function DialogBoxCategory({ icon, mainTitle, item }) {
@@ -27,6 +27,10 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
     description: "",
     image: "",
   });
+
+  useEffect(() => {
+    setFormValues({ ...item });
+  }, [item]);
 
   const { mutate: editCategory } = useMutation({
     mutationFn: (data) => EditCategory(item.id, data),
@@ -124,6 +128,13 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
                 onInput={handlechangeImage}
               />
             </div>
+            {item.image && (
+              <img
+                src={formValues?.image}
+                alt="images"
+                className="!w-[200px] h-[100px]"
+              />
+            )}
           </div>
           <DialogFooter>
             <Button type="submit" onClick={editFuction}>

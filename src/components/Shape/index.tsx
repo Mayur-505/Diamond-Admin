@@ -174,12 +174,6 @@ const Index = () => {
     setDeleteID(id);
   };
 
-  const handleDeleteShape = () => {
-    removeShape(deleteID);
-    setOpenDelete(false);
-    setIsOpen(true);
-  };
-
   const handleDeleteClarity = () => {
     removeShape(deleteID);
     setIsOpen(true);
