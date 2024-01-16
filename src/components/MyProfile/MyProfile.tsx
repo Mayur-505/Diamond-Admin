@@ -11,6 +11,7 @@ import { toast } from "../ui/use-toast";
 import { useAppSelector } from "@/hooks/use-redux";
 import { getCategory } from "@/services/categoryService";
 import Loading from "../Common/Loading";
+import { Button } from "../ui/button";
 
 const MyProfile = () => {
   const [dataObject, setDataObject] = useState({
@@ -20,6 +21,7 @@ const MyProfile = () => {
   });
   const { user } = useAppSelector((state) => state.auth);
   const [userdata, setUserData] = useState({});
+  const [imageUrl, setImageUrl] = useState("");
   const [userID, setUserId] = useState(user?.query?.id || "");
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +29,8 @@ const MyProfile = () => {
     changepass(dataObject);
     setIsOpen(true);
   };
+
+  console.log("userdata", userdata);
 
   useEffect(() => {
     if (user?.qurey?.id) setUserId(user?.qurey?.id);
@@ -69,12 +73,15 @@ const MyProfile = () => {
     mutationFn: UpdateProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ONEUSER"] });
+      setImageUrl("");
+      setIsOpen(false);
       toast({
         title: "profile image change",
         description: "user profile image change successfully",
       });
     },
     onError: (error) => {
+      setIsOpen(false);
       toast({
         title: "profile image change",
         description: error?.data?.message || "",
@@ -82,23 +89,10 @@ const MyProfile = () => {
     },
   });
 
-  const heandelImageIpdate = (images: string) => {
-    let payload = {
-      userid: userdata?.id,
-      image: images,
-      firstname: userdata?.firstname,
-      lastname: userdata.lastname,
-      email: userdata.email,
-      mobile: userdata.mobile,
-      password: userdata.password,
-    };
-    UpdateUser(payload);
-  };
-
   const { mutate: UploadImagedata, isPending } = useMutation({
     mutationFn: UploadImage,
     onSuccess: (res) => {
-      heandelImageIpdate(res?.data?.data?.image);
+      setImageUrl(res?.data?.data?.image);
     },
   });
 
@@ -107,6 +101,28 @@ const MyProfile = () => {
     const payload = new FormData();
     payload.append("image", files[0]);
     UploadImagedata(payload);
+  };
+
+  const handaleChangeEvent = (e) => {
+    const { name, value } = e.target;
+    console.log(userdata, "userdata", name);
+    setUserData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handaleUpdateProfile = () => {
+    let payload = {
+      userid: userdata?.id,
+      image: imageUrl,
+      firstname: userdata?.firstname,
+      Address: userdata?.Address,
+      lastname: userdata?.lastname,
+      email: userdata?.email,
+      mobile: userdata?.mobile,
+      password: userdata?.password,
+      Comment: userdata?.Comment,
+    };
+    UpdateUser(payload);
+    setIsOpen(true);
   };
   return (
     <div className="custom_contener !px-[28px] !mt-[50px]">
@@ -167,9 +183,10 @@ const MyProfile = () => {
                           <input
                             className="input input-md focus:ring-blue-600 focus-within:ring-blue-600 focus-within:border-blue-600 focus:border-blue-600"
                             type="text"
-                            name="name"
+                            name="firstname"
                             autoComplete="off"
                             placeholder="Name"
+                            onChange={handaleChangeEvent}
                             value={userdata?.firstname}
                           />
                         </span>
@@ -210,6 +227,7 @@ const MyProfile = () => {
                             name="email"
                             autoComplete="off"
                             placeholder="Email"
+                            onChange={handaleChangeEvent}
                             value={userdata?.email}
                           />
                         </span>
@@ -237,9 +255,10 @@ const MyProfile = () => {
                           <input
                             className="input input-md focus:ring-blue-600 focus-within:ring-blue-600 focus-within:border-blue-600 focus:border-blue-600"
                             type="email"
-                            name="email"
+                            name="Address"
                             autoComplete="off"
                             placeholder="Email"
+                            onChange={handaleChangeEvent}
                             value={userdata?.Address}
                           />
                         </span>
@@ -259,6 +278,13 @@ const MyProfile = () => {
                             type="file"
                             onChange={handaleImageChange}
                           />
+                          {imageUrl && (
+                            <img
+                              src={imageUrl}
+                              alt="imageUrl"
+                              className="w-[300px] h-[130px] mt-[10px]"
+                            />
+                          )}
                           <span
                             className="avatar avatar-circle border-2 border-white dark:border-gray-800 shadow-lg"
                             style={{
@@ -302,9 +328,10 @@ const MyProfile = () => {
                           <input
                             className="input input-md focus:ring-blue-600 focus-within:ring-blue-600 focus-within:border-blue-600 focus:border-blue-600"
                             type="text"
-                            name="title"
+                            name="Comment"
                             autoComplete="off"
                             placeholder="Title"
+                            onChange={handaleChangeEvent}
                             value={userdata?.Comment}
                           />
                         </span>
@@ -312,6 +339,15 @@ const MyProfile = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="flex justify-end gap-4 mt-5 mb-[50px]">
+                <button
+                  className="button bg-[#343A40] text-white radius-round h-11 px-8 py-2"
+                  type="button"
+                  onClick={() => handaleUpdateProfile()}
+                >
+                  Update Profile
+                </button>
               </div>
             </form>
           </div>
