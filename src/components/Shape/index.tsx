@@ -343,8 +343,8 @@ const Index = () => {
               // @ts-expect-error
               name="name"
               id="name"
-              label="Clarity"
-              placeholder="Clarity"
+              label="Shape"
+              placeholder="shape"
               error={errors?.name?.message}
               {...register("name")}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"

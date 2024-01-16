@@ -66,8 +66,10 @@ const ProductList = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_PRODUCT"] });
       setIsOpen(false);
+      setOpenDelete(false);
       toast({
-        description: "Product deleted successfully.",
+        variant: "success",
+        title: "Product deleted successfully.",
       });
     },
     onError: (error: ErrorType) => {
@@ -76,6 +78,10 @@ const ProductList = () => {
         navigate("/auth/login");
         setIsOpen(false);
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -87,12 +93,12 @@ const ProductList = () => {
   const handleDeleteProduct = () => {
     setIsOpen(true);
     removeProduct(deleteID);
-    setOpenDelete(false);
   };
 
   const Deletebody = (
     <div>
       {isPending && <Loading />}
+      {isopen && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -249,7 +255,9 @@ const ProductList = () => {
             <button
               type="button"
               onClick={() => {
-                navigate(`/gems/edit-product/${row?.original?.id}`);
+                navigate(`/gems/new-product`, {
+                  state: { editdata: row.original },
+                });
               }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >

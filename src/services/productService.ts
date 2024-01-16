@@ -51,7 +51,7 @@ export const deleteProduct = async (id: string) => {
   return res.data;
 };
 
-export const updateProduct = async ({ data }: { data: FormData }) => {
+export const updateProduct = async (data: any) => {
   const url = `/product/update`;
   const method = "patch";
   const token = localStorage.token;

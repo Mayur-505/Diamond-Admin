@@ -105,10 +105,10 @@ const router = createBrowserRouter([
         path: "new-product",
         element: <NewProduct />,
       },
-      {
-        path: "edit-product/:id",
-        element: <EditProduct />,
-      },
+      // {
+      //   path: "edit-product/:id",
+      //   element: <EditProduct />,
+      // },
       {
         path: "order-history",
         element: <OrderHistory />,

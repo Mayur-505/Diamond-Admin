@@ -37,15 +37,15 @@ const SelectMenu: FC<SelectMenuProps> = ({
   getCountryCode,
 }) => {
   return (
-    <div className={`grid items-center gap-[6px] ${className}`}>
+    <div className={`grid items-center ${className}`}>
       {label && (
-        <Label className="font-Poppins text-xs font-normal text-[#666666]">
+        <Label className="text-xs font-[500] font-Nunito md:text-sm">
           {label}
         </Label>
       )}
       <Select onValueChange={onChange} value={value}>
         <SelectTrigger
-          className={`h-auto w-full px-[14px] py-[10px] font-Poppins text-sm outline-none text-[#222] ${selectMenuClassName}`}
+          className={`h-[36px] border-[#ced4da] w-full px-[12px] py-[8px] font-Poppins text-sm outline-none text-[#222] ${selectMenuClassName}`}
         >
           <div className="flex items-center gap-[6px]">
             {icon && <img src={icon} alt="calendarIcon" />}
