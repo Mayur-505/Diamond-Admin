@@ -46,10 +46,13 @@ const AddParentCategory = () => {
       queryClient.invalidateQueries({ queryKey: ["addCategory"] });
     },
     onError: (error: ErrorType) => {
-      toast({ description: "Something went wrong." });
       if (error?.code == 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 

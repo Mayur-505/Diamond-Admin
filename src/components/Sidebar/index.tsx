@@ -4,7 +4,7 @@ import { CiBandage, CiImageOn, CiKeyboard } from "react-icons/ci";
 import { BiCategory, BiCategoryAlt } from "react-icons/bi";
 import { FaListUl, FaRegUser } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
-import { LuHistory } from "react-icons/lu";
+import { LuHistory, LuUpload } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
 const Index = ({ collapsed }: { collapsed: boolean }) => {
@@ -102,6 +102,13 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
             >
               <LuHistory />
               Order History
+            </Link>
+            <Link
+              to={"/gems/bulk-upload"}
+              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
+            >
+              <LuUpload />
+              Bulk Upload
             </Link>
           </ul>
         </div>

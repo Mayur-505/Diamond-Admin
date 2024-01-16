@@ -29,6 +29,7 @@ import BlogList from "./components/blog/BlogList";
 import BannerList from "./components/banner/BannerList";
 import MyProfile from "./components/MyProfile/MyProfile";
 import EditProduct from "./components/Ecommerce/EditProduct";
+import BulkUpload from "./components/BulkUpload/BulkUpload";
 
 const router = createBrowserRouter([
   {
@@ -113,8 +114,8 @@ const router = createBrowserRouter([
         element: <OrderHistory />,
       },
       {
-        path: "blog",
-        element: <BlogList />,
+        path: "bulk-upload",
+        element: <BulkUpload />,
       },
     ],
   },

@@ -96,11 +96,6 @@ const BlogList = () => {
       setValue("heading", findData?.heading);
       setValue("description", findData?.description);
       setValue("images", findData?.images);
-    } else {
-      setValue("title", "");
-      setValue("heading", "");
-      setValue("description", "");
-      setValue("images", []);
     }
   }, [data, isEdit]);
 
@@ -291,6 +286,7 @@ const BlogList = () => {
               onClick={() => {
                 setIsEdit(row?.original?.id);
                 setOpen(true);
+                setImageUrl(row?.original?.image);
               }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
@@ -447,7 +443,9 @@ const BlogList = () => {
         <Button
           variant={"outline"}
           className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
-          onClick={() => setOpenDelete(false)}
+          onClick={() => {
+            setOpenDelete(false), setIsEdit(""), setImageUrl("");
+          }}
         >
           Cancel
         </Button>

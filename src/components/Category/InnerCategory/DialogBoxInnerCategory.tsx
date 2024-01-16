@@ -16,7 +16,7 @@ import { toast } from "@/components/ui/use-toast";
 import { UploadImage } from "@/services/adminService";
 import { EditInnerCategory } from "@/services/innercateGoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
@@ -34,10 +34,15 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
       toast({
         description: "Sub category Created Successfully.",
       });
+      setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_INNERCATEGORY"] });
     },
-    onError: () => {
-      toast({ description: "Something went wrong." });
+    onError: (error) => {
+      setIsOpen(false);
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -48,7 +53,10 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
       setIsOpen(false);
     },
     onError: (error) => {
-      console.log(error);
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       setIsOpen(false);
     },
   });
@@ -77,7 +85,12 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
       payload.append("description", formValues.description);
     }
     editInnerCategory(payload);
+    setIsOpen(true);
   };
+
+  useEffect(() => {
+    setFormValues({ ...item });
+  }, [item]);
 
   return (
     <>
@@ -121,6 +134,13 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
                 onChange={handlechangeImage}
               />
             </div>
+            {item.image && (
+              <img
+                src={formValues?.image}
+                alt="images"
+                className="!w-[200px] h-[100px]"
+              />
+            )}
           </div>
           <DialogFooter>
             <Button type="submit" onClick={editFuction}>

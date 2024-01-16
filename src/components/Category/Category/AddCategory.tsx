@@ -43,7 +43,10 @@ const AddCategory = () => {
       setIsOpen(false);
     },
     onError: (error) => {
-      console.log(error);
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       setIsOpen(false);
     },
   });

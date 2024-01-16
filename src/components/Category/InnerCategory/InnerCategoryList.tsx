@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxInnerCategory } from "./DialogBoxInnerCategory";
+import { getSubCategoryall } from "@/services/subcategoryService";
 
 interface Customer {
   id: number;
@@ -47,17 +48,29 @@ const InnerCategoryList = () => {
     queryFn: () => getInnerCategory({ page: activePage, pageSize: 10 }),
   });
 
-  const { mutate: removeCategory } = useMutation({
+  const { data: SubcategoryData } = useQuery({
+    queryKey: ["GET_INNERCATEGORY"],
+    queryFn: getSubCategoryall,
+  });
+
+  console.log("SubcategoryData", SubcategoryData?.data?.responseData);
+
+  const { mutate: removeCategory, isPending } = useMutation({
     mutationFn: deleteInnerCategory,
     onSuccess: () => {
       setOpenDelete(false);
       queryClient.invalidateQueries({ queryKey: ["GET_INNERCATEGORY"] });
+      setOpenDelete(false);
     },
     onError: (error) => {
-      toast({ description: "Not deleted" });
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       if (error?.code == 401) {
         navigate("/auth/login");
       }
+      setOpenDelete(false);
     },
   });
 
@@ -68,7 +81,6 @@ const InnerCategoryList = () => {
 
   const handleDeleteCategory = () => {
     removeCategory(deleteID);
-    setOpenDelete(false);
   };
 
   const columns: Column<Customer>[] = [
@@ -114,9 +126,12 @@ const InnerCategoryList = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="">{row?.original?.subcategoryid?.name}</div>
-      ),
+      cell: ({ row }) => {
+        const data = SubcategoryData?.data?.responseData?.find(
+          (item) => item?.id == row?.original?.subCategory
+        );
+        return <div className="">{data?.name}</div>;
+      },
     },
     {
       accessorKey: "Status",
@@ -167,6 +182,7 @@ const InnerCategoryList = () => {
   const body = (
     <div>
       {isLoading && <Loading />}
+      {isPending && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button

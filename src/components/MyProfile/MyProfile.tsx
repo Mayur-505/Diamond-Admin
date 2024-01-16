@@ -22,8 +22,10 @@ const MyProfile = () => {
   const [userdata, setUserData] = useState({});
   const [userID, setUserId] = useState(user?.query?.id || "");
   const queryClient = useQueryClient();
+  const [isOpen, setIsOpen] = useState(false);
   const handaleUpdate = () => {
     changepass(dataObject);
+    setIsOpen(true);
   };
 
   useEffect(() => {
@@ -39,7 +41,6 @@ const MyProfile = () => {
     setUserData(categoryData?.data?.data);
   }, [categoryData]);
 
-  console.log(categoryData, userID, "categoryData");
   const handalechange = (e: any) => {
     const { name, value } = e.target;
     setDataObject((prev) => ({ ...prev, [name]: value }));
@@ -52,6 +53,7 @@ const MyProfile = () => {
         title: "Reset Password",
         description: "Password changes successfully",
       });
+      setIsOpen(false);
       setDataObject({ old_pass: "", new_pass: "", confirm_pass: "" });
     },
     onError: (error) => {
@@ -59,6 +61,7 @@ const MyProfile = () => {
         title: "Reset Password",
         description: error?.data?.message || "",
       });
+      setIsOpen(false);
     },
   });
 
@@ -108,6 +111,7 @@ const MyProfile = () => {
   return (
     <div className="custom_contener !px-[28px] !mt-[50px]">
       {isPending && <Loading />}
+      {isOpen && <Loading />}
       <Tabs defaultValue="account" className="w-full">
         <TabsList className="grid w-full grid-cols-2 max-w-[400px] bg-[#343A4030]">
           <TabsTrigger value="account">My Account</TabsTrigger>

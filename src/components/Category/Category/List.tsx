@@ -16,6 +16,7 @@ import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxSubCategory } from "./DialogBoxSubCategory";
 import { allgetCategorydata } from "@/services/categoryService";
+import { array } from "yup";
 
 interface Customer {
   id: number;
@@ -41,25 +42,29 @@ const List = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteID, setDeleteID] = useState("");
   const [activePage, setActivePage] = useState(1);
+  const [isopen, setIsopen] = useState(false);
   const { data: subcategoryData, isLoading } = useQuery({
     queryKey: ["GET_SUBCATEGORY", { activePage }],
     queryFn: () => getSubCategory({ page: activePage, pageSize: 10 }),
   });
 
-  const { data: categorylistData } = useQuery({
+  const { data: categorylistData, isPending } = useQuery({
     queryKey: ["GET_SUBCATEGORY"],
     queryFn: allgetCategorydata,
   });
-
-  console.log("subcategoryData", subcategoryData);
 
   const { mutate: removeCategory } = useMutation({
     mutationFn: deleteSubCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SUBCATEGORY"] });
+      setOpenDelete(false);
+      setIsopen(false);
     },
     onError: (error) => {
-      toast({ description: "Not deleted" });
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       if (error?.code == 401) {
         navigate("/auth/login");
       }
@@ -73,7 +78,7 @@ const List = () => {
 
   const handleDeleteCategory = () => {
     removeCategory(deleteID);
-    setOpenDelete(false);
+    setIsopen(true);
   };
 
   const columns: Column<Customer>[] = [
@@ -103,15 +108,12 @@ const List = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="">
-          {
-            subcategoryData?.data?.modifiedCategories?.find((item) => {
-              item.id == row?.original?.category;
-            }).name
-          }
-        </div>
-      ),
+      cell: ({ row }) => {
+        const data = categorylistData?.data.modifiedCategories.find(
+          (item) => item.id == row.original.category
+        );
+        return <div className="">{data?.name}</div>;
+      },
     },
     {
       accessorKey: "name",
@@ -179,6 +181,7 @@ const List = () => {
   const body = (
     <div>
       {isLoading && <Loading />}
+      {isopen && <Loading />}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
@@ -202,6 +205,7 @@ const List = () => {
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
+      {isPending && <Loading />}
       <DataTableDemo
         data={subcategoryData?.data?.responseData || []}
         columns={columns}

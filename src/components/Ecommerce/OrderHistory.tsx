@@ -19,26 +19,28 @@ import * as yup from "yup";
 import Loading from "../Common/Loading";
 import { toast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import SelectMenu from "../Common/SelectMenu";
+import { Label } from "../ui/label";
+import { Value } from "@radix-ui/react-select";
+import { useAppSelector } from "@/hooks/use-redux";
 
 const OrderHistory = () => {
   const [activePage, setActivePage] = useState(1);
   const [isEdit, setIsEdit] = useState<string>("");
+  const { user } = useAppSelector((state) => state.auth);
   const [open, setOpen] = useState<boolean>(false);
   const [summaryData, setSummaryData] = useState(null);
+  const [selectMenu, setSelectmenu] = useState("");
   const [active, setActive] = useState(0);
   const [openview, setOpenView] = useState<boolean>(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState({
-    orderstatus: "",
-    orderNote: "",
-    payment: "",
+    orderstatus: selectMenu,
     orderid: "",
   });
   const schema = yup.object({
     orderstatus: yup.string().required(),
-    orderNote: yup.string().required(),
-    payment: yup.string().required(),
     orderid: yup.string().required(),
   });
 
@@ -70,13 +72,10 @@ const OrderHistory = () => {
 
       console.log("datata", findData);
       setValue("orderstatus", findData?.orderstatus || "");
-      setValue("orderNote", findData?.orderNote || "");
-      setValue("payment", String(findData?.payment) || "");
       setValue("orderid", findData?.id || "");
     } else {
       setValue("orderstatus", "");
-      setValue("orderNote", "");
-      setValue("payment", "");
+      setValue("orderid", "");
     }
   }, [orderHistoryData, isEdit]);
 
@@ -92,15 +91,23 @@ const OrderHistory = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ORDER_HISTORY"] });
     },
     onError: (error) => {
-      toast({ description: "Something went wrong." });
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       if (error?.code == 401) {
         navigate("/auth/login");
       }
     },
   });
 
-  const onSubmit = (data: FieldValues) => {
-    updateOrder(data);
+  const onSubmit = (data) => {
+    const object = {
+      orderid: data.orderid,
+      orderstatus: selectMenu,
+    };
+    console.log("datas", data);
+    updateOrder(object);
   };
 
   const columns: Column<Customer>[] = [
@@ -211,6 +218,7 @@ const OrderHistory = () => {
                 type="button"
                 onClick={() => {
                   setIsEdit(row?.original?.id);
+                  setSelectmenu(String(row?.original?.orderstatus || 1));
                   setOpen(true);
                 }}
                 className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
@@ -227,6 +235,10 @@ const OrderHistory = () => {
   const handleClose = () => {
     setOpenView(false);
   };
+
+  const handleChangeMenu = (value) => {
+    setSelectmenu(value);
+  };
   const body = (
     <div>
       {isPending && <Loading />}
@@ -237,39 +249,20 @@ const OrderHistory = () => {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-1">
-            <InputWithLabel
-              type="text"
-              name="orderNote"
-              id="orderNote"
-              label="Order Note"
-              placeholder="order note"
-              error={errors?.orderNote?.message}
-              {...register("orderNote")}
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
-            />
-          </div>
-          <div className="mt-1">
-            <InputWithLabel
-              type="text"
-              name="payment"
-              id="payment"
-              label="Payment"
-              placeholder="Payment"
-              error={errors?.price?.message}
-              {...register("payment")}
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
-            />
-          </div>
-          <div className="mt-1">
-            <InputWithLabel
-              type="text"
+            <Label className={` text-xs font-[500] font-Nunito md:text-sm`}>
+              Order Status
+            </Label>
+            <SelectMenu
+              placeholder="Order Status"
+              className="border w-full border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+              onChange={handleChangeMenu}
+              options={[
+                { value: "0", label: "Processing" },
+                { value: "1", label: "Pendding" },
+                { value: "2", label: "Complete" },
+              ]}
+              value={selectMenu}
               name="orderstatus"
-              id="orderstatus"
-              label="Order Status"
-              placeholder="order status"
-              error={errors?.orderstatus?.message}
-              {...register("orderstatus")}
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] mt-1"
             />
           </div>
           <div className="flex justify-end gap-4 mt-5">

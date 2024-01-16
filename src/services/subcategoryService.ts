@@ -8,6 +8,14 @@ export const getSubCategory = async (params) => {
   return res.data;
 };
 
+export const getSubCategoryall = async () => {
+  const url = "/subcategory/getallSubCategories";
+  const method = "get";
+
+  const res = await api({ url, method });
+  return res.data;
+};
+
 export const AddSubCategory = async (data: any) => {
   const url = "/subcategory/create";
   const method = "post";

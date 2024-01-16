@@ -18,10 +18,12 @@ import { EditCategory } from "@/services/categoryService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
 
 export function DialogBoxCategory({ icon, mainTitle, item }) {
   const queryClient = useQueryClient();
   const [isopen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
@@ -41,8 +43,11 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
       });
       queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
     },
-    onError: () => {
-      toast({ description: "Something went wrong." });
+    onError: (error) => {
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
       setIsOpen(false);
     },
   });
@@ -54,7 +59,13 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
       setIsOpen(false);
     },
     onError: (error) => {
-      console.log(error);
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
+      if (error?.code == 401) {
+        navigate("/auth/login");
+      }
       setIsOpen(false);
     },
   });

@@ -117,13 +117,18 @@ const List = () => {
     queryFn: () => getCategory({ page: activePage, pageSize: 10 }),
   });
 
-  const { mutate: removeCategory } = useMutation({
+  const { mutate: removeCategory, isPending } = useMutation({
     mutationFn: deleteCategory,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
+      setOpenDelete(false);
     },
     onError: (error) => {
-      toast({ description: "Not deleted" });
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
+      setOpenDelete(false);
       if (error?.code == 401) {
         navigate("/auth/login");
       }
@@ -137,11 +142,11 @@ const List = () => {
 
   const handleDeleteCategory = () => {
     removeCategory(deleteID);
-    setOpenDelete(false);
   };
   const body = (
     <div>
       {createPortal(<>{isLoading && <Loading />}</>, document.body)}
+      {createPortal(<>{isPending && <Loading />}</>, document.body)}
       <div>Are you Sure you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button

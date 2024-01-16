@@ -271,6 +271,7 @@ const Index = () => {
           <div className="flex justify-end gap-4 mt-5">
             <Button
               variant={"outline"}
+              type="button"
               className="w-full bg-[#343a40] text-white"
               onClick={() => handleClose()}
             >

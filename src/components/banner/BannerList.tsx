@@ -70,6 +70,8 @@ const BannerList = () => {
     },
   });
 
+  console.log("imageUrl", imageUrl);
+
   const {
     register,
     handleSubmit,
@@ -257,6 +259,7 @@ const BannerList = () => {
               onClick={() => {
                 setIsEdit(row?.original?.id);
                 setOpen(true);
+                setImageUrl(row?.original.image || "");
               }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
@@ -277,6 +280,8 @@ const BannerList = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setIsEdit("");
+    setImageUrl("");
   };
 
   const { mutate: UploadImagedata } = useMutation({
