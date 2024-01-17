@@ -206,9 +206,11 @@ const OrderHistory = () => {
         return (
           <span
             className={`badge text-white px-1 py-0.5 text-[12px] rounded ${
-              row?.original?.status === "Active"
-                ? "bg-[#28a745]"
-                : "bg-[#dc3545]"
+              row.original?.orderstatus == 0
+                ? "bg-[#dc3545]"
+                : row.original?.orderstatus == 1
+                ? "bg-[#dc3545]"
+                : "bg-[#007bff]"
             }`}
           >
             {row.original?.orderstatus == 0
