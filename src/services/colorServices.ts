@@ -8,7 +8,7 @@ export const getColor = async (params: any) => {
   return res.data;
 };
 
-export const createColor = async (data: string) => {
+export const createColor = async (data: any) => {
   const url = "/color/create";
   const method = "post";
   const token = localStorage.token;
@@ -19,7 +19,7 @@ export const createColor = async (data: string) => {
   return res.data;
 };
 
-export const updateColor = async ({ data }: { data: string }) => {
+export const updateColor = async ({ data }: { data: any }) => {
   const url = "/color/update";
   const method = "patch";
   const token = localStorage.token;

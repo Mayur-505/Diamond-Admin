@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import InputWithLabel from "../Common/InputWithLabel";
 import TextAreaWithLabel from "../Common/TextAreaWithLabel";
@@ -31,7 +31,6 @@ const NewProduct = () => {
   const [imageArray, setImageArray] = useState<any>(["", "", "", ""]);
   const [base64imageArray, setbase64imageArray] = useState(["", "", "", ""]);
   const navigate = useNavigate();
-  const [activePage, setActivePage] = useState(1);
   const [isopen, setIsOpen] = useState<boolean>(false);
   const { state } = useLocation();
   const [errors, setErrors] = useState<any>({});
@@ -241,7 +240,7 @@ const NewProduct = () => {
       setImageArray([...imageArray]);
     }
   }, [state]);
-
+  let activePage = 1;
   const [imgUrl, setImgUrl] = useState("");
   const { data: categoryData } = useQuery({
     queryKey: ["GET_CATEGORY", { activePage }],
@@ -1169,7 +1168,7 @@ const NewProduct = () => {
                   <div className="flex gap-[10px]">
                     {imageArray.map((item: any, ind: number) => {
                       return (
-                        <div className="w-full relative h-[200px]">
+                        <div className="w-full relative h-[200px]" key={item}>
                           <label className="flex flex-col text-[30px] items-center justify-center border border-dashed border-[#ced4da] h-full w-full textsm text-center">
                             <RiUploadCloud2Line />
                             <span className="text-[15px]"> Upload Image</span>

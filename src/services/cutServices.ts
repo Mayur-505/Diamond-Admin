@@ -7,7 +7,7 @@ export const getCut = async (params: any) => {
   return res.data;
 };
 
-export const createCut = async (data: string) => {
+export const createCut = async (data: any) => {
   const url = "/cut/create";
   const method = "post";
   const token = localStorage.token;

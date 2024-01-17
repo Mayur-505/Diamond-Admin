@@ -15,16 +15,13 @@ const Verification = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleInput = (
-      event: React.ChangeEvent<HTMLInputElement>,
-      index: number
-    ) => {
+    const handleInput = (event: any, index: number) => {
       const inputs = inputsRef.current;
       const numericValues = inputs
         .map((input) => input.value)
         .filter((value) => /^[0-9]$/.test(value));
       setOtp(numericValues.join("").slice(0, 6));
-
+      console.log("event", event);
       if (index !== inputs.length - 1 && inputs[index].value !== "") {
         inputs[index + 1].focus();
       }

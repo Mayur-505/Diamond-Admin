@@ -264,11 +264,10 @@ const Index: React.FC = () => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             data={ActiveContactData?.data?.Contactdata || []}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
             columns={columns}
             setActivePage={setActivePage}
             pageCount={ActiveContactData?.data?.total}
-            filterable={"name"}
+            filterName={"name"}
           />
         </TabsContent>
         <TabsContent value="InActive">
@@ -276,11 +275,10 @@ const Index: React.FC = () => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             data={InActiveContactData?.data?.Contactdata || []}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
             columns={columns}
             setActivePage={setInActivePage}
             pageCount={InActiveContactData?.data?.total}
-            filterable={"name"}
+            filterName={"name"}
           />
         </TabsContent>
       </Tabs>

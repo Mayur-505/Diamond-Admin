@@ -303,7 +303,6 @@ const Index = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         data={colorData?.data?.Colordata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         columns={columns}
         filterName={"name"}
         customButton={

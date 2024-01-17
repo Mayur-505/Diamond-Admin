@@ -1,4 +1,3 @@
-import { Shape } from "@/lib/types";
 import api from "./api";
 
 export const getShape = async (params: any) => {

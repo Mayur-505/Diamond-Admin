@@ -1,10 +1,6 @@
-import { Blog } from "@/lib/types";
 import api from "./api";
 
-export const getBlog = async (params: {
-  page: number;
-  pageSize: number;
-}): Promise<Blog[]> => {
+export const getBlog = async (params: any) => {
   const url = "/blog/fetch";
   const method = "get";
 

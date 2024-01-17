@@ -298,10 +298,8 @@ const Index = () => {
       {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         data={clarityData?.data?.Claritydata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         columns={columns}
         filterName={"name"}
         customButton={

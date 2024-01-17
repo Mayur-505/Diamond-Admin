@@ -482,7 +482,6 @@ const BannerList = () => {
       {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         data={data?.Blogdata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         columns={columns}

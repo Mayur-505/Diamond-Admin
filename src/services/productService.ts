@@ -1,19 +1,6 @@
 import api from "./api";
 
-export const getProduct = async (params: {
-  subcategoryid: string;
-  innnercategoryid: string;
-  categoryid: string;
-  minPrice: string;
-  maxPrice: string;
-  sort: string;
-  mincarat: string;
-  maxcarat: string;
-  Clarity: string[];
-  Cuts: string[];
-  Color: string[];
-  shape: string;
-}) => {
+export const getProduct = async (params: any) => {
   const url = "/product/product";
   const method = "get";
 

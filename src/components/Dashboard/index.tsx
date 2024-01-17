@@ -94,11 +94,11 @@ const invoices2 = [
 ];
 
 const Index = () => {
-  const handelchangegraph = () =>
-    // array: number[],
-    // color: string,
-    // bgcolor: string
-    {};
+  // const handelchangegraph = () =>
+  //   // array: number[],
+  //   // color: string,
+  //   // bgcolor: string
+  //   {};
 
   return (
     <div className="custom_contener !px-[28px]">

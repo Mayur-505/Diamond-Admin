@@ -11,7 +11,6 @@ import { toast } from "../ui/use-toast";
 import { useAppSelector } from "@/hooks/use-redux";
 import Loading from "../Common/Loading";
 import { Button } from "../ui/button";
-import { Profile } from "@/lib/types";
 
 const MyProfile = () => {
   const [dataObject, setDataObject] = useState({
@@ -20,7 +19,7 @@ const MyProfile = () => {
     confirm_pass: "",
   });
   const { user } = useAppSelector((state) => state.auth);
-  const [userdata, setUserData] = React.useState<Profile | null>(null);
+  const [userdata, setUserData] = React.useState<any>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [userID, setUserId] = useState(user?.query?.id || "");
   const queryClient = useQueryClient();
@@ -105,7 +104,7 @@ const MyProfile = () => {
 
   const handaleChangeEvent = (e: any) => {
     const { name, value } = e.target;
-    setUserData((prev) => ({ ...prev, [name]: value }));
+    setUserData((prev: any) => ({ ...prev, [name]: value }));
   };
 
   const handaleUpdateProfile = () => {
