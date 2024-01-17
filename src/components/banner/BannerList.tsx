@@ -3,7 +3,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { Button } from "../ui/button";
-import { ErrorType, Shape } from "@/lib/types";
+import { ErrorType, Banner } from "@/lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataTableDemo } from "../Common/DataTable";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ import {
 } from "@/services/bannerService";
 import { EyeIcon } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "../ui/use-toast";
+import { useToast } from "../ui/use-toast";
 import { UploadImage } from "@/services/adminService";
 
 interface Column<T> {
@@ -31,12 +31,20 @@ interface Column<T> {
   enableSorting?: boolean;
 }
 
-interface data {
-  title: string;
-  description: string;
-  images: File[];
+interface CustomError {
+  code?: number;
 }
-
+interface SingleBlogData {
+  id: string;
+  title: string;
+  heading: string;
+  description: string;
+  image: string;
+  author: {
+    email: string;
+  };
+  total: string;
+}
 const schema = yup.object({
   title: yup.string().required(),
   description: yup.string().required(),
@@ -54,12 +62,14 @@ const BannerList = () => {
   const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [imageUrl, setImageUrl] = React.useState<string>("");
   const [openview, setOpenView] = React.useState<boolean>(false);
-  const [singleBlogData, setSingleBlogData] = React.useState(null);
+  const [singleBlogData, setSingleBlogData] =
+    React.useState<SingleBlogData | null>(null);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [isEdit, setIsEdit] = React.useState<string>("");
   const [openDelete, setOpenDelete] = React.useState(false);
   const [deleteID, setDeleteID] = React.useState("");
   const navigate = useNavigate();
+  const { toast } = useToast();
   const queryClient = useQueryClient();
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -87,8 +97,8 @@ const BannerList = () => {
 
   useEffect(() => {
     if (data && isEdit) {
-      const findData: Shape = data?.Blogdata?.find(
-        (item: Shape) => item.id === isEdit
+      const findData: Banner = data?.Blogdata?.find(
+        (item: Banner) => item.id === isEdit
       );
       setValue("title", findData?.title);
       setValue("description", findData?.description);
@@ -112,15 +122,15 @@ const BannerList = () => {
         description: "Create banner successfully",
       });
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -136,15 +146,15 @@ const BannerList = () => {
       setImageUrl("");
       setIsOpen(false);
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -160,15 +170,15 @@ const BannerList = () => {
         description: "Update banner successfully",
       });
     },
-    onError: (error: ErrorType) => {
-      console.log(error);
+    onError: (error) => {
       setIsOpen(false);
-      if (error.code == 401) {
+
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -193,7 +203,7 @@ const BannerList = () => {
     setIsOpen(true);
     removeBanner(deleteID);
   };
-  const columns: Column<Shape>[] = [
+  const columns: Column<Banner>[] = [
     {
       accessorKey: "image",
       header: <div className="text-left">Image</div>,
@@ -337,7 +347,6 @@ const BannerList = () => {
           <div className="mt-1">
             <InputWithLabel
               type="text"
-              name="title"
               id="title"
               label="Banner"
               placeholder="Banner Title"

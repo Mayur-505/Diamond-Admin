@@ -5,14 +5,14 @@ export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 interface AxiosParams {
   baseURL?: string;
-  headers?: unknown | { [key: string]: string };
+  headers?: { [key: string]: string }; // Explicitly type headers as an object
   method?: "get" | "post" | "patch" | "put" | "delete";
   data?:
     | unknown
     | null
     | FormData
     | { [key: string]: string | number | boolean };
-  params?: { [key: string]: string };
+  params?: { [key: string]: any };
   url: string;
   isFormData?: boolean;
 }

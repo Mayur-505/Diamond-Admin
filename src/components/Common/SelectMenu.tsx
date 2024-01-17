@@ -15,7 +15,7 @@ interface OptionsType {
 
 interface SelectMenuProps {
   options: OptionsType[];
-  value?: string | OptionsType | null;
+  value?: string | undefined;
   disabled?: boolean;
   onChange?: (val: string) => void;
   placeholder: string;
@@ -36,7 +36,6 @@ const SelectMenu: FC<SelectMenuProps> = ({
   selectMenuClassName,
   icon,
   disabled,
-  getCountryCode,
 }) => {
   return (
     <div className={`grid items-center ${className}`}>

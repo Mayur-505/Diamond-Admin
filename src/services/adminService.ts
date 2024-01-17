@@ -1,7 +1,7 @@
 import api from "./api";
 
 export const getAdmin = async (params: { page: number; pageSize: number }) => {
-  const url = "/user/admin?page=1&pageSize=10";
+  const url = `/user/admin?page=${params.page}&pageSize=${params.pageSize}`;
   const method = "get";
   const headers = {};
   const res = await api({ url, method, headers });

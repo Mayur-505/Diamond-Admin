@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -21,7 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
+export function DialogBoxInnerCategory({ icon, mainTitle, item }: any) {
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
@@ -31,7 +30,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
   const queryClient = useQueryClient();
 
   const { mutate: editInnerCategory } = useMutation({
-    mutationFn: (data) => EditInnerCategory(item.id, data),
+    mutationFn: (data: FormData) => EditInnerCategory(item.id, data),
     onSuccess: () => {
       toast({
         description: "Inner Category Updated Successfully.",
@@ -43,7 +42,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
       setIsOpen(false);
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -57,7 +56,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
       setIsOpen(false);
     },
@@ -79,7 +78,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
     queryFn: getSubCategoryall,
   });
   const categoryOptions = InnercategoryData?.data?.responseData
-    ? InnercategoryData?.data?.responseData?.map((item) => ({
+    ? InnercategoryData?.data?.responseData?.map((item: any) => ({
         label: item.name,
         value: item.id,
       }))

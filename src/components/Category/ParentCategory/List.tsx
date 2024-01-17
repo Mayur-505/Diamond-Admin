@@ -14,7 +14,11 @@ import Modal from "@/components/Common/Model";
 import { DialogBoxCategory } from "./DialogBoxCategory";
 import { createPortal } from "react-dom";
 
-interface Customer {
+interface CustomError {
+  code?: number;
+}
+
+interface parentCategory {
   id: number;
   name: string;
   description: string;
@@ -36,7 +40,7 @@ const List = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteID, setDeleteID] = useState("");
 
-  const columns: Column<Customer>[] = [
+  const columns: Column<parentCategory>[] = [
     {
       accessorKey: "image",
       header: <div className="text-left">Image</div>,
@@ -126,10 +130,10 @@ const List = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
       setOpenDelete(false);
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
     },

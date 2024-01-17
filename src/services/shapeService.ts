@@ -8,7 +8,13 @@ export const getShape = async (params: {
   const url = "/shape/fetch";
   const method = "get";
 
-  const res = await api({ url, method, params });
+  // Convert number values to strings
+  const stringParams = {
+    page: params.page.toString(),
+    pageSize: params.pageSize.toString(),
+  };
+
+  const res = await api({ url, method, params: stringParams });
   return res.data.data;
 };
 

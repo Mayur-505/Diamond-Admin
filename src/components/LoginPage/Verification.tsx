@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Diamond from "../../assets/Image/dark-logo.svg";
 import { Button } from "../ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { ResendOtp, VerificationOtp } from "@/services/authService";
@@ -16,7 +16,7 @@ const Verification = () => {
 
   useEffect(() => {
     const handleInput = (
-      event: React.FormEvent<HTMLInputElement>,
+      event: React.ChangeEvent<HTMLInputElement>,
       index: number
     ) => {
       const inputs = inputsRef.current;
@@ -63,7 +63,7 @@ const Verification = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -97,13 +97,13 @@ const Verification = () => {
               <input
                 key={index}
                 type="text"
-                maxLength="1"
+                maxLength={1}
                 id={`otp-${index}`}
                 pattern="[0-9]"
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 required
-                ref={(input) => (inputsRef.current[index] = input)}
+                ref={(input) => (inputsRef.current[index] = input!)}
                 className="h-[35px] w-[42px] border-[1px] border-[#ced4da] text-center text-[14px] font-Nunito font-normal text-[#495057] rounded-[4px]"
               />
             ))}

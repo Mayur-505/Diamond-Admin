@@ -14,7 +14,7 @@ const Login = () => {
 
   const {
     register,
-    formState: { errors },
+    formState: {},
     reset,
     handleSubmit,
   } = useForm();

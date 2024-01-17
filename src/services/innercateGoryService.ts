@@ -1,6 +1,6 @@
 import api from "./api";
 
-export const getInnerCategory = async (params) => {
+export const getInnerCategory = async (params: any) => {
   const url = "/innercategory/getallinnercategory";
   const method = "get";
 

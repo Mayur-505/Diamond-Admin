@@ -13,7 +13,7 @@ const ForgotPassword = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {},
     reset,
   } = useForm();
 
@@ -32,7 +32,7 @@ const ForgotPassword = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });

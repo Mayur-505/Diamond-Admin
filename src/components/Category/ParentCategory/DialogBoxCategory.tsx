@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,7 +19,11 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 
-export function DialogBoxCategory({ icon, mainTitle, item }) {
+interface CustomError {
+  code?: number;
+}
+
+export function DialogBoxCategory({ icon, mainTitle, item }: any) {
   const queryClient = useQueryClient();
   const [isopen, setIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -35,7 +38,7 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
   }, [item]);
 
   const { mutate: editCategory } = useMutation({
-    mutationFn: (data) => EditCategory(item.id, data),
+    mutationFn: (data: FormData) => EditCategory(item.id, data),
     onSuccess: () => {
       setIsOpen(false);
       toast({
@@ -46,7 +49,7 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
       setIsOpen(false);
     },
@@ -61,9 +64,9 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       setIsOpen(false);

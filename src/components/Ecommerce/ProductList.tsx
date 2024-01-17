@@ -17,6 +17,9 @@ import { EyeIcon } from "lucide-react";
 import Loading from "../Common/Loading";
 import { toast } from "../ui/use-toast";
 
+interface CustomError {
+  code?: number;
+}
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
   header: React.ReactNode | ((args: { column: any }) => React.ReactNode);
@@ -24,12 +27,53 @@ interface Column<T> {
   enableSorting?: boolean;
 }
 
+interface SingleBlogData {
+  id: string;
+  maintitle: string;
+  productimage: string;
+  diamond_clarity: {
+    clarityimage: string;
+    clarity_desc: string;
+  };
+  diamond_color: {
+    colorimage: string;
+    color_desc: string;
+  };
+  diamond_cut: {
+    cutimage: string;
+    cut_desc: string;
+  };
+  diamond_size: {
+    sizeimages: string;
+    size_desc: string;
+  };
+  price: number;
+  total: string;
+  colour: string;
+  shape: string;
+  carat: string;
+  table: number;
+  polish: string;
+  clarity: string;
+  symmetry: string;
+  flourescence: string;
+  categoryid: {
+    name: string;
+  };
+  innercategoryid: {
+    name: string;
+  };
+  subcategoryid: {
+    name: string;
+  };
+}
+
 const ProductList = () => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState<boolean>(false);
   const [activePage, setActivePage] = useState<number>(1);
   const [isopen, setIsOpen] = React.useState<boolean>(false);
-  const [singleProductData, setSingleProductData] = useState(null);
+  const [singleProductData, setSingleProductData] =
+    React.useState<SingleBlogData | null>(null);
   const [openview, setOpenView] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [deleteID, setDeleteID] = useState("");
@@ -72,15 +116,15 @@ const ProductList = () => {
         title: "Product deleted successfully.",
       });
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
         setIsOpen(false);
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -277,7 +321,6 @@ const ProductList = () => {
   ];
 
   const handleClose = () => {
-    setOpen(false);
     setOpenView(false);
   };
 
@@ -307,7 +350,7 @@ const ProductList = () => {
                   src={thumbnail}
                   alt={`Product${index + 1}`}
                   className="cursor-pointer w-full rounded-[4px] border-[2px] border-transparent transition-all"
-                  onClick={() => handleThumbnailClick(thumbnail)}
+                  onClick={() => thumbnail && handleThumbnailClick(thumbnail)}
                 />
               ))}
             </div>
@@ -321,50 +364,72 @@ const ProductList = () => {
           </div>
         </div>
         <div className="py-4">
-          <strong>Price:</strong> {singleProductData?.price}
+          <strong className="max-w-[150px] w-full inline-block">Price:</strong>{" "}
+          {singleProductData?.price}
         </div>
         <div className="pb-4">
-          <strong>Colour:</strong> {singleProductData?.colour}
+          <strong className="max-w-[150px] w-full inline-block">Colour:</strong>{" "}
+          {singleProductData?.colour}
         </div>
         <div className="pb-4">
-          <strong>Shape:</strong> {singleProductData?.shape}
+          <strong className="max-w-[150px] w-full inline-block">Shape:</strong>{" "}
+          {singleProductData?.shape}
         </div>
         <div className="pb-4">
-          <strong>Table:</strong> {singleProductData?.table}
+          <strong className="max-w-[150px] w-full inline-block">Table:</strong>{" "}
+          {singleProductData?.table}
         </div>
         <div className="pb-4">
-          <strong>Carat:</strong> {singleProductData?.carat}
+          <strong className="max-w-[150px] w-full inline-block">Carat:</strong>{" "}
+          {singleProductData?.carat}
         </div>
         <div className="pb-4">
-          <strong>Clarity:</strong> {singleProductData?.clarity}
+          <strong className="max-w-[150px] w-full inline-block">
+            Clarity:
+          </strong>{" "}
+          {singleProductData?.clarity}
         </div>
         <div className="pb-4">
-          <strong>polish:</strong> {singleProductData?.polish}
+          <strong className="max-w-[150px] w-full inline-block">polish:</strong>{" "}
+          {singleProductData?.polish}
         </div>
         <div className="pb-4">
-          <strong>Symmetry:</strong> {singleProductData?.symmetry}
+          <strong className="max-w-[150px] w-full inline-block">
+            Symmetry:
+          </strong>{" "}
+          {singleProductData?.symmetry}
         </div>
         <div className="pb-4">
-          <strong>Flourescence:</strong> {singleProductData?.flourescence}
+          <strong className="max-w-[150px] w-full inline-block">
+            Flourescence:
+          </strong>{" "}
+          {singleProductData?.flourescence}
         </div>
         {singleProductData?.categoryid?.name && (
           <div className="pb-4">
-            <strong>Category:</strong> {singleProductData?.categoryid?.name}
+            <strong className="max-w-[150px] w-full inline-block">
+              Category:
+            </strong>{" "}
+            {singleProductData?.categoryid?.name}
           </div>
         )}
         {singleProductData?.innercategoryid?.name && (
           <div className="pb-4">
-            <strong>Inner Category:</strong>{" "}
+            <strong className="max-w-[150px] w-full inline-block">
+              Inner Category:
+            </strong>{" "}
             {singleProductData?.innercategoryid?.name}
           </div>
         )}
         {singleProductData?.subcategoryid?.name && (
           <div className="pb-4">
-            <strong>Subcategory:</strong>{" "}
+            <strong className="max-w-[150px] w-full inline-block">
+              Subcategory:
+            </strong>{" "}
             {singleProductData?.subcategoryid?.name}
           </div>
         )}
-        <div className="pb-4">
+        {/* <div className="pb-4">
           <div className="pb-2">
             <strong>Diamond Size:</strong>
           </div>
@@ -415,7 +480,7 @@ const ProductList = () => {
             />
             <div>{singleProductData?.diamond_cut?.cut_desc}</div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="flex justify-end gap-4 mt-5">
         <Button

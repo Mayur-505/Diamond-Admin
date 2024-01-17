@@ -11,7 +11,7 @@ export enum payment_Status {
   Complete,
 }
 
-export const getOrderHistory = async (params) => {
+export const getOrderHistory = async (params: any) => {
   const url = "/order/getall";
   const method = "get";
   const token = localStorage.token;
@@ -33,7 +33,7 @@ export const getOrderSummary = async (id: string) => {
   return api({ url, method, headers });
 };
 
-export const updateOrderHistory = async (data) => {
+export const updateOrderHistory = async (data: any) => {
   const url = `/order/update`;
   const method = "patch";
   const token = localStorage.token;

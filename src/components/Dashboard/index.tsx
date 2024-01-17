@@ -94,11 +94,11 @@ const invoices2 = [
 ];
 
 const Index = () => {
-  const handelchangegraph = (
-    array: number[],
-    color: string,
-    bgcolor: string
-  ) => {};
+  const handelchangegraph = () =>
+    // array: number[],
+    // color: string,
+    // bgcolor: string
+    {};
 
   return (
     <div className="custom_contener !px-[28px]">
@@ -234,13 +234,13 @@ const Index = () => {
           <div className="flex gap-[10px] mb-[42px]">
             <div
               className="hover:shadow-md px-[7px]"
-              onClick={() =>
-                handelchangegraph(
-                  [2, 7, 20, 9, 16, 9, 5],
-                  "#e3f2fd66",
-                  "#9bddff"
-                )
-              }
+              // onClick={() =>
+              //   handelchangegraph(
+              //     [2, 7, 20, 9, 16, 9, 5],
+              //     "#e3f2fd66",
+              //     "#9bddff"
+              //   )
+              // }
             >
               <h2 className="flex text-[#495057] font-Nunito font-normal text-[14px] items-center gap-[7px] py-[17px]">
                 <FiPlusCircle />
@@ -250,13 +250,13 @@ const Index = () => {
             </div>
             <div
               className="hover:shadow-md px-[7px]"
-              onClick={() =>
-                handelchangegraph(
-                  [2, 4, 9, 20, 16, 12, 10],
-                  "#e8eaf633",
-                  "#c5cae9"
-                )
-              }
+              // onClick={() =>
+              //   handelchangegraph(
+              //     [2, 4, 9, 20, 16, 12, 10],
+              //     "#e8eaf633",
+              //     "#c5cae9"
+              //   )
+              // }
             >
               <h2 className="flex text-[#495057] font-Nunito font-normal text-[14px] items-center gap-[7px] py-[17px]">
                 <TfiCheckBox />
@@ -266,13 +266,13 @@ const Index = () => {
             </div>
             <div
               className="hover:shadow-md px-[7px]"
-              onClick={() =>
-                handelchangegraph(
-                  [2, 17, 7, 15, 4, 20, 8],
-                  "#b2dfdb33",
-                  "#b2dfdb"
-                )
-              }
+              // onClick={() =>
+              //   handelchangegraph(
+              //     [2, 17, 7, 15, 4, 20, 8],
+              //     "#b2dfdb33",
+              //     "#b2dfdb"
+              //   )
+              // }
             >
               <h2 className="flex text-[#495057] font-Nunito font-normal text-[14px] items-center gap-[7px] py-[17px]">
                 <MdRefresh />
@@ -282,13 +282,13 @@ const Index = () => {
             </div>
             <div
               className="hover:shadow-md px-[7px]"
-              onClick={() =>
-                handelchangegraph(
-                  [2, 2, 20, 4, 17, 16, 20],
-                  "#b2ebf233",
-                  "#b2ebf2"
-                )
-              }
+              // onClick={() =>
+              //   handelchangegraph(
+              //     [2, 2, 20, 4, 17, 16, 20],
+              //     "#b2ebf233",
+              //     "#b2ebf2"
+              //   )
+              // }
             >
               <h2 className="flex text-[#495057] font-Nunito font-normal text-[14px] items-center gap-[7px] py-[17px]">
                 <MdOutlineCancel />

@@ -11,6 +11,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+interface CustomError {
+  code?: number;
+}
+
 const AddInnerCategory = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -39,22 +43,29 @@ const AddInnerCategory = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
       setIsOpen(false);
     },
   });
 
   const categoryOptions = InnercategoryData?.data?.responseData
-    ? InnercategoryData?.data?.responseData?.map((item) => ({
+    ? InnercategoryData?.data?.responseData?.map((item: any) => ({
         label: item.name,
         value: item.id,
       }))
     : [];
 
-  const handleChange = (name: string, value: string | undefined) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleChange("image", files[0]);
+    }
+  };
+
+  const handleChange = (name: string, value: string | File | undefined) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
-    if (name == "image") {
+    if (name == "image" && value) {
       const payload = new FormData();
       payload.append("image", value);
       UploadImagedata(payload);
@@ -80,9 +91,9 @@ const AddInnerCategory = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
     },
@@ -151,7 +162,7 @@ const AddInnerCategory = () => {
               id="image"
               type="file"
               className="col-span-3"
-              onChange={(e) => handleChange("image", e.target.files[0])}
+              onChange={(e) => handleFileChange(e)}
             />
             {imageUrl && (
               <img

@@ -1,45 +1,20 @@
-import {
-  Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
-  LifeBuoy,
-  LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
-  Settings,
-  User,
-  UserPlus,
-  Users,
-} from "lucide-react";
-import ProfileImage from "@/assets/Image/profileImage.jpg";
-
-import { Button } from "@/components/ui/button";
+import { LogOut, User } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { LogOutAPI } from "@/services/authService";
 import { useAppSelector } from "@/hooks/use-redux";
 import { toast } from "../ui/use-toast";
 
-export function ProfileDropDown({ userdata }) {
-  console.log("userdata", userdata);
+export function ProfileDropDown({ userdata }: any) {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
 
@@ -55,7 +30,7 @@ export function ProfileDropDown({ userdata }) {
         navigate("/auth/login");
       }
     },
-    onError: (response) => {
+    onError: (response: any) => {
       toast({
         variant: "error",
         description: response?.data?.message?.[0]?.msg || "user not found",

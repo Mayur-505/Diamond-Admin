@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Diamond from "../../assets/Image/dark-logo.svg";
 import { Button } from "../ui/button";
 import InputWithLabel from "../Common/InputWithLabel";
@@ -12,14 +12,14 @@ const NewPassword = () => {
   const { toast } = useToast();
   const {
     register,
-    formState: { errors },
+    formState: {},
     reset,
     handleSubmit,
   } = useForm();
 
   const { mutate: NewPass } = useMutation({
     mutationFn: (data: FieldValues) => newPassword(data),
-    onSuccess: (response) => {
+    onSuccess: () => {
       toast({
         variant: "success",
         title: "Password Created Successfully",
@@ -31,7 +31,7 @@ const NewPassword = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });

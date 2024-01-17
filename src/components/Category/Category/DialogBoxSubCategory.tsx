@@ -20,7 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
-export function DialogBoxSubCategory({ icon, mainTitle, item }) {
+export function DialogBoxSubCategory({ icon, mainTitle, item }: any) {
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
@@ -34,7 +34,7 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }) {
   const queryClient = useQueryClient();
 
   const { mutate: editSubCategory } = useMutation({
-    mutationFn: (data) => EditSubCategory(item.id, data),
+    mutationFn: (data: FormData) => EditSubCategory(item.id, data),
     onSuccess: () => {
       toast({
         description: "Sub Category Updated Successfully.",
@@ -58,7 +58,7 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }) {
       setIsOpen(false);
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -78,7 +78,7 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }) {
   });
 
   const categoryOptions = subcategoryData?.data?.modifiedCategories
-    ? subcategoryData?.data?.modifiedCategories?.map((item) => ({
+    ? subcategoryData?.data?.modifiedCategories?.map((item: any) => ({
         label: item.name,
         value: item.id,
       }))

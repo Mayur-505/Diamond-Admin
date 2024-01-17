@@ -3,7 +3,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { Button } from "../ui/button";
-import { ErrorType, Shape } from "@/lib/types";
+import { Blog, ErrorType } from "@/lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DataTableDemo } from "../Common/DataTable";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
@@ -25,18 +25,14 @@ import { toast } from "../ui/use-toast";
 import { UploadImage } from "@/services/adminService";
 import { useNavigate } from "react-router-dom";
 
+interface CustomError {
+  code?: number;
+}
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
   header: React.ReactNode | ((args: { column: any }) => React.ReactNode);
   cell: (args: { row: any }) => React.ReactNode;
   enableSorting?: boolean;
-}
-
-interface data {
-  title: string;
-  heading: string;
-  description: string;
-  images: File[];
 }
 
 const schema = yup.object({
@@ -51,12 +47,25 @@ const schema = yup.object({
     }),
 });
 
+interface SingleBlogData {
+  id: string;
+  title: string;
+  heading: string;
+  description: string;
+  image: string;
+  author: {
+    email: string;
+  };
+  total: string;
+}
+
 const BlogList = () => {
   const { user } = useAppSelector((state) => state.auth);
   const [open, setOpen] = React.useState<boolean>(false);
   const [isopen, setIsOpen] = React.useState<boolean>(false);
   const [openview, setOpenView] = React.useState<boolean>(false);
-  const [singleBlogData, setSingleBlogData] = React.useState(null);
+  const [singleBlogData, setSingleBlogData] =
+    React.useState<SingleBlogData | null>(null);
   const [activePage, setActivePage] = React.useState<number>(1);
   const [isEdit, setIsEdit] = React.useState<string>("");
   const [imageUrl, setImageUrl] = React.useState<string>("");
@@ -89,8 +98,8 @@ const BlogList = () => {
 
   useEffect(() => {
     if (data && isEdit) {
-      const findData: Shape = data?.Blogdata?.find(
-        (item: Shape) => item.id === isEdit
+      const findData: Blog = data?.Blogdata?.find(
+        (item: Blog) => item.id === isEdit
       );
       setValue("title", findData?.title);
       setValue("heading", findData?.heading);
@@ -111,15 +120,15 @@ const BlogList = () => {
         description: "create blog successfully",
       });
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -134,15 +143,15 @@ const BlogList = () => {
       setOpenDelete(false);
       setIsOpen(false);
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -159,15 +168,15 @@ const BlogList = () => {
         description: "update blog successfully",
       });
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -204,7 +213,7 @@ const BlogList = () => {
     },
   });
 
-  const columns: Column<Shape>[] = [
+  const columns: Column<Blog>[] = [
     {
       accessorKey: "image",
       header: <div className="text-left">Image</div>,

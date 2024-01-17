@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
-import { Cut, ErrorType } from "@/lib/types";
+import { Cut } from "@/lib/types";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Modal from "../Common/Model";
@@ -12,7 +12,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "../ui/use-toast";
-import { ToastAction } from "../ui/toast";
 import {
   createCut,
   deleteCut,
@@ -22,6 +21,10 @@ import {
 import Loading from "../Common/Loading";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
+
+interface CustomError {
+  code?: number;
+}
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -73,7 +76,7 @@ const Index = () => {
 
   const { mutate: addCut } = useMutation({
     mutationFn: createCut,
-    onSuccess: (res) => {
+    onSuccess: () => {
       setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_CUT"] });
       toast({
@@ -83,14 +86,14 @@ const Index = () => {
       setOpen(false);
       reset();
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       setIsOpen(false);
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -106,14 +109,14 @@ const Index = () => {
       setIsOpen(false);
       setOpenDelete(false);
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       setIsOpen(false);
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -131,14 +134,14 @@ const Index = () => {
       setEdit("");
       reset();
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
       setIsOpen(false);
     },
@@ -149,7 +152,7 @@ const Index = () => {
     const data = allData?.find((item: Cut) => item.id === id);
 
     setEdit(id);
-    setValue("name", data?.name);
+    setValue("name", data?.name || "");
     setOpen(true);
   };
 
@@ -302,7 +305,6 @@ const Index = () => {
       {createPortal(<>{isPending && <Loading />}</>, document.body)}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         data={cutData?.data?.Cutdata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

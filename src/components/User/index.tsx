@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
 import { RiArrowUpDownFill } from "react-icons/ri";
-import { Progress } from "../ui/progress";
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "@/services/userService";
 import Loading from "../Common/Loading";
+import { User } from "@/lib/types";
 
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
@@ -17,7 +16,6 @@ interface Column<T> {
 
 const Index: React.FC = () => {
   const [activePage, setActivePage] = useState(1);
-  const navigate = useNavigate();
 
   const { data: UserData, isLoading } = useQuery({
     queryKey: ["GET_USER", { activePage }],

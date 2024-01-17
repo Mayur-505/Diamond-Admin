@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { DataTableDemo } from "../Common/DataTable";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
-import { Color, ErrorType } from "@/lib/types";
+import { Color } from "@/lib/types";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Modal from "../Common/Model";
@@ -13,7 +13,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "../ui/use-toast";
-import { ToastAction } from "../ui/toast";
 import {
   createColor,
   deleteColor,
@@ -22,6 +21,9 @@ import {
 } from "@/services/colorServices";
 import Loading from "../Common/Loading";
 
+interface CustomError {
+  code?: number;
+}
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
   header: React.ReactNode | ((args: { column: any }) => React.ReactNode);
@@ -81,14 +83,14 @@ const Index = () => {
       setOpen(false);
       reset();
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -104,14 +106,14 @@ const Index = () => {
       setOpenDelete(false);
       setIsOpen(false);
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -129,15 +131,15 @@ const Index = () => {
       setEdit("");
       reset();
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -146,7 +148,7 @@ const Index = () => {
     const allData: Color[] = colorData?.data?.Colordata;
     const data = allData?.find((item: Color) => item.id === id);
     setEdit(id);
-    setValue("name", data?.name);
+    setValue("name", data?.name || "");
     setOpen(true);
   };
 
@@ -299,7 +301,6 @@ const Index = () => {
       {isopen && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         data={colorData?.data?.Colordata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

@@ -6,12 +6,12 @@ import {
   UploadImage,
 } from "@/services/adminService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "../ui/use-toast";
 import { useAppSelector } from "@/hooks/use-redux";
-import { getCategory } from "@/services/categoryService";
 import Loading from "../Common/Loading";
 import { Button } from "../ui/button";
+import { Profile } from "@/lib/types";
 
 const MyProfile = () => {
   const [dataObject, setDataObject] = useState({
@@ -20,7 +20,7 @@ const MyProfile = () => {
     confirm_pass: "",
   });
   const { user } = useAppSelector((state) => state.auth);
-  const [userdata, setUserData] = useState({});
+  const [userdata, setUserData] = React.useState<Profile | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [userID, setUserId] = useState(user?.query?.id || "");
   const queryClient = useQueryClient();
@@ -29,8 +29,6 @@ const MyProfile = () => {
     changepass(dataObject);
     setIsOpen(true);
   };
-
-  console.log("userdata", userdata);
 
   useEffect(() => {
     if (user?.qurey?.id) setUserId(user?.qurey?.id);
@@ -63,7 +61,8 @@ const MyProfile = () => {
     onError: (error) => {
       toast({
         title: "Reset Password",
-        description: error?.data?.message || "",
+        description:
+          (error as { data?: { message?: string } })?.data?.message || "",
       });
       setIsOpen(false);
     },
@@ -84,7 +83,8 @@ const MyProfile = () => {
       setIsOpen(false);
       toast({
         title: "profile image change",
-        description: error?.data?.message || "",
+        description:
+          (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -103,9 +103,8 @@ const MyProfile = () => {
     UploadImagedata(payload);
   };
 
-  const handaleChangeEvent = (e) => {
+  const handaleChangeEvent = (e: any) => {
     const { name, value } = e.target;
-    console.log(userdata, "userdata", name);
     setUserData((prev) => ({ ...prev, [name]: value }));
   };
 

@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
-import { Clarity, ErrorType } from "@/lib/types";
+import { Clarity } from "@/lib/types";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -19,9 +19,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "../ui/use-toast";
-import { ToastAction } from "../ui/toast";
 import Loading from "../Common/Loading";
 
+interface CustomError {
+  code?: number;
+}
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
   header: React.ReactNode | ((args: { column: any }) => React.ReactNode);
@@ -82,15 +84,15 @@ const Index = () => {
       setOpen(false);
       reset();
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -106,14 +108,14 @@ const Index = () => {
       setIsOpen(false);
       setOpenDelete(false);
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -131,24 +133,24 @@ const Index = () => {
       });
       reset();
     },
-    onError: (error: ErrorType) => {
+    onError: (error) => {
       console.log(error);
       setIsOpen(false);
-      if (error.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
 
   const handleEdit = (id: string) => {
     const allData: Clarity[] = clarityData?.data?.Claritydata;
-    const data = allData?.find((item: Clarity) => item.id === id);
+    const data = allData?.find((item: Clarity) => item?.id === id);
     setEdit(id);
-    setValue("name", data?.name);
+    setValue("name", data?.name || "");
     setOpen(true);
   };
 

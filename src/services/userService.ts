@@ -7,6 +7,12 @@ export const getUser = async (params: { page: number; pageSize: number }) => {
   const headers = {
     Authorization: `Bearer ${token}`,
   };
-  const res = await api({ url, method, params, headers });
+
+  const stringParams = {
+    page: params.page.toString(),
+    pageSize: params.pageSize.toString(),
+  };
+
+  const res = await api({ url, method, params: stringParams, headers });
   return res.data;
 };

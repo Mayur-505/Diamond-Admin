@@ -11,23 +11,23 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxSubCategory } from "./DialogBoxSubCategory";
 import { allgetCategorydata } from "@/services/categoryService";
-import { array } from "yup";
 
-interface Customer {
+interface SubCategory {
   id: number;
   name: string;
   parentCategory: string;
-  metatitle: string;
-  metakeyword: string;
   description: string;
   status: string;
 }
 
+interface CustomError {
+  code?: number;
+}
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
   header: React.ReactNode | ((args: { column: any }) => React.ReactNode);
@@ -63,9 +63,9 @@ const List = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
     },
@@ -81,11 +81,11 @@ const List = () => {
     setIsopen(true);
   };
 
-  const columns: Column<Customer>[] = [
+  const columns: Column<SubCategory>[] = [
     {
       accessorKey: "image",
       header: <div className="text-left">Image</div>,
-      cell: ({ row }) => {
+      cell: ({ row }: { row: any }) => {
         return (
           <img
             src={row?.original?.image}
@@ -110,7 +110,7 @@ const List = () => {
       },
       cell: ({ row }) => {
         const data = categorylistData?.data.modifiedCategories.find(
-          (item) => item.id == row.original.category
+          (item: any) => item.id == row.original.category
         );
         return <div className="">{data?.name}</div>;
       },

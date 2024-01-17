@@ -76,8 +76,10 @@ export function DataTableDemo<T extends Record<string, unknown>>({
   });
 
   const handlePageClick = (data: any) => {
-    const selectedPage = data.selected;
-    setActivePage(selectedPage + 1);
+    if (setActivePage) {
+      const selectedPage = data.selected;
+      setActivePage(selectedPage + 1);
+    }
   };
 
   return (
@@ -183,7 +185,7 @@ export function DataTableDemo<T extends Record<string, unknown>>({
           nextLabel={">"}
           breakLabel={"..."}
           breakClassName={"break-me"}
-          pageCount={pageCount / 10}
+          pageCount={pageCount ? pageCount / 10 : 0}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}

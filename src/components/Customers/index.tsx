@@ -14,11 +14,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { toast } from "../ui/use-toast";
 import { MdDeleteOutline } from "react-icons/md";
-import { AiOutlineEdit } from "react-icons/ai";
 import Loading from "../Common/Loading";
 import Modal from "../Common/Model";
 import { useNavigate } from "react-router-dom";
+import { Customers } from "@/lib/types";
 
+interface CustomError {
+  code?: number;
+}
 interface Column<T> {
   accessorKey: keyof T | ((row: T) => any) | string;
   header: React.ReactNode | ((args: { column: any }) => React.ReactNode);
@@ -61,13 +64,13 @@ const Index: React.FC = () => {
       setIsOpen(false);
     },
     onError: (error) => {
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       setIsOpen(false);
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -85,12 +88,12 @@ const Index: React.FC = () => {
     },
     onError: (error) => {
       setIsOpen(false);
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -130,7 +133,7 @@ const Index: React.FC = () => {
     </div>
   );
 
-  const columns: Column<Payment>[] = [
+  const columns: Column<Customers>[] = [
     {
       accessorKey: "name",
       header: ({ column }) => {

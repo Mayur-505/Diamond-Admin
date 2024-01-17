@@ -17,6 +17,9 @@ import Modal from "@/components/Common/Model";
 import { DialogBoxInnerCategory } from "./DialogBoxInnerCategory";
 import { getSubCategoryall } from "@/services/subcategoryService";
 
+interface CustomError {
+  code?: number;
+}
 interface Customer {
   id: number;
   name: string;
@@ -63,9 +66,9 @@ const InnerCategoryList = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       setOpenDelete(false);
@@ -126,7 +129,7 @@ const InnerCategoryList = () => {
       },
       cell: ({ row }) => {
         const data = SubcategoryData?.data?.responseData?.find(
-          (item) => item?.id == row?.original?.subCategory
+          (item: any) => item?.id == row?.original?.subCategory
         );
         return <div className="">{data?.name}</div>;
       },
@@ -206,8 +209,6 @@ const InnerCategoryList = () => {
       {isLoading && <Loading />}
       <DataTableDemo
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-
         data={InnercategoryData?.data?.responseData || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

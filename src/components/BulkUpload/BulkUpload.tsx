@@ -1,13 +1,15 @@
-import { ErrorType } from "@/lib/types";
 import { BulkUploadData } from "@/services/bulkuploadService";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
-import { useDropzone } from "react-dropzone";
+import { DropzoneRootProps, useDropzone } from "react-dropzone";
 import { BiSolidCloudUpload } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import Loading from "../Common/Loading";
 
+interface CustomError {
+  code?: number;
+}
 const baseStyle = {
   flex: 1,
   display: "flex",
@@ -45,13 +47,13 @@ const BulkUpload = () => {
         description: "Bulk Upload Successfully.",
       });
     },
-    onError: (error: ErrorType) => {
-      if (error?.code == 401) {
+    onError: (error) => {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
     },
   });
@@ -99,12 +101,14 @@ const BulkUpload = () => {
     }),
     [isFocused, isDragAccept, isDragReject]
   );
-
+  const rootProps: DropzoneRootProps = getRootProps({
+    style,
+  } as DropzoneRootProps);
   return (
     <>
       {isPending && <Loading />}
       <div className=" ml-[30px] mt-[50px] max-w-[400px] bg-[#fafafa] border-[1px] border-solid border-[#0000004f] rounded-[3px] p-[15px]">
-        <div {...getRootProps({ style })}>
+        <div {...rootProps}>
           <input
             {...getInputProps()}
             accept="application/vnd.ms-excel (.XLS)"

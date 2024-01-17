@@ -1,6 +1,6 @@
 import api from "./api";
 
-export const getSubCategory = async (params) => {
+export const getSubCategory = async (params: any) => {
   const url = "/subcategory/getallSubCategories";
   const method = "get";
 
@@ -47,7 +47,7 @@ export const deleteSubCategory = (id: string) => {
   return api({ url, method, headers, data: {} });
 };
 
-export const categoryTosubCategory = async (params) => {
+export const categoryTosubCategory = async (params: any) => {
   const url = `/category/subcategory`;
   const method = "get";
   const token = localStorage.token;
@@ -57,7 +57,7 @@ export const categoryTosubCategory = async (params) => {
 
   return api({ url, method, params, headers });
 };
-export const subcategoryToInnerCategory = async (params) => {
+export const subcategoryToInnerCategory = async (params: any) => {
   const url = `/subcategory/innercategory`;
   const method = "get";
   const token = localStorage.token;

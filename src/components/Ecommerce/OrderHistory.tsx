@@ -5,15 +5,12 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getOrderHistory,
-  getOrderSummary,
   updateOrderHistory,
 } from "@/services/orderhistoryService";
-import { EyeIcon } from "lucide-react";
 import Modal from "../Common/Model";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { AiOutlineEdit } from "react-icons/ai";
-import { FieldValues, FormProvider, useForm } from "react-hook-form";
-import InputWithLabel from "../Common/InputWithLabel";
+import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Loading from "../Common/Loading";
@@ -21,23 +18,28 @@ import { toast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import SelectMenu from "../Common/SelectMenu";
 import { Label } from "../ui/label";
-import { useAppSelector } from "@/hooks/use-redux";
+
+interface CustomError {
+  code?: number;
+}
+interface Column<T> {
+  accessorKey: keyof T | ((row: T) => any) | string;
+  header: React.ReactNode | ((args: { column: any }) => React.ReactNode);
+  cell: (args: { row: any }) => React.ReactNode;
+  enableSorting?: boolean;
+}
+interface Order {
+  // properties of your Customer type
+}
 
 const OrderHistory = () => {
   const [activePage, setActivePage] = useState(1);
   const [isEdit, setIsEdit] = useState<string>("");
-  const { user } = useAppSelector((state) => state.auth);
   const [open, setOpen] = useState<boolean>(false);
-  const [summaryData, setSummaryData] = useState(null);
   const [selectMenu, setSelectmenu] = useState("");
   const [active, setActive] = useState(0);
-  const [openview, setOpenView] = useState<boolean>(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [filter, setFilter] = useState({
-    orderstatus: selectMenu,
-    orderid: "",
-  });
   const schema = yup.object({
     orderstatus: yup.string().required(),
     orderid: yup.string().required(),
@@ -45,16 +47,9 @@ const OrderHistory = () => {
 
   const methods = useForm({
     resolver: yupResolver(schema),
-    defaultValues: filter,
   });
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-    setValue,
-  } = methods;
+  const { handleSubmit, reset, setValue } = methods;
 
   const { data: orderHistoryData, isLoading } = useQuery({
     queryKey: ["GET_ORDER_HISTORY", { activePage, active }],
@@ -63,17 +58,15 @@ const OrderHistory = () => {
         page: activePage,
         pageSize: 10,
         orderstatus: active,
-        payment: !active == 1 ? 0 : 2,
+        payment: active == 0 ? 0 : 2,
       }),
   });
 
   useEffect(() => {
     if (orderHistoryData && isEdit) {
       const findData = orderHistoryData?.data?.responceData?.find(
-        (item) => item.id === isEdit
+        (item: any) => item.id === isEdit
       );
-
-      console.log("datata", findData);
       setValue("orderstatus", findData?.orderstatus || "");
       setValue("orderid", findData?.id || "");
     } else {
@@ -96,15 +89,16 @@ const OrderHistory = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
-      if (error?.code == 401) {
+
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     const object = {
       orderid: data.orderid,
       orderstatus: selectMenu,
@@ -113,7 +107,7 @@ const OrderHistory = () => {
     updateOrder(object);
   };
 
-  const columns: Column<Customer>[] = [
+  const columns: Column<Order>[] = [
     {
       accessorKey: "Product Image",
       header: <div className="text-left">Image</div>,
@@ -252,11 +246,10 @@ const OrderHistory = () => {
   ];
 
   const handleClose = () => {
-    setOpenView(false);
     setOpen(false);
   };
 
-  const handleChangeMenu = (value) => {
+  const handleChangeMenu = (value: any) => {
     setSelectmenu(value);
   };
   const body = (
@@ -282,7 +275,6 @@ const OrderHistory = () => {
                 { value: "2", label: "Complete" },
               ]}
               value={selectMenu}
-              name="orderstatus"
             />
           </div>
           <div className="flex justify-end gap-4 mt-5">

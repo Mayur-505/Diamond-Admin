@@ -1,7 +1,7 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
 import SelectMenu from "@/components/Common/SelectMenu";
 import TextAreaWithLabel from "@/components/Common/TextAreaWithLabel";
-import { AddSubCategory, getSubCategory } from "@/services/subcategoryService";
+import { AddSubCategory } from "@/services/subcategoryService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,10 @@ import Loading from "@/components/Common/Loading";
 import { UploadImage } from "@/services/adminService";
 import { allgetCategorydata } from "@/services/categoryService";
 import { Button } from "@/components/ui/button";
+
+interface CustomError {
+  code?: number;
+}
 
 const AddCategory = () => {
   const navigate = useNavigate();
@@ -31,7 +35,7 @@ const AddCategory = () => {
   });
 
   const categoryOptions = subcategoryData?.data?.modifiedCategories
-    ? subcategoryData?.data?.modifiedCategories?.map((item) => ({
+    ? subcategoryData?.data?.modifiedCategories?.map((item: any) => ({
         label: item.name,
         value: item.id,
       }))
@@ -46,15 +50,20 @@ const AddCategory = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
       setIsOpen(false);
     },
   });
-
-  const handleChange = (name: string, value: string | Date | undefined) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleChange("image", files[0]);
+    }
+  };
+  const handleChange = (name: string, value: string | File | undefined) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
-    if (name == "image") {
+    if (name == "image" && value) {
       const payload = new FormData();
       payload.append("image", value);
       UploadImagedata(payload);
@@ -80,9 +89,9 @@ const AddCategory = () => {
     onError: (error) => {
       toast({
         variant: "error",
-        title: error?.data?.message || "",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
       });
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
     },
@@ -151,7 +160,7 @@ const AddCategory = () => {
               id="image"
               type="file"
               className="col-span-3"
-              onChange={(e) => handleChange("image", e.target.files[0])}
+              onChange={(e) => handleFileChange(e)}
             />
             {imageUrl && (
               <img
