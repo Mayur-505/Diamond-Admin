@@ -210,7 +210,6 @@ const NewProduct = () => {
     return formIsValid;
   };
 
-  console.log("state", state);
   useEffect(() => {
     if (state?.editdata) {
       setFormValues({
@@ -386,8 +385,6 @@ const NewProduct = () => {
     base64imageArray[index] = files[0];
     setbase64imageArray([...base64imageArray]);
 
-    console.log("ind", imageArray);
-
     if (files) {
       if (files?.length) {
         if (state?.editdata) {
@@ -419,7 +416,6 @@ const NewProduct = () => {
     //   setFormValues((prev) => ({ ...prev, productimage: images }));
     // }
   };
-  console.log("files", imageArray);
 
   const { mutate: UploadImagedata } = useMutation({
     mutationFn: UploadImage,
@@ -543,7 +539,6 @@ const NewProduct = () => {
       if (validateForm()) {
         const payload = new FormData();
         for (const key in formValues) {
-          console.log(formValues, "formValues");
           if (key !== "productimage") {
             payload.append(key, formValues[key]);
           }
@@ -594,8 +589,6 @@ const NewProduct = () => {
       productimage: [],
     });
   };
-  console.log("UploadMultiImagedata", formValues.productimage);
-
   const base64fuc = async (name: string, imageData: any) => {
     if (state?.editdata) {
       setPriviewImages((prev: any) => ({ ...prev, [name]: formValues[name] }));

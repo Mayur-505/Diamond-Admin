@@ -300,7 +300,6 @@ const Index = () => {
     payload.append("name", data.name);
     payload.append("description", data.description);
     if (isEdit) {
-      console.log("imageUrl", imageUrl);
       payload.append("image", imageUrl);
       payload.append("shapeid", isEdit);
     } else {

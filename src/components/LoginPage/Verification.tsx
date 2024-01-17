@@ -21,7 +21,7 @@ const Verification = () => {
         .map((input) => input.value)
         .filter((value) => /^[0-9]$/.test(value));
       setOtp(numericValues.join("").slice(0, 6));
-      console.log("event", event);
+      console.log("error", event);
       if (index !== inputs.length - 1 && inputs[index].value !== "") {
         inputs[index + 1].focus();
       }

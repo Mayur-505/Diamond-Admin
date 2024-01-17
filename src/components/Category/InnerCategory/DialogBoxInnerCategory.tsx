@@ -103,7 +103,6 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }: any) {
   useEffect(() => {
     setFormValues({ ...item });
   }, [item]);
-  console.log("item123", item);
 
   return (
     <>

@@ -80,8 +80,6 @@ const BannerList = () => {
     },
   });
 
-  console.log("imageUrl", imageUrl);
-
   const {
     register,
     handleSubmit,

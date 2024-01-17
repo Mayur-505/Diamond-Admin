@@ -59,7 +59,6 @@ const BulkUpload = () => {
   });
 
   const handleUploadFile = (file: File[]) => {
-    console.log("file6++", file);
     if (!file.length)
       return toast({
         variant: "error",

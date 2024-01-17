@@ -106,7 +106,6 @@ const OrderHistory = () => {
       orderid: data.orderid,
       orderstatus: selectMenu,
     };
-    console.log("datas", data);
     updateOrder(object);
   };
 
@@ -212,9 +211,11 @@ const OrderHistory = () => {
                 : "bg-[#dc3545]"
             }`}
           >
-            {row?.original?.productResponse?.[0]?.status == "0"
-              ? "Inactive"
-              : "Active"}
+            {row.original?.orderstatus == 0
+              ? "Processing"
+              : row.original?.orderstatus == 1
+              ? "Ongoing"
+              : "Delivered"}
           </span>
         );
       },
@@ -260,7 +261,6 @@ const OrderHistory = () => {
     setSelectmenu(value);
   };
 
-  console.log("viewData", viewData);
   const OrderViewBody = (
     <div>
       <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
