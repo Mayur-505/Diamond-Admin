@@ -335,7 +335,7 @@ const OrderHistory = () => {
           <DataTableDemo
             data={orderHistoryData?.data?.responceData || []}
             columns={columns}
-            filterName={"name"}
+            filterName={"title"}
             setActivePage={setActivePage}
             pageCount={orderHistoryData?.data?.total}
             customButton={
