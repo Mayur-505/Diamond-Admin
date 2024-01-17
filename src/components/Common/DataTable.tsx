@@ -32,7 +32,7 @@ import {
 import ReactPaginate from "react-paginate";
 
 interface DataTableProps<T extends Record<string, unknown>> {
-  columns: Column<T>[];
+  columns: any;
   data: T[];
   filterName?: string | undefined;
   customButton?: React.ReactNode;

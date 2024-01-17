@@ -18,6 +18,7 @@ import { toast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import SelectMenu from "../Common/SelectMenu";
 import { Label } from "../ui/label";
+import { EyeIcon } from "lucide-react";
 
 interface CustomError {
   code?: number;
@@ -35,8 +36,10 @@ interface Order {
 const OrderHistory = () => {
   const [activePage, setActivePage] = useState(1);
   const [isEdit, setIsEdit] = useState<string>("");
+  const [viewData, setViewData] = useState<any>({});
   const [open, setOpen] = useState<boolean>(false);
   const [selectMenu, setSelectmenu] = useState("");
+  const [openview, setOpenView] = useState(false);
   const [active, setActive] = useState(0);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -189,7 +192,12 @@ const OrderHistory = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="">{row?.original?.productResponse?.[0]?.quantity}</div>
+        <div className="">
+          {row?.original?.productResponse?.reduce(
+            (acc: number, item: any) => acc + parseInt(item?.quantity),
+            0
+          )}
+        </div>
       ),
     },
     {
@@ -217,15 +225,14 @@ const OrderHistory = () => {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            {/* <Button
+            <Button
               onClick={() => {
-                handleView(row?.original?.id);
-                setOpenView(true);
+                setViewData(row?.original), setOpenView(true);
               }}
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <EyeIcon className="text-[#fff] text-[16px]" />
-            </Button> */}
+            </Button>
             {active !== 2 && (
               <Button
                 type="button"
@@ -252,6 +259,61 @@ const OrderHistory = () => {
   const handleChangeMenu = (value: any) => {
     setSelectmenu(value);
   };
+
+  let sum = 0;
+
+  console.log("viewData", viewData);
+  const OrderViewBody = (
+    <div>
+      <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
+        Order Details
+      </h2>
+      {viewData?.productResponse &&
+        viewData?.productResponse?.map((item: any) => {
+          return (
+            <div className="flex w-full justify-between mb-[15px]">
+              <div className="flex items-center gap-[15px]">
+                <img
+                  src={item?.product?.productimage?.[0]}
+                  className="h-[60px] w-[60px]"
+                  alt="image"
+                />
+                <div>
+                  <p className="text-[14px]">{item?.product?.title}</p>
+                  <p className="text-[14px]">
+                    <span className="font-bold">Cert Number :</span>{" "}
+                    {item?.product?.cert_number}
+                  </p>
+                </div>
+              </div>
+              <p className="text-[12px]">Qua:{item?.quantity}</p>
+            </div>
+          );
+        })}
+      <div className="flex items-center justify-end mt-[10px]">
+        <p>
+          <span className="text-[14px] font-bold">Totle Quantity :</span>{" "}
+          {viewData?.productResponse?.reduce(
+            (acc: number, item: any) => acc + parseInt(item.quantity),
+            0
+          )}
+        </p>
+        <p className="ml-[15px]">
+          <span className="text-[14px] font-bold">Totle Price :</span>{" "}
+          {viewData?.totalprice}
+        </p>
+      </div>
+      <div className="flex justify-end gap-4 mt-5 ">
+        <Button
+          variant={"outline"}
+          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+          onClick={() => handleClose()}
+        >
+          Cancel
+        </Button>
+      </div>
+    </div>
+  );
   const body = (
     <div>
       {isPending && <Loading />}
@@ -384,12 +446,14 @@ const OrderHistory = () => {
         children={body}
         className="!p-[20px]"
       />
-      {/* <Modal
+      <Modal
         open={openview}
-        onClose={() => setOpenView(false)}
+        onClose={() => {
+          setOpenView(false), (sum = 0);
+        }}
         children={OrderViewBody}
         className="!p-[20px]"
-      /> */}
+      />
     </div>
   );
 };
