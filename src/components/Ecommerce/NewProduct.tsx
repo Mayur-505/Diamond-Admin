@@ -418,7 +418,7 @@ const NewProduct = () => {
             {state?.editdata ? "Edit Product" : "Create Product"}
           </div>
           <div className="grid grid-cols-12 gap-[14px] mx-0 mt-0">
-            <div className="col-span-8 p-0 w-full">
+            <div className="col-span-12 p-0 w-full">
               <div className="flex mt-0 flex-wrap items-center mx-[-14px]">
                 <div className="px-[14px] py-0 mb-[14px] w-full">
                   <InputWithLabel
@@ -652,6 +652,88 @@ const NewProduct = () => {
                   />
                 </div>
 
+                <div className="px-[14px] py-0 mb-[14px] w-full">
+                  <InputWithLabel
+                    id="size"
+                    label="Size"
+                    placeholder="size"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.size}
+                    onChange={(e) => handleChange("size", e.target.value)}
+                  />
+                </div>
+                <div className="p-[14px] py-0 mb-[14px] w-full">
+                  <TextAreaWithLabel
+                    label={"Size Description"}
+                    placeholder="size_desc"
+                    value={formValues.size_desc}
+                    textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] h-[145px]"
+                    className="md:col-span-2 "
+                    onChange={(e) => handleChange("size_desc", e.target.value)}
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] w-full">
+                  <SelectMenu
+                    options={colorOptions}
+                    placeholder="Select Colour"
+                    label="Colour"
+                    className="rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.colour}
+                    onChange={(e) => handleChange("colour", e)}
+                  />
+                </div>
+                <div className="p-[14px] py-0 mb-[14px] w-full">
+                  <TextAreaWithLabel
+                    label={"Color Description"}
+                    placeholder="color_desc"
+                    value={formValues.color_desc}
+                    textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] h-[145px]"
+                    className="md:col-span-2"
+                    onChange={(e) => handleChange("color_desc", e.target.value)}
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] w-full">
+                  <SelectMenu
+                    placeholder="Select Clarity"
+                    label="Clarity"
+                    options={clarityOptions}
+                    className="rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.clarity}
+                    onChange={(e) => handleChange("clarity", e)}
+                  />
+                </div>
+                <div className="p-[14px] py-0 mb-[14px] w-full">
+                  <TextAreaWithLabel
+                    label={"Clarity Description"}
+                    placeholder="clarity_desc"
+                    value={formValues.clarity_desc}
+                    textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] h-[145px]"
+                    className="md:col-span-2"
+                    onChange={(e) =>
+                      handleChange("clarity_desc", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] w-full">
+                  <SelectMenu
+                    options={cutOptions}
+                    placeholder="Select Cut"
+                    label="Cut"
+                    className="rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.cut}
+                    onChange={(e) => handleChange("cut", e)}
+                  />
+                </div>
+                <div className="p-[14px] py-0 mb-[14px] w-full">
+                  <TextAreaWithLabel
+                    label={"Cut Description"}
+                    placeholder="cut_desc"
+                    value={formValues.cut_desc}
+                    textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] h-[145px]"
+                    className="md:col-span-2"
+                    onChange={(e) => handleChange("cut_desc", e.target.value)}
+                  />
+                </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full relative z-[0]">
                   <label
                     htmlFor="sizeimages"
@@ -772,117 +854,28 @@ const NewProduct = () => {
                       );
                     })}
                   </div>
+                  <div className="rounded-[4px] flex justify-between items-center py-[7px] gap-4">
+                    <Button
+                      className="flex-1 rounded-[4px] bg-transparent border-[#D32F2F] border text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white"
+                      onClick={handleDiscard}
+                    >
+                      <span>Cancel</span>
+                    </Button>
+                    <Button
+                      className="flex-1 bg-[#2196F3] rounded-[4px] border-[#2196F3] border hover:text-[#000] hover:bg-white text-[#fff]"
+                      onClick={handleSubmit}
+                    >
+                      <span>
+                        {state?.editdata ? "Update Product" : "Create Product"}
+                      </span>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="col-span-4 flex-1 w-full gap-y-[14px] flex flex-col">
-              <div className="border border-[#dee2e6] rounded-[4px]">
-                <div className="px-[14px] py-0 mb-[14px] w-full">
-                  <InputWithLabel
-                    id="size"
-                    label="Size"
-                    placeholder="size"
-                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    value={formValues.size}
-                    onChange={(e) => handleChange("size", e.target.value)}
-                  />
-                </div>
-                <div className="p-[14px] py-0 mb-[14px] w-full">
-                  <TextAreaWithLabel
-                    label={"Size Description"}
-                    placeholder="size_desc"
-                    value={formValues.size_desc}
-                    textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] h-[145px]"
-                    className="md:col-span-2 "
-                    onChange={(e) => handleChange("size_desc", e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="border border-[#dee2e6] rounded-[4px]">
-                <div className="px-[14px] py-0 mb-[14px] w-full">
-                  <SelectMenu
-                    options={colorOptions}
-                    placeholder="Select Colour"
-                    label="Colour"
-                    className="rounded-[4px] placeholder:opacity-[0.6]"
-                    value={formValues.colour}
-                    onChange={(e) => handleChange("colour", e)}
-                  />
-                </div>
-                <div className="p-[14px] py-0 mb-[14px] w-full">
-                  <TextAreaWithLabel
-                    label={"Color Description"}
-                    placeholder="color_desc"
-                    value={formValues.color_desc}
-                    textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] h-[145px]"
-                    className="md:col-span-2"
-                    onChange={(e) => handleChange("color_desc", e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="border border-[#dee2e6] rounded-[4px]">
-                <div className="px-[14px] py-0 mb-[14px] w-full">
-                  <SelectMenu
-                    placeholder="Select Clarity"
-                    label="Clarity"
-                    options={clarityOptions}
-                    className="rounded-[4px] placeholder:opacity-[0.6]"
-                    value={formValues.clarity}
-                    onChange={(e) => handleChange("clarity", e)}
-                  />
-                </div>
-                <div className="p-[14px] py-0 mb-[14px] w-full">
-                  <TextAreaWithLabel
-                    label={"Clarity Description"}
-                    placeholder="clarity_desc"
-                    value={formValues.clarity_desc}
-                    textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] h-[145px]"
-                    className="md:col-span-2"
-                    onChange={(e) =>
-                      handleChange("clarity_desc", e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-              <div className="border border-[#dee2e6] rounded-[4px]">
-                <div className="px-[14px] py-0 mb-[14px] w-full">
-                  <SelectMenu
-                    options={cutOptions}
-                    placeholder="Select Cut"
-                    label="Cut"
-                    className="rounded-[4px] placeholder:opacity-[0.6]"
-                    value={formValues.cut}
-                    onChange={(e) => handleChange("cut", e)}
-                  />
-                </div>
-                <div className="p-[14px] py-0 mb-[14px] w-full">
-                  <TextAreaWithLabel
-                    label={"Cut Description"}
-                    placeholder="cut_desc"
-                    value={formValues.cut_desc}
-                    textAreaClassName="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] h-[145px]"
-                    className="md:col-span-2"
-                    onChange={(e) => handleChange("cut_desc", e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="rounded-[4px] flex justify-between items-center py-[7px] gap-4">
-                <Button
-                  className="flex-1 rounded-[4px] bg-transparent border-[#D32F2F] border text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white"
-                  onClick={handleDiscard}
-                >
-                  <span>Cancel</span>
-                </Button>
-                <Button
-                  className="flex-1 bg-[#2196F3] rounded-[4px] border-[#2196F3] border hover:text-[#000] hover:bg-white text-[#fff]"
-                  onClick={handleSubmit}
-                >
-                  <span>
-                    {state?.editdata ? "Update Product" : "Create Product"}
-                  </span>
-                </Button>
-              </div>
-            </div>
+            {/* <div className="col-span-4 flex-1 w-full gap-y-[14px] flex flex-col"> */}
+
+            {/* </div> */}
           </div>
         </div>
       </div>
