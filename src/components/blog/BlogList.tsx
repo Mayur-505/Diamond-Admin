@@ -56,7 +56,7 @@ interface SingleBlogData {
   author: {
     email: string;
   };
-  total: string;
+  total: number;
 }
 
 const BlogList = () => {
@@ -530,7 +530,6 @@ const BlogList = () => {
         // @ts-expect-error
         data={data?.Blogdata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         columns={columns}
         filterName={"title"}
         customButton={

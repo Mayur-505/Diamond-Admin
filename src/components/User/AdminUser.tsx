@@ -221,7 +221,6 @@ const AdminUser: React.FC = () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           data={adminData?.data?.admindata || []}
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
           columns={columns}
           filterName="firstname"
           setActivePage={setActivePage}

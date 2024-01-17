@@ -100,7 +100,6 @@ const Index: React.FC = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         data={UserData?.data?.userdata || []}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         columns={columns}
         setActivePage={setActivePage}
         pageCount={UserData?.data?.total}

@@ -70,7 +70,7 @@ export type Blog = {
   status: number;
   createdAt: string;
   updatedAt: string;
-  total: any;
+  total: number;
 };
 export type Banner = {
   id: string;

@@ -260,8 +260,6 @@ const OrderHistory = () => {
     setSelectmenu(value);
   };
 
-  let sum = 0;
-
   console.log("viewData", viewData);
   const OrderViewBody = (
     <div>
@@ -449,7 +447,7 @@ const OrderHistory = () => {
       <Modal
         open={openview}
         onClose={() => {
-          setOpenView(false), (sum = 0);
+          setOpenView(false);
         }}
         children={OrderViewBody}
         className="!p-[20px]"
