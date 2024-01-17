@@ -1,8 +1,6 @@
 import api from "./api";
 
-export const getColor = async (params: {
-  params: { page: number; pageSize: number };
-}) => {
+export const getColor = async (params: any) => {
   const url = "/color/fetch";
   const method = "get";
 

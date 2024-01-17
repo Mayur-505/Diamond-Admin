@@ -1,10 +1,7 @@
 import { Shape } from "@/lib/types";
 import api from "./api";
 
-export const getShape = async (params: {
-  page: number;
-  pageSize: number;
-}): Promise<Shape[]> => {
+export const getShape = async (params: any) => {
   const url = "/shape/fetch";
   const method = "get";
 

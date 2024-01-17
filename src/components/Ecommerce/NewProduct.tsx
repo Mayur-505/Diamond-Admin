@@ -19,23 +19,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Loading from "../Common/Loading";
 import { UploadImage } from "@/services/adminService";
 import { updateProduct } from "@/services/productService";
-import { Input } from "../ui/input";
-import { Item } from "@radix-ui/react-dropdown-menu";
-import { MdOutlineUpload } from "react-icons/md";
 import { RiUploadCloud2Line } from "react-icons/ri";
 import { Label } from "../ui/label";
 
+interface CustomError {
+  code?: number;
+}
+
 const NewProduct = () => {
   const queryClient = useQueryClient();
-  const [imageArray, setImageArray] = useState(["", "", "", ""]);
+  const [imageArray, setImageArray] = useState<any>(["", "", "", ""]);
   const [base64imageArray, setbase64imageArray] = useState(["", "", "", ""]);
   const navigate = useNavigate();
   const [activePage, setActivePage] = useState(1);
-  const Inputraf = useRef(null);
   const [isopen, setIsOpen] = useState<boolean>(false);
   const { state } = useLocation();
-  const [errors, setErrors] = useState({});
-  const [priviewImages, setPriviewImages] = useState({
+  const [errors, setErrors] = useState<any>({});
+  const [priviewImages, setPriviewImages] = useState<any>({
     sizeimages: null,
     colorimage: null,
     clarityimage: null,
@@ -43,7 +43,7 @@ const NewProduct = () => {
     productimage: [],
   });
 
-  const [formValues, setFormValues] = useState({
+  const [formValues, setFormValues] = useState<any>({
     maintitle: "",
     title: "",
     price: "",
@@ -82,9 +82,7 @@ const NewProduct = () => {
 
   const validateForm = () => {
     let formIsValid = true;
-    const newErrors = {};
-
-    // Validate username
+    const newErrors: any = {};
     if (!formValues.maintitle?.trim()) {
       formIsValid = false;
       newErrors.maintitle = "main title required";
@@ -251,7 +249,7 @@ const NewProduct = () => {
   });
 
   const categoryOptions = categoryData?.data?.modifiedCategories
-    ? categoryData?.data?.modifiedCategories?.map((item) => ({
+    ? categoryData?.data?.modifiedCategories?.map((item: any) => ({
         label: item.name,
         value: item.id,
       }))
@@ -268,7 +266,7 @@ const NewProduct = () => {
   });
 
   const categorySubOptions = subcategoryData?.data?.data?.categories
-    ? subcategoryData?.data?.data?.categories?.map((item) => ({
+    ? subcategoryData?.data?.data?.categories?.map((item: any) => ({
         label: item.name,
         value: item.id,
       }))
@@ -283,7 +281,7 @@ const NewProduct = () => {
   });
 
   const categoryInnerOptions = InnercategoryData?.data?.data?.innercategories
-    ? InnercategoryData?.data?.data?.innercategories?.map((item) => ({
+    ? InnercategoryData?.data?.data?.innercategories?.map((item: any) => ({
         label: item.name,
         value: item.id,
       }))
@@ -295,7 +293,7 @@ const NewProduct = () => {
   });
 
   const shapeOptions = shapeData?.Shapedata
-    ? shapeData?.Shapedata?.map((item) => ({
+    ? shapeData?.Shapedata?.map((item: any) => ({
         label: item.name,
         value: item.name,
       }))
@@ -307,7 +305,7 @@ const NewProduct = () => {
   });
 
   const colorOptions = colorData?.data?.Colordata
-    ? colorData?.data?.Colordata?.map((item) => ({
+    ? colorData?.data?.Colordata?.map((item: any) => ({
         label: item.name,
         value: item.name,
       }))
@@ -318,7 +316,7 @@ const NewProduct = () => {
     queryFn: () => getClarity({ page: activePage, pageSize: 10 }),
   });
   const clarityOptions = clarityData?.data?.Claritydata
-    ? clarityData?.data?.Claritydata?.map((item) => ({
+    ? clarityData?.data?.Claritydata?.map((item: any) => ({
         label: item.name,
         value: item.name,
       }))
@@ -330,13 +328,13 @@ const NewProduct = () => {
   });
 
   const cutOptions = cutData?.data?.Cutdata
-    ? cutData?.data?.Cutdata?.map((item) => ({
+    ? cutData?.data?.Cutdata?.map((item: any) => ({
         label: item.name,
         value: item.name,
       }))
     : [];
 
-  const handleChange = (name: string, value: string | number) => {
+  const handleChange = (name: string, value: any) => {
     if (state?.editdata) {
       if (name === "sizeimages") {
         setImgUrl(name);
@@ -364,10 +362,10 @@ const NewProduct = () => {
         UploadImagedata(payload);
       }
     }
-    setFormValues((prev) => ({ ...prev, [name]: value }));
+    setFormValues((prev: any) => ({ ...prev, [name]: value }));
   };
 
-  function convertFileToBase64(file) {
+  function convertFileToBase64(file: any) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -403,7 +401,7 @@ const NewProduct = () => {
           for (let i = 0; i < files.length; i++) {
             images.push(files[i]);
           }
-          setFormValues((prev) => ({ ...prev, productimage: images }));
+          setFormValues((prev: any) => ({ ...prev, productimage: images }));
         }
       } else {
         toast({
@@ -427,7 +425,7 @@ const NewProduct = () => {
   const { mutate: UploadImagedata } = useMutation({
     mutationFn: UploadImage,
     onSuccess: (res) => {
-      setFormValues((prev) => ({
+      setFormValues((prev: any) => ({
         ...prev,
         [imgUrl]: res?.data?.data?.image,
       }));
@@ -505,13 +503,13 @@ const NewProduct = () => {
       });
     },
     onError: (error) => {
-      toast({
-        variant: "error",
-        title: error?.data?.message,
-      });
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
+      });
     },
   });
 
@@ -527,14 +525,14 @@ const NewProduct = () => {
       navigate("/gems/product-list");
     },
     onError: (error) => {
-      toast({
-        variant: "error",
-        title: error?.data?.message,
-      });
       setIsOpen(false);
-      if (error?.code == 401) {
+      if ((error as CustomError)?.code === 401) {
         navigate("/auth/login");
       }
+      toast({
+        variant: "error",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
+      });
     },
   });
 
@@ -601,7 +599,7 @@ const NewProduct = () => {
 
   const base64fuc = async (name: string, imageData: any) => {
     if (state?.editdata) {
-      setPriviewImages((prev) => ({ ...prev, [name]: formValues[name] }));
+      setPriviewImages((prev: any) => ({ ...prev, [name]: formValues[name] }));
     } else {
       if (name == "productimage") {
         priviewImages.productimage = [];
@@ -613,7 +611,7 @@ const NewProduct = () => {
         }
       } else {
         const image = await convertFileToBase64(imageData);
-        setPriviewImages((prev) => ({ ...prev, [name]: image }));
+        setPriviewImages((prev: any) => ({ ...prev, [name]: image }));
       }
     }
   };
@@ -1058,7 +1056,7 @@ const NewProduct = () => {
                     id="sizeimages"
                     type="file"
                     className="hidden"
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       handleChange("sizeimages", e.target.files[0])
                     }
                   />
@@ -1088,7 +1086,7 @@ const NewProduct = () => {
                     id="colorimage"
                     type="file"
                     className="hidden"
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       handleChange("colorimage", e.target.files[0])
                     }
                   />
@@ -1119,7 +1117,7 @@ const NewProduct = () => {
                     id="clarityimage"
                     type="file"
                     className="hidden"
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       handleChange("clarityimage", e.target.files[0])
                     }
                   />
@@ -1149,7 +1147,7 @@ const NewProduct = () => {
                     id="cutimage"
                     type="file"
                     className="hidden"
-                    onChange={(e) =>
+                    onChange={(e: any) =>
                       handleChange("cutimage", e.target.files[0])
                     }
                   />
@@ -1169,7 +1167,7 @@ const NewProduct = () => {
                     Product Image
                   </Label>
                   <div className="flex gap-[10px]">
-                    {imageArray.map((item, ind) => {
+                    {imageArray.map((item: any, ind: number) => {
                       return (
                         <div className="w-full relative h-[200px]">
                           <label className="flex flex-col text-[30px] items-center justify-center border border-dashed border-[#ced4da] h-full w-full textsm text-center">

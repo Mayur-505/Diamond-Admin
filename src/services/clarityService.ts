@@ -4,9 +4,7 @@ interface ClarityFetchParams {
   page: number;
   pageSize: number;
 }
-export const getClarity = async (
-  params: ClarityFetchParams
-): Promise<Clarity[]> => {
+export const getClarity = async (params: any) => {
   const url = "/clarity/fetch";
   const method = "get";
 
