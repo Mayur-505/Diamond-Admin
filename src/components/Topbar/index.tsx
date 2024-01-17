@@ -6,7 +6,6 @@ import { ProfileDropDown } from "../Common/ProfileDropDown";
 import { useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/hooks/use-redux";
 import { GetOneUser } from "@/services/adminService";
-import { Button } from "../ui/button";
 
 interface HeaderProps {
   setCollapsed: (collapsed: boolean) => void;
