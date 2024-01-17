@@ -48,13 +48,12 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
     >
       <div className="flex items-center gap-[14px]">
         <div className="border-[#dee2e6] border-r-[1px] border-solid">
-          <Button
-            type="button"
+          <div
             onClick={() => setCollapsed(!collapsed)}
-            className="h-[35px] w-[35px] bg-[#f8f9fa] mr-[14px] hidden items-center justify-center lg:flex "
+            className="h-[35px] w-[35px] bg-[#f8f9fa] mr-[14px] hidden items-center justify-center lg:flex cursor-pointer"
           >
             <FaChevronLeft />
-          </Button>
+          </div>
         </div>
         <h1 className="font-Nunito font-[600] text-[#6c757d] uppercase text-[14px]">
           {path == "/dashboard"
