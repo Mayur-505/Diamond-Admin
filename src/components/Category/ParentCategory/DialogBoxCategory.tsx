@@ -39,7 +39,7 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
     onSuccess: () => {
       setIsOpen(false);
       toast({
-        description: "Sub category Created Successfully.",
+        description: "Parent Category Updated Successfully.",
       });
       queryClient.invalidateQueries({ queryKey: ["GET_CATEGORY"] });
     },
@@ -105,9 +105,6 @@ export function DialogBoxCategory({ icon, mainTitle, item }) {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{mainTitle}</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

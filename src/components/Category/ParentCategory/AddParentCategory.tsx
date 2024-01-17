@@ -1,5 +1,6 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
 import Loading from "@/components/Common/Loading";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ErrorType } from "@/lib/types";
 import { UploadImage } from "@/services/adminService";
@@ -35,7 +36,7 @@ const AddParentCategory = () => {
     mutationFn: AddCategory,
     onSuccess: () => {
       toast({
-        description: "Parent category Created Successfully.",
+        description: "Parent Category Created Successfully.",
       });
       setCategory({
         name: "",
@@ -124,19 +125,19 @@ const AddParentCategory = () => {
           )}
         </div>
         <div className="col-span-12 flex items-center gap-4">
-          <button
+          <Button
             type="button"
             onClick={() => navigate("/category/category")}
-            className="text-[14px] font-[600] text-[#343a40] shadow-md px-4 py-2 w-full rounded"
+            className="text-[14px] font-[600] text-[#ffffff] shadow-md px-4 py-2 w-full rounded"
           >
             Cancel
-          </button>
-          <button
-            className="text-[14px] font-[600] bg-[#343a40] text-[#fff] shadow-md px-4 py-2 w-full rounded"
+          </Button>
+          <Button
+            className="text-[14px] font-[600] bg-[#2796ef] text-[#fff] shadow-md px-4 py-2 w-full rounded"
             onClick={handleSubmit}
           >
             Add
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import * as XLSX from "xlsx";
+import { Button } from "../ui/button";
 
 interface ExportButtonProps {
   data: any[];
@@ -19,8 +20,8 @@ export const ExportExcelButton = ({
   };
 
   return (
-    <button className={className} onClick={exportToExcel}>
+    <Button className={className} onClick={exportToExcel}>
       Export
-    </button>
+    </Button>
   );
 };

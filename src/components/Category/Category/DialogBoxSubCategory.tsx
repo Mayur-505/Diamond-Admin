@@ -1,10 +1,10 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
 import Loading from "@/components/Common/Loading";
+import SelectMenu from "@/components/Common/SelectMenu";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -14,9 +14,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { UploadImage } from "@/services/adminService";
+import { allgetCategorydata } from "@/services/categoryService";
 import { EditSubCategory } from "@/services/subcategoryService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { error } from "console";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -37,7 +37,7 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }) {
     mutationFn: (data) => EditSubCategory(item.id, data),
     onSuccess: () => {
       toast({
-        description: "Sub-category updated Successfully.",
+        description: "Sub Category Updated Successfully.",
       });
       setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_SUBCATEGORY"] });
@@ -72,6 +72,17 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }) {
   const handleChange = (name: string, value: string | number) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
+  const { data: subcategoryData } = useQuery({
+    queryKey: ["GET_SUBCATEGORY"],
+    queryFn: allgetCategorydata,
+  });
+
+  const categoryOptions = subcategoryData?.data?.modifiedCategories
+    ? subcategoryData?.data?.modifiedCategories?.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }))
+    : [];
 
   const editFuction = () => {
     const payload = new FormData();
@@ -97,11 +108,20 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }) {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{mainTitle}</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name">Parent Category</Label>
+              <SelectMenu
+                placeholder="Select Category Name"
+                className="border w-[277px] border-[#ced4da] rounded-[4px]"
+                label=""
+                disabled={true}
+                options={categoryOptions}
+                value={item.category}
+                // onChange={(e) => handleChange("category", e)}
+              />
+            </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name">Name</Label>
               <InputWithLabel
@@ -131,13 +151,13 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }) {
                 onChange={handlechangeImage}
               />
             </div>
-            {item.image && (
-              <img
-                src={formValues?.image}
-                alt="images"
-                className="!w-[200px] h-[100px]"
-              />
-            )}
+            <img
+              src={formValues?.image || ""}
+              alt="images"
+              className={`!w-[200px] h-[100px] ${
+                !formValues?.image?.length && "hidden"
+              }`}
+            />
           </div>
           <DialogFooter>
             <Button type="submit" onClick={editFuction}>

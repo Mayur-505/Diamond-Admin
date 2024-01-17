@@ -218,7 +218,7 @@ const Index: React.FC = () => {
         return (
           <div className="flex gap-2">
             {active === "active" && (
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   mutate({ contactid: row?.original?.id, status: 2 }),
@@ -227,15 +227,15 @@ const Index: React.FC = () => {
                 className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
               >
                 <IoMdCheckmark className="text-[#fff] text-[16px]" />
-              </button>
+              </Button>
             )}
-            <button
+            <Button
               type="button"
               onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
-            </button>
+            </Button>
           </div>
         );
       },

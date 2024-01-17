@@ -155,7 +155,15 @@ const AdminUser: React.FC = () => {
       header: () => <div className="text-left">Role</div>,
       cell: ({ row }) => {
         return (
-          <div className="text-left">{row.original.role == 2 && "Admin"}</div>
+          <span
+            className={`badge text-white px-1 py-0.5 text-[12px] rounded ${
+              row?.original?.status === "Active"
+                ? "bg-[#28a745]"
+                : "bg-[#343a40]"
+            }`}
+          >
+            {row.original.role == 2 && "Admin"}
+          </span>
         );
       },
     },
@@ -165,13 +173,13 @@ const AdminUser: React.FC = () => {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            <button
+            <Button
               type="button"
               onClick={handleDelete.bind(null, row.original.id)}
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
-            </button>
+            </Button>
           </div>
         );
       },
@@ -232,14 +240,14 @@ const AdminUser: React.FC = () => {
           value={formValues.email}
           onChange={(e) => handleChange("email", e.target.value)}
         />
-        <button
+        <Button
           className="px-5 h-[35px] bg-[#2796ef] rounded-[4px] text-[#ffffff] border border-transparent font-Nunito font-[600]"
           type="button"
           onClick={handleAssign}
           disabled={!formValues.email.length}
         >
           Assign Admin
-        </button>
+        </Button>
       </div>
     </>
   );

@@ -5,21 +5,35 @@ import InputWithLabel from "../Common/InputWithLabel";
 import { type FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPassword } from "@/services/authService";
+import { useToast } from "../ui/use-toast";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+
   const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
   const { mutate } = useMutation({
     mutationFn: (data: FieldValues) => forgotPassword(data),
     onSuccess: () => {
       reset();
+      toast({
+        variant: "success",
+        title: "Forget Password Created Successfully",
+      });
       navigate("/auth/verification");
+    },
+    onError: (error) => {
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 

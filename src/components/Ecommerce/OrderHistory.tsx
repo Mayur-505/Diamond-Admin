@@ -21,7 +21,6 @@ import { toast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import SelectMenu from "../Common/SelectMenu";
 import { Label } from "../ui/label";
-import { Value } from "@radix-ui/react-select";
 import { useAppSelector } from "@/hooks/use-redux";
 
 const OrderHistory = () => {
@@ -164,9 +163,21 @@ const OrderHistory = () => {
         );
       },
       cell: ({ row }) => (
-        <div className="">
-          {row?.original?.payment == 2 ? "Success" : "Pendding"}
-        </div>
+        <span
+          className={`badge text-white px-1 py-0.5 text-[12px] rounded ${
+            row?.original?.payment == 0
+              ? "bg-[#FF8C00]"
+              : row?.original?.payment == 1
+              ? "bg-[#FFA500]"
+              : "bg-[#28a745]"
+          }`}
+        >
+          {row?.original?.payment == 0
+            ? "Pendding"
+            : row?.original?.payment == 1
+            ? "Processing"
+            : "Success"}
+        </span>
       ),
     },
     {
@@ -222,7 +233,7 @@ const OrderHistory = () => {
               <EyeIcon className="text-[#fff] text-[16px]" />
             </Button> */}
             {active !== 2 && (
-              <button
+              <Button
                 type="button"
                 onClick={() => {
                   setIsEdit(row?.original?.id);
@@ -232,7 +243,7 @@ const OrderHistory = () => {
                 className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
               >
                 <AiOutlineEdit className="text-[#fff] text-[16px]" />
-              </button>
+              </Button>
             )}
           </div>
         );
@@ -242,6 +253,7 @@ const OrderHistory = () => {
 
   const handleClose = () => {
     setOpenView(false);
+    setOpen(false);
   };
 
   const handleChangeMenu = (value) => {

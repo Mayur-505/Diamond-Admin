@@ -5,9 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
 import { ResendOtp, VerificationOtp } from "@/services/authService";
+import { useToast } from "../ui/use-toast";
 
 const Verification = () => {
   const inputsRef = useRef<HTMLInputElement[]>([]);
+  const { toast } = useToast();
   const [Otp, setOtp] = useState("");
   const email = localStorage.getItem("forgotmail");
   const navigate = useNavigate();
@@ -52,7 +54,17 @@ const Verification = () => {
         "ForgetPasswordToken",
         response?.data?.data?.ForgetPasswordToken
       );
+      toast({
+        variant: "success",
+        title: "Verification Successfully",
+      });
       navigate("/auth/new-password");
+    },
+    onError: (error) => {
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
   const { mutate: resendOtp } = useMutation({

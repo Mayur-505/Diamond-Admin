@@ -1,5 +1,6 @@
 import InputWithLabel from "@/components/Common/InputWithLabel";
 import Loading from "@/components/Common/Loading";
+import SelectMenu from "@/components/Common/SelectMenu";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,7 +16,8 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { UploadImage } from "@/services/adminService";
 import { EditInnerCategory } from "@/services/innercateGoryService";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getSubCategoryall } from "@/services/subcategoryService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -32,7 +34,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
     mutationFn: (data) => EditInnerCategory(item.id, data),
     onSuccess: () => {
       toast({
-        description: "Sub category Created Successfully.",
+        description: "Inner Category Updated Successfully.",
       });
       setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ["GET_INNERCATEGORY"] });
@@ -72,6 +74,17 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  const { data: InnercategoryData } = useQuery({
+    queryKey: ["GET_INNERCATEGORY"],
+    queryFn: getSubCategoryall,
+  });
+  const categoryOptions = InnercategoryData?.data?.responseData
+    ? InnercategoryData?.data?.responseData?.map((item) => ({
+        label: item.name,
+        value: item.id,
+      }))
+    : [];
+
   const editFuction = () => {
     const payload = new FormData();
 
@@ -91,6 +104,7 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
   useEffect(() => {
     setFormValues({ ...item });
   }, [item]);
+  console.log("item123", item);
 
   return (
     <>
@@ -100,11 +114,20 @@ export function DialogBoxInnerCategory({ icon, mainTitle, item }) {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{mainTitle}</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name">Sub Category</Label>
+              <SelectMenu
+                placeholder="Sub Category Name"
+                className="border w-[277px] border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
+                label=""
+                options={categoryOptions}
+                value={item.subCategory}
+                disabled={true}
+                // onChange={(e) => handleChange("category", e)}
+              />
+            </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="name">Name</Label>
               <InputWithLabel

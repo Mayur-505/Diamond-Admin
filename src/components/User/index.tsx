@@ -81,7 +81,15 @@ const Index: React.FC = () => {
       header: () => <div className="text-left">Role</div>,
       cell: ({ row }) => {
         return (
-          <div className="text-left">{row.original.role == 1 && "User"}</div>
+          <span
+            className={`badge text-white px-1 py-0.5 text-[12px] rounded ${
+              row?.original?.status === "Active"
+                ? "bg-[#28a745]"
+                : "bg-[#343a40]"
+            }`}
+          >
+            {row.original.role == 1 && "User"}
+          </span>
         );
       },
     },

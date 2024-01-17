@@ -2,16 +2,11 @@ import InputWithLabel from "@/components/Common/InputWithLabel";
 import Loading from "@/components/Common/Loading";
 import SelectMenu from "@/components/Common/SelectMenu";
 import TextAreaWithLabel from "@/components/Common/TextAreaWithLabel";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { UploadImage } from "@/services/adminService";
-import {
-  addInnerCategory,
-  getInnerCategory,
-} from "@/services/innercateGoryService";
-import {
-  getSubCategory,
-  getSubCategoryall,
-} from "@/services/subcategoryService";
+import { addInnerCategory } from "@/services/innercateGoryService";
+import { getSubCategoryall } from "@/services/subcategoryService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -72,7 +67,7 @@ const AddInnerCategory = () => {
     onSuccess: () => {
       navigate("/category/inner-category");
       toast({
-        description: "Inner category Created Successfully.",
+        description: "Inner Category Created Successfully.",
       });
       setFormValues({
         name: "",
@@ -123,7 +118,7 @@ const AddInnerCategory = () => {
         <div className="col-span-10 grid grid-cols-12 gap-4">
           <div className="col-span-12">
             <SelectMenu
-              placeholder="Sub Category Name"
+              placeholder="Select Sub Category"
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
               label=""
               options={categoryOptions}
@@ -131,27 +126,13 @@ const AddInnerCategory = () => {
               onChange={(e) => handleChange("category", e)}
             />
           </div>
-          <div className="col-span-4">
+          <div className="col-span-12">
             <InputWithLabel
               id="title"
               placeholder="Title"
               value={formValues.name}
               className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
               onChange={(e) => handleChange("name", e.target.value)}
-            />
-          </div>
-          <div className="col-span-4">
-            <InputWithLabel
-              id="meta-title"
-              placeholder="Meta Title"
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
-            />
-          </div>
-          <div className="col-span-4">
-            <InputWithLabel
-              id="meta-keyword"
-              placeholder="Meta Keyword"
-              className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
             />
           </div>
           <div className="col-span-12">
@@ -181,20 +162,20 @@ const AddInnerCategory = () => {
             )}
           </div>
           <div className="col-span-12 flex items-center gap-4">
-            <button
+            <Button
               className="px-5 py-1.5 bg-[#2796ef] rounded-[4px] text-[#ffffff] border border-transparent font-Nunito font-[600]"
               type="button"
               onClick={handleSubmit}
             >
-              Create Category
-            </button>
-            <button
-              className="px-5 py-1.5 rounded-[4px] text-[#ff0000] border border-[#ff0000] font-Nunito font-[600]"
+              Create Inner Category
+            </Button>
+            <Button
+              className="px-5 py-1.5 rounded-[4px] text-[#fff] font-Nunito font-[600]"
               type="button"
               onClick={() => navigate("/category/inner-category")}
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       </div>

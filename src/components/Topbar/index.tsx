@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from "react";
-import { FaChevronLeft, FaRegBell } from "react-icons/fa6";
-import { LuSearch } from "react-icons/lu";
+import { FaChevronLeft } from "react-icons/fa6";
 import { useLocation } from "react-router-dom";
 import { GrTextAlignRight } from "react-icons/gr";
 import { ProfileDropDown } from "../Common/ProfileDropDown";
 import { useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/hooks/use-redux";
 import { GetOneUser } from "@/services/adminService";
+import { Button } from "../ui/button";
 
 interface HeaderProps {
   setCollapsed: (collapsed: boolean) => void;
@@ -48,13 +48,13 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
     >
       <div className="flex items-center gap-[14px]">
         <div className="border-[#dee2e6] border-r-[1px] border-solid">
-          <button
+          <Button
             type="button"
             onClick={() => setCollapsed(!collapsed)}
             className="h-[35px] w-[35px] bg-[#f8f9fa] mr-[14px] hidden items-center justify-center lg:flex "
           >
             <FaChevronLeft />
-          </button>
+          </Button>
         </div>
         <h1 className="font-Nunito font-[600] text-[#6c757d] uppercase text-[14px]">
           {path == "/dashboard"
@@ -63,10 +63,6 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
         </h1>
       </div>
       <div className="flex items-center gap-[14px]">
-        <div className="flex gap-[14px] items-center pr-[14px] border-[#dee2e6] border-r-[1px] border-solid">
-          <LuSearch style={{ fontSize: "22px" }} />
-          <FaRegBell style={{ fontSize: "22px" }} />
-        </div>
         <ProfileDropDown userdata={userdata} />
         <div className="h-[35px] w-[35px] bg-[#f8f9fa] mr-[14px]  flex items-center justify-center">
           <GrTextAlignRight style={{ fontSize: "20px" }} />

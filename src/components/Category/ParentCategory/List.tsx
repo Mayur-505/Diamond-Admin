@@ -88,7 +88,7 @@ const List = () => {
       cell: ({ row }) => {
         return (
           <div className="flex gap-2">
-            <button
+            <Button
               type="button"
               className="text-[14px] font-[600] bg-[#343a40] text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
             >
@@ -97,15 +97,15 @@ const List = () => {
                 mainTitle="Edit Category"
                 item={row?.original}
               />
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className="text-[14px] font-[600] bg-red-200 text-[#fff] p-1 rounded w-[26px] h-[26px] flex items-center justify-center"
               key={row.original.id}
               onClick={handleDelete.bind(null, row.original.id)}
             >
               <MdDeleteOutline className="text-[#dc3545] text-[18px]" />
-            </button>
+            </Button>
           </div>
         );
       },
@@ -191,7 +191,7 @@ const List = () => {
             <ExportExcelButton
               data={categoryData?.data?.modifiedCategories || []}
               filename="CategoryData.xlsx"
-              className="text-[14px] font-[600] text-[#343a40] border px-4 py-2 rounded"
+              className="text-[14px] font-[600] text-[#fff] border px-4 py-2 rounded"
             />
             <Modal
               open={openDelete}

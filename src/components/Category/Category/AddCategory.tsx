@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
 import { UploadImage } from "@/services/adminService";
 import { allgetCategorydata } from "@/services/categoryService";
+import { Button } from "@/components/ui/button";
 
 const AddCategory = () => {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ const AddCategory = () => {
     mutationFn: AddSubCategory,
     onSuccess: () => {
       toast({
-        description: "Sub category Created Successfully.",
+        description: "Sub Category Created Successfully.",
       });
       setFormValues({
         name: "",
@@ -117,7 +118,7 @@ const AddCategory = () => {
         <div className="col-span-10 grid grid-cols-12 gap-4">
           <div className="col-span-12 flex gap-[10px]">
             <SelectMenu
-              placeholder="Parent Category Name"
+              placeholder="Select Parent Category"
               className="border w-[50%] border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6] "
               label=""
               options={categoryOptions}
@@ -161,20 +162,20 @@ const AddCategory = () => {
             )}
           </div>
           <div className="col-span-12 flex items-center gap-4">
-            <button
+            <Button
               className="px-5 py-1.5 bg-[#2796ef] rounded-[4px] text-[#ffffff] border border-transparent font-Nunito font-[600]"
               type="button"
               onClick={handleSubmit}
             >
-              Create Category
-            </button>
-            <button
-              className="px-5 py-1.5 rounded-[4px] text-[#ff0000] border border-[#ff0000] font-Nunito font-[600]"
+              Create Sub Category
+            </Button>
+            <Button
+              className="px-5 py-1.5 rounded-[4px] text-[#fff] font-Nunito font-[600]"
               type="button"
               onClick={() => navigate("/category/sub-category")}
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       </div>

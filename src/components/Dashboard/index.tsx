@@ -25,6 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Button } from "../ui/button";
 
 const invoices = [
   {
@@ -223,12 +224,12 @@ const Index = () => {
             <h3 className="font-Nunito font-[600] text-[#000] text-[21px]">
               Orders
             </h3>
-            <button className="flex items-center gap-[7px] px-[14px] py-[7px]">
+            <Button className="flex items-center gap-[7px] px-[14px] py-[7px]">
               <IoSearchOutline />
               <span className="font-Nunito font-[600] text-[#495057] text-[12px]">
                 Show
               </span>
-            </button>
+            </Button>
           </div>
           <div className="flex gap-[10px] mb-[42px]">
             <div

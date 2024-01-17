@@ -61,6 +61,7 @@ const Login = () => {
           />
           <InputWithLabel
             id="password"
+            type="password"
             placeholder="Password"
             className="h-[35px] w-[280px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
             {...register("password", { required: "This field is required." })}
@@ -75,7 +76,7 @@ const Login = () => {
       </form>
       <p className="m-0 text-[14px] font-normal font-Nunito text-[#495057]">
         A problem?{" "}
-        <Link to={"/auth/signup"} className="text-[#2196F3]">
+        <Link to={"#"} className="text-[#2196F3]">
           Click here
         </Link>{" "}
         and let us help you.

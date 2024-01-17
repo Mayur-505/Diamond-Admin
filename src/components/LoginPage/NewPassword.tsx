@@ -5,20 +5,34 @@ import InputWithLabel from "../Common/InputWithLabel";
 import { FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { newPassword } from "@/services/authService";
+import { useToast } from "../ui/use-toast";
 
 const NewPassword = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const {
     register,
     formState: { errors },
     reset,
     handleSubmit,
   } = useForm();
+
   const { mutate: NewPass } = useMutation({
     mutationFn: (data: FieldValues) => newPassword(data),
     onSuccess: (response) => {
+      toast({
+        variant: "success",
+        title: "Password Created Successfully",
+      });
       reset();
       navigate("/auth/login");
+      localStorage.removeItem("ForgetPasswordToken");
+    },
+    onError: (error) => {
+      toast({
+        variant: "error",
+        title: error?.data?.message || "",
+      });
     },
   });
 
@@ -37,18 +51,17 @@ const NewPassword = () => {
             <h2 className="font-Nunito text-[28px] font-semibold text-[#212121]">
               Create a new password
             </h2>
-            <p className="m-0 text-[14px] font-normal font-Nunito text-[#495057]">
-              Lorem ipsum dolor sit amet
-            </p>
           </div>
           <InputWithLabel
             id="new_pass"
+            type="password"
             placeholder="Password"
             className="h-[35px] w-[280px] p-[7px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
             {...register("new_pass", { required: "This field is required." })}
           />
           <InputWithLabel
             id="confirm_pass"
+            type="password"
             placeholder="Repeat Password"
             className="h-[35px] w-[280px] p-[7px] border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
             {...register("confirm_pass", {
@@ -64,11 +77,11 @@ const NewPassword = () => {
         </div>
       </form>
       <p className="m-0 text-[14px] font-normal font-Nunito text-[#495057]">
-        A problem?{" "}
+        {/* A problem?{" "}
         <Link to={"/auth/signup"} className="text-[#2196F3]">
           Click here
         </Link>{" "}
-        and let us help you.
+        and let us help you. */}
       </p>
     </>
   );

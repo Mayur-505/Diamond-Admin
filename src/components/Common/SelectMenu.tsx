@@ -16,6 +16,7 @@ interface OptionsType {
 interface SelectMenuProps {
   options: OptionsType[];
   value?: string | OptionsType | null;
+  disabled?: boolean;
   onChange?: (val: string) => void;
   placeholder: string;
   label?: string;
@@ -34,6 +35,7 @@ const SelectMenu: FC<SelectMenuProps> = ({
   className,
   selectMenuClassName,
   icon,
+  disabled,
   getCountryCode,
 }) => {
   return (
@@ -43,7 +45,11 @@ const SelectMenu: FC<SelectMenuProps> = ({
           {label}
         </Label>
       )}
-      <Select onValueChange={onChange} value={value}>
+      <Select
+        disabled={disabled ? true : false}
+        onValueChange={onChange}
+        value={value}
+      >
         <SelectTrigger
           className={`h-[36px] border-[#ced4da] w-full px-[12px] py-[8px] font-Poppins text-sm outline-none text-[#222] ${selectMenuClassName}`}
         >

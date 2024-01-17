@@ -342,13 +342,13 @@ const MyProfile = () => {
                 </div>
               </div>
               <div className="flex justify-end gap-4 mt-5 mb-[50px]">
-                <button
+                <Button
                   className="button bg-[#343A40] text-white radius-round h-11 px-8 py-2"
                   type="button"
                   onClick={() => handaleUpdateProfile()}
                 >
                   Update Profile
-                </button>
+                </Button>
               </div>
             </form>
           </div>
@@ -423,7 +423,7 @@ const MyProfile = () => {
                   </div>
                 </div>
                 <div className="mt-6 ltr:text-right">
-                  <button
+                  <Button
                     className="button bg-white border border-gray-300 dark:bg-gray-700 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 active:bg-gray-100 dark:active:bg-gray-500 dark:active:border-gray-500 text-gray-600 dark:text-gray-100 radius-round h-11 px-8 py-2 ltr:mr-2 rtl:ml-2"
                     type="button"
                     onClick={() =>
@@ -435,14 +435,14 @@ const MyProfile = () => {
                     }
                   >
                     Reset
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     className="button bg-[#343A40] text-white radius-round h-11 px-8 py-2"
                     type="button"
                     onClick={() => handaleUpdate()}
                   >
                     Update Password
-                  </button>
+                  </Button>
                 </div>
               </div>
             </form>
