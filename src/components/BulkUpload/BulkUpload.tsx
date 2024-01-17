@@ -106,7 +106,10 @@ const BulkUpload = () => {
   return (
     <>
       {isPending && <Loading />}
-      <div className=" ml-[30px] mt-[50px] max-w-[400px] bg-[#fafafa] border-[1px] border-solid border-[#0000004f] rounded-[3px] p-[15px]">
+      <h2 className="ml-[30px] mt-[38px] text-[23px] font-[600] pb-[5px]">
+        Bulk Upload
+      </h2>
+      <div className=" ml-[30px] max-w-[400px] bg-[#fafafa] border-[1px] border-solid border-[#0000004f] rounded-[3px] p-[15px]">
         <div {...rootProps}>
           <input
             {...getInputProps()}

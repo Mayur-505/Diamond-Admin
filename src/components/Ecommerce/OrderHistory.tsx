@@ -265,53 +265,63 @@ const OrderHistory = () => {
 
   const OrderViewBody = (
     <div>
-      <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
-        Order Details
-      </h2>
-      {viewData?.productResponse &&
-        viewData?.productResponse?.map((item: any) => {
-          return (
-            <div className="flex w-full justify-between mb-[15px]">
-              <div className="flex items-center gap-[15px]">
-                <img
-                  src={item?.product?.productimage?.[0]}
-                  className="h-[60px] w-[60px]"
-                  alt="image"
-                />
-                <div>
-                  <p className="text-[14px]">{item?.product?.title}</p>
-                  <p className="text-[14px]">
-                    <span className="font-bold">Cert Number :</span>{" "}
-                    {item?.product?.cert_number}
-                  </p>
+      {viewData?.productResponse?.length ? (
+        <>
+          <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
+            Order Details
+          </h2>
+          {viewData?.productResponse?.map((item: any) => {
+            return (
+              <div className="flex w-full justify-between mb-[15px]">
+                <div className="flex items-center gap-[15px]">
+                  <img
+                    src={item?.product?.productimage?.[0]}
+                    className="h-[60px] w-[60px]"
+                    alt="image"
+                  />
+                  <div>
+                    <p className="text-[14px]">{item?.product?.title}</p>
+                    <p className="text-[14px]">
+                      <span className="font-bold">Cert Number :</span>{" "}
+                      {item?.product?.cert_number}
+                    </p>
+                  </div>
                 </div>
+                <p className="text-[12px]">Qua:{item?.quantity}</p>
               </div>
-              <p className="text-[12px]">Qua:{item?.quantity}</p>
-            </div>
-          );
-        })}
-      <div className="flex items-center justify-end mt-[10px]">
-        <p>
-          <span className="text-[14px] font-bold">Totle Quantity :</span>{" "}
-          {viewData?.productResponse?.reduce(
-            (acc: number, item: any) => acc + parseInt(item.quantity),
-            0
-          )}
-        </p>
-        <p className="ml-[15px]">
-          <span className="text-[14px] font-bold">Totle Price :</span>{" "}
-          {viewData?.totalprice}
-        </p>
-      </div>
-      <div className="flex justify-end gap-4 mt-5 ">
-        <Button
-          variant={"outline"}
-          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
-          onClick={() => handleClose()}
-        >
-          Cancel
-        </Button>
-      </div>
+            );
+          })}
+          <div className="flex items-center justify-end mt-[10px]">
+            <p>
+              <span className="text-[14px] font-bold">Totle Quantity :</span>{" "}
+              {viewData?.productResponse?.reduce(
+                (acc: number, item: any) => acc + parseInt(item.quantity),
+                0
+              )}
+            </p>
+            <p className="ml-[15px]">
+              <span className="text-[14px] font-bold">Totle Price :</span>{" "}
+              {viewData?.totalprice}
+            </p>
+          </div>
+          <div className="flex justify-end gap-4 mt-5 ">
+            <Button
+              variant={"outline"}
+              className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+              onClick={() => handleClose()}
+            >
+              Cancel
+            </Button>
+          </div>
+        </>
+      ) : (
+        <>
+          <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
+            Order Details
+          </h2>
+          <div className="text-[15px] text-center p-[20px]">No Product</div>
+        </>
+      )}
     </div>
   );
   const body = (
@@ -422,9 +432,9 @@ const OrderHistory = () => {
           <DataTableDemo
             data={orderHistoryData?.data?.responceData || []}
             columns={columns}
-            filterName={"title"}
             setActivePage={setActivePage}
             pageCount={orderHistoryData?.data?.total}
+            filterName={"title"}
             customButton={
               <div className="flex justify-end gap-4">
                 <div className="flex flex-col text-center md:text-left">

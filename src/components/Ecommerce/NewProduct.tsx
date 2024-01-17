@@ -919,8 +919,8 @@ const NewProduct = () => {
                   />
                   <div className="text-[red] text-[13px]">{errors?.status}</div>
                 </div>
-                <div className="w-[50.1%]">
-                  <div className="px-[14px] py-0 mb-[14px] w-full">
+                <div className="w-full">
+                  <div className="px-[14px] py-0 mb-[14px] w-[50%]">
                     <InputWithLabel
                       id="size"
                       label="Size"
@@ -947,8 +947,8 @@ const NewProduct = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-[50.1%]">
-                  <div className="px-[14px] py-0 mb-[14px] w-full">
+                <div className="w-full">
+                  <div className="px-[14px] py-0 mb-[14px] w-[50%]">
                     <SelectMenu
                       options={colorOptions}
                       placeholder="Select Colour"
@@ -977,8 +977,8 @@ const NewProduct = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-[50.1%]">
-                  <div className="px-[14px] py-0 mb-[14px] w-full">
+                <div className="w-full">
+                  <div className="px-[14px] py-0 mb-[14px] w-[50%]">
                     <SelectMenu
                       placeholder="Select Clarity"
                       label="Clarity"
@@ -1007,8 +1007,8 @@ const NewProduct = () => {
                     </div>
                   </div>
                 </div>
-                <div className="w-[50.1%]">
-                  <div className="px-[14px] py-0 mb-[14px] w-full">
+                <div className="w-full">
+                  <div className="px-[14px] py-0 mb-[14px] w-[50%]">
                     <SelectMenu
                       options={cutOptions}
                       placeholder="Select Cut"
