@@ -15,7 +15,7 @@ import { getClarity } from "@/services/clarityService";
 import { getCut } from "@/services/cutServices";
 import { toast } from "../ui/use-toast";
 import { addProduct } from "@/services/newproductService";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../Common/Loading";
 import { UploadImage } from "@/services/adminService";
 import { getSingleProduct, updateProduct } from "@/services/productService";
@@ -33,8 +33,8 @@ const NewProduct = () => {
   const navigate = useNavigate();
   const { editId } = useParams();
   const [isopen, setIsOpen] = useState<boolean>(false);
-  const { state } = useLocation();
   const [errors, setErrors] = useState<any>({});
+  const [indexNumber, setIndexNuber] = useState(0);
   const [priviewImages, setPriviewImages] = useState<any>({
     sizeimages: null,
     colorimage: null,
@@ -44,7 +44,7 @@ const NewProduct = () => {
   });
   const { data: editdata } = useQuery({
     queryKey: ["GET_SiNGLE_PRODUCT", { editId }],
-    queryFn: () => getSingleProduct(editId),
+    queryFn: () => getSingleProduct(editId || ""),
   });
 
   console.log("editdata", editdata?.data);
@@ -398,6 +398,7 @@ const NewProduct = () => {
           setIsOpen(true);
           const payload = new FormData();
           payload.append("image", files[0]);
+          setIndexNuber(index);
           UploadMultiImagedata(payload);
         } else {
           const images: File[] = [];
@@ -442,12 +443,7 @@ const NewProduct = () => {
   const { mutate: UploadMultiImagedata } = useMutation({
     mutationFn: UploadImage,
     onSuccess: (res) => {
-      console.log(
-        "sdsddsdds",
-        formValues.productimage,
-        priviewImages.productimage
-      );
-      formValues.productimage.push(res?.data?.data?.image);
+      formValues.productimage[indexNumber] = res?.data?.data?.image;
       setFormValues({ ...formValues });
       setIsOpen(false);
     },
