@@ -149,7 +149,7 @@ const OrderHistory = () => {
             className="p-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            payment
+            Payment
             <RiArrowUpDownFill className="ml-2 h-4 w-4" />
           </Button>
         );
