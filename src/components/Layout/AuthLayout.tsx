@@ -26,13 +26,6 @@ const AuthLayout = () => {
         </>
       );
       break;
-    case "/auth/signup":
-      title = (
-        <>
-          Create a <br /> Diamond <br /> Account
-        </>
-      );
-      break;
     case "/auth/verification":
       title = (
         <>

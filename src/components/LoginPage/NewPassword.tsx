@@ -76,13 +76,7 @@ const NewPassword = () => {
           </Button>
         </div>
       </form>
-      <p className="m-0 text-[14px] font-normal font-Nunito text-[#495057]">
-        {/* A problem?{" "}
-        <Link to={"/auth/signup"} className="text-[#2196F3]">
-          Click here
-        </Link>{" "}
-        and let us help you. */}
-      </p>
+      <p className="m-0 text-[14px] font-normal font-Nunito text-[#495057]"></p>
     </>
   );
 };
