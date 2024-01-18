@@ -18,6 +18,7 @@ import Loading from "../Common/Loading";
 import Modal from "../Common/Model";
 import { useNavigate } from "react-router-dom";
 import { Customers } from "@/lib/types";
+import DeleteModal from "../Common/DeleteModal";
 
 interface CustomError {
   code?: number;
@@ -108,30 +109,30 @@ const Index: React.FC = () => {
     setIsOpen(true);
   };
 
-  const Deletebody = (
-    <div>
-      {isPending && <Loading />}
-      {isopen && <Loading />}
-      <div>Are you Sure you want to delete data?</div>
-      <div className="flex justify-end gap-4 mt-5">
-        <Button
-          variant={"outline"}
-          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
-          onClick={() => setOpenDelete(false)}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          variant={"outline"}
-          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
-          onClick={handleDeleteContact}
-        >
-          Delete
-        </Button>
-      </div>
-    </div>
-  );
+  // const Deletebody = (
+  //   <div>
+  //     {isPending && <Loading />}
+  //     {isopen && <Loading />}
+  //     <div>Are you Sure you want to delete data?</div>
+  //     <div className="flex justify-end gap-4 mt-5">
+  //       <Button
+  //         variant={"outline"}
+  //         className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+  //         onClick={() => setOpenDelete(false)}
+  //       >
+  //         Cancel
+  //       </Button>
+  //       <Button
+  //         type="submit"
+  //         variant={"outline"}
+  //         className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+  //         onClick={handleDeleteContact}
+  //       >
+  //         Delete
+  //       </Button>
+  //     </div>
+  //   </div>
+  // );
 
   const columns: Column<Customers>[] = [
     {
@@ -282,11 +283,11 @@ const Index: React.FC = () => {
           />
         </TabsContent>
       </Tabs>
-      <Modal
-        open={openDelete}
-        onClose={() => setOpenDelete(false)}
-        children={Deletebody}
-        className="!p-[20px]"
+      <DeleteModal
+        openDelete={openDelete}
+        setOpenDelete={setOpenDelete}
+        isopen={isopen}
+        handleDelete={handleDeleteContact}
       />
     </div>
   );

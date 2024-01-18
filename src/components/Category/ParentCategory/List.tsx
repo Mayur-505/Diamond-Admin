@@ -13,6 +13,7 @@ import Loading from "@/components/Common/Loading";
 import Modal from "@/components/Common/Model";
 import { DialogBoxCategory } from "./DialogBoxCategory";
 import { createPortal } from "react-dom";
+import DeleteModal from "@/components/Common/DeleteModal";
 
 interface CustomError {
   code?: number;
@@ -147,30 +148,30 @@ const List = () => {
   const handleDeleteCategory = () => {
     removeCategory(deleteID);
   };
-  const body = (
-    <div>
-      {createPortal(<>{isLoading && <Loading />}</>, document.body)}
-      {createPortal(<>{isPending && <Loading />}</>, document.body)}
-      <div>Are you Sure you want to delete data?</div>
-      <div className="flex justify-end gap-4 mt-5">
-        <Button
-          variant={"outline"}
-          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
-          onClick={() => setOpenDelete(false)}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          variant={"outline"}
-          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
-          onClick={handleDeleteCategory}
-        >
-          Delete
-        </Button>
-      </div>
-    </div>
-  );
+  // const body = (
+  //   <div>
+  //     {createPortal(<>{isLoading && <Loading />}</>, document.body)}
+  //     {createPortal(<>{isPending && <Loading />}</>, document.body)}
+  //     <div>Are you Sure you want to delete data?</div>
+  //     <div className="flex justify-end gap-4 mt-5">
+  //       <Button
+  //         variant={"outline"}
+  //         className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+  //         onClick={() => setOpenDelete(false)}
+  //       >
+  //         Cancel
+  //       </Button>
+  //       <Button
+  //         type="submit"
+  //         variant={"outline"}
+  //         className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+  //         onClick={handleDeleteCategory}
+  //       >
+  //         Delete
+  //       </Button>
+  //     </div>
+  //   </div>
+  // );
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
@@ -197,11 +198,11 @@ const List = () => {
               filename="CategoryData.xlsx"
               className="text-[14px] font-[600] text-[#fff] border px-4 py-2 rounded"
             />
-            <Modal
-              open={openDelete}
-              onClose={() => setOpenDelete(false)}
-              children={body}
-              className="!p-[20px]"
+            <DeleteModal
+              openDelete={openDelete}
+              setOpenDelete={setOpenDelete}
+              isopen={isPending}
+              handleDelete={handleDeleteCategory}
             />
           </div>
         }

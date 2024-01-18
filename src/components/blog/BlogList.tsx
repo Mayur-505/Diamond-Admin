@@ -24,6 +24,7 @@ import { EyeIcon } from "lucide-react";
 import { toast } from "../ui/use-toast";
 import { UploadImage } from "@/services/adminService";
 import { useNavigate } from "react-router-dom";
+import DeleteModal from "../Common/DeleteModal";
 
 interface CustomError {
   code?: number;
@@ -443,32 +444,32 @@ const BlogList = () => {
     </div>
   );
 
-  const Deletebody = (
-    <div>
-      {isPending && <Loading />}
-      {isopen && <Loading />}
-      <div>Are you Sure you want to delete data?</div>
-      <div className="flex justify-end gap-4 mt-5">
-        <Button
-          variant={"outline"}
-          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
-          onClick={() => {
-            setOpenDelete(false), setIsEdit(""), setImageUrl("");
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          variant={"outline"}
-          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
-          onClick={handleDeleteBlog}
-        >
-          Delete
-        </Button>
-      </div>
-    </div>
-  );
+  // const Deletebody = (
+  //   <div>
+  //     {isPending && <Loading />}
+  //     {isopen && <Loading />}
+  //     <div>Are you Sure you want to delete data?</div>
+  //     <div className="flex justify-end gap-4 mt-5">
+  //       <Button
+  //         variant={"outline"}
+  //         className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+  //         onClick={() => {
+  //           setOpenDelete(false), setIsEdit(""), setImageUrl("");
+  //         }}
+  //       >
+  //         Cancel
+  //       </Button>
+  //       <Button
+  //         type="submit"
+  //         variant={"outline"}
+  //         className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+  //         onClick={handleDeleteBlog}
+  //       >
+  //         Delete
+  //       </Button>
+  //     </div>
+  //   </div>
+  // );
 
   const BlogViewBody = (
     <div>
@@ -559,11 +560,11 @@ const BlogList = () => {
         children={BlogViewBody}
         className="!p-[20px]"
       />
-      <Modal
-        open={openDelete}
-        onClose={() => setOpenDelete(false)}
-        children={Deletebody}
-        className="!p-[20px]"
+      <DeleteModal
+        openDelete={openDelete}
+        setOpenDelete={setOpenDelete}
+        isopen={isopen}
+        handleDelete={handleDeleteBlog}
       />
     </div>
   );

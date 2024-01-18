@@ -20,6 +20,7 @@ import {
   updateColor,
 } from "@/services/colorServices";
 import Loading from "../Common/Loading";
+import DeleteModal from "../Common/DeleteModal";
 
 interface CustomError {
   code?: number;
@@ -270,30 +271,30 @@ const Index = () => {
     </div>
   );
 
-  const Deletebody = (
-    <div>
-      {isPending && <Loading />}
-      {isopen && <Loading />}
-      <div>Are you Sure you want to delete data?</div>
-      <div className="flex justify-end gap-4 mt-5">
-        <Button
-          variant={"outline"}
-          className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
-          onClick={() => setOpenDelete(false)}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
-          variant={"outline"}
-          className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
-          onClick={handleDeleteColor}
-        >
-          Delete
-        </Button>
-      </div>
-    </div>
-  );
+  // const Deletebody = (
+  //   <div>
+  //     {isPending && <Loading />}
+  //     {isopen && <Loading />}
+  //     <div>Are you Sure you want to delete data?</div>
+  //     <div className="flex justify-end gap-4 mt-5">
+  //       <Button
+  //         variant={"outline"}
+  //         className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
+  //         onClick={() => setOpenDelete(false)}
+  //       >
+  //         Cancel
+  //       </Button>
+  //       <Button
+  //         type="submit"
+  //         variant={"outline"}
+  //         className="w-full bg-[#343a40] border border-transparent hover:border-[#343a40] text-white"
+  //         onClick={handleDeleteColor}
+  //       >
+  //         Delete
+  //       </Button>
+  //     </div>
+  //   </div>
+  // );
 
   return (
     <div className="custom_contener !p-[17.5px] !mb-[28px] customShadow">
@@ -327,11 +328,11 @@ const Index = () => {
         children={body}
         className="!p-[20px]"
       />
-      <Modal
-        open={openDelete}
-        onClose={() => setOpenDelete(false)}
-        children={Deletebody}
-        className="!p-[20px]"
+      <DeleteModal
+        openDelete={openDelete}
+        setOpenDelete={setOpenDelete}
+        isopen={isopen}
+        handleDelete={handleDeleteColor}
       />
     </div>
   );
