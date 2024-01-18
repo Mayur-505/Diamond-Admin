@@ -149,7 +149,7 @@ const Index = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
       toast({
         variant: "success",
-        title: "Shape edit successfully",
+        title: "Shape Updated successfully",
       });
       setImageUrl("");
       setOpen(false);
