@@ -409,7 +409,8 @@ const BannerList = () => {
     <div>
       {isPending && <Loading />}
       {isopen && <Loading />}
-      <div>Are you Sure you want to delete data?</div>
+      <div className="font Nutino text-[35px] font-semibold">Are you sure?</div>
+      <div className="font Nutino text-[20px]">Do you want to delete data?</div>
       <div className="flex justify-end gap-4 mt-5">
         <Button
           variant={"outline"}
