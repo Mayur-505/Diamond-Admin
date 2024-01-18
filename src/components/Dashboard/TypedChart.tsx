@@ -18,7 +18,7 @@ const TypedCharts = ({ array, border, bgColor }: Iprops) => {
       },
     ],
   };
-  return <Line data={data} style={{ width: "100%" }} />;
+  return <Line data={data} />;
 };
 
 export default TypedCharts;
