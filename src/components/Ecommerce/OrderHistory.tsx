@@ -287,7 +287,7 @@ const OrderHistory = () => {
                     </p>
                   </div>
                 </div>
-                <p className="text-[12px]">Qua:{item?.quantity}</p>
+                <p className="text-[12px]">Qty:{item?.quantity}</p>
               </div>
             );
           })}
@@ -308,7 +308,7 @@ const OrderHistory = () => {
             <Button
               variant={"outline"}
               className="w-full text-[#343a40] border border-[#343a40] bg-[#fff]"
-              onClick={() => handleClose()}
+              onClick={() => setOpenView(false)}
             >
               Cancel
             </Button>
@@ -458,9 +458,7 @@ const OrderHistory = () => {
       />
       <Modal
         open={openview}
-        onClose={() => {
-          setOpenView(false);
-        }}
+        onClose={() => setOpenView(false)}
         children={OrderViewBody}
         className="!p-[20px]"
       />
