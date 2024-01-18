@@ -25,7 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Button } from "../ui/button";
 
 const invoices = [
   {
