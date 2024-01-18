@@ -111,18 +111,15 @@ const OrderHistory = () => {
 
   const columns: Column<Order>[] = [
     {
-      accessorKey: "Product Image",
+      accessorKey: "orderDetails?.id",
       header: <div className="text-left">Image</div>,
-      cell: ({ row }) => {
-        return (
-          <img
-            src={
-              row?.original?.productResponse?.[0]?.product?.productimage?.[0]
-            }
-            className="w-[40px] h-[40px] object-cover rounded"
-          />
-        );
-      },
+      cell: ({ row }) => (
+        // <img
+        //   src={row?.original?.Address}
+        //   className="w-[40px] h-[40px] object-cover rounded"
+        // />
+        <>{row?.original?.orderDetails?.id}</>
+      ),
     },
     {
       accessorKey: "title",
@@ -305,14 +302,14 @@ const OrderHistory = () => {
           })}
           <div className="flex items-center justify-end mt-[10px]">
             <p>
-              <span className="text-[14px] font-bold">Totle Quantity :</span>{" "}
+              <span className="text-[14px] font-bold">Total Quantity :</span>{" "}
               {viewData?.productResponse?.reduce(
                 (acc: number, item: any) => acc + parseInt(item.quantity),
                 0
               )}
             </p>
             <p className="ml-[15px]">
-              <span className="text-[14px] font-bold">Totle Price :</span>{" "}
+              <span className="text-[14px] font-bold">Total Price :</span>{" "}
               {viewData?.totalprice}
             </p>
           </div>
@@ -402,7 +399,7 @@ const OrderHistory = () => {
           <DataTableDemo
             data={orderHistoryData?.data?.responceData || []}
             columns={columns}
-            filterName={"title"}
+            filterName={"id"}
             setActivePage={setActivePage}
             pageCount={orderHistoryData?.data?.total}
             customButton={

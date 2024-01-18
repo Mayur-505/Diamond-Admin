@@ -46,11 +46,13 @@ export function ProfileDropDown({ userdata }: any) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="cursor-pointer flex gap-[7px] items-center">
-          <img
-            src={userdata?.image}
-            alt="ProfileImage"
-            className="max-w-[35px] w-full"
-          />
+          {userdata?.image && (
+            <img
+              src={userdata?.image}
+              alt="ProfileImage"
+              className="max-w-[35px] h-[35px] rounded-full object-cover w-full"
+            />
+          )}
           <p className="font-Nunito font-[600] text-[#495057] text-[12px] border-[#dee2e6] border-r-[1px] border-solid pr-[14px]">
             {userdata?.firstname}
           </p>
