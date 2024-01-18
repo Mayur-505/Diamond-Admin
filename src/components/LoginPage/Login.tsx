@@ -26,7 +26,7 @@ const Login = () => {
       setUserData(response.data.data);
       reset();
       if (response.data.data.qurey.role === 2) {
-        navigate("/dashboard");
+        navigate("/");
         toast({
           variant: "success",
           title: "Login Successfully",
