@@ -111,14 +111,13 @@ const OrderHistory = () => {
 
   const columns: Column<Order>[] = [
     {
-      accessorKey: "orderDetails?.id",
+      accessorKey: "Image",
       header: <div className="text-left">Image</div>,
       cell: ({ row }) => (
-        // <img
-        //   src={row?.original?.Address}
-        //   className="w-[40px] h-[40px] object-cover rounded"
-        // />
-        <>{row?.original?.orderDetails?.id}</>
+        <img
+          src={row?.original?.productResponse?.[0]?.product?.productimage?.[0]}
+          className="w-[40px] h-[40px] object-cover rounded"
+        />
       ),
     },
     {
@@ -282,7 +281,9 @@ const OrderHistory = () => {
                       <span className="font-bold">Cert Number :</span>{" "}
                       {item?.product?.cert_number}
                     </p>
-                    <p className="text-[12px]">Qty : {item?.quantity}</p>
+                    <p className="text-[12px]">
+                      <span className="font-bold">Qty : </span> {item?.quantity}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -403,7 +404,7 @@ const OrderHistory = () => {
           <DataTableDemo
             data={orderHistoryData?.data?.responceData || []}
             columns={columns}
-            filterName={"id"}
+            filterName={"title"}
             setActivePage={setActivePage}
             pageCount={orderHistoryData?.data?.total}
             customButton={
