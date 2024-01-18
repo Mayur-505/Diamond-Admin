@@ -285,6 +285,18 @@ const OrderHistory = () => {
                       <span className="font-bold">Cert Number :</span>{" "}
                       {item?.product?.cert_number}
                     </p>
+                    {viewData?.mobile && (
+                      <p className="text-[14px]">
+                        <span className="font-bold">Mobile Number :</span> +91{" "}
+                        {viewData?.mobile}
+                      </p>
+                    )}
+                    {viewData?.Address && (
+                      <p className="text-[14px]">
+                        <span className="font-bold">Address :</span>{" "}
+                        {viewData?.Address}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <p className="text-[12px]">Qty:{item?.quantity}</p>
