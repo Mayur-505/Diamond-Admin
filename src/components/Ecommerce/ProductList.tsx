@@ -81,7 +81,7 @@ const ProductList = () => {
   const queryClient = useQueryClient();
   const [selectedImage, setSelectedImage] = useState<string>();
 
-  const { data, isLoading, isPending } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["GET_PRODUCT", { activePage }],
     queryFn: () => getProduct({ page: activePage, pageSize: 10 }),
   });

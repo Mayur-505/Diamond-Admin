@@ -13,7 +13,6 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
-import Modal from "@/components/Common/Model";
 import { DialogBoxSubCategory } from "./DialogBoxSubCategory";
 import { allgetCategorydata } from "@/services/categoryService";
 import DeleteModal from "@/components/Common/DeleteModal";
@@ -44,7 +43,7 @@ const List = () => {
   const [deleteID, setDeleteID] = useState("");
   const [activePage, setActivePage] = useState(1);
   const [isopen, setIsopen] = useState(false);
-  const { data: subcategoryData, isLoading } = useQuery({
+  const { data: subcategoryData } = useQuery({
     queryKey: ["GET_SUBCATEGORY", { activePage }],
     queryFn: () => getSubCategory({ page: activePage, pageSize: 10 }),
   });

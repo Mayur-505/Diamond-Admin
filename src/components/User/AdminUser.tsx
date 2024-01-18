@@ -7,7 +7,6 @@ import { assignAdmin, getAdmin, removeAdmin } from "@/services/adminService";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "../ui/use-toast";
 import InputWithLabel from "../Common/InputWithLabel";
-import Modal from "../Common/Model";
 import Loading from "../Common/Loading";
 import { useNavigate } from "react-router-dom";
 import { Admin } from "@/lib/types";

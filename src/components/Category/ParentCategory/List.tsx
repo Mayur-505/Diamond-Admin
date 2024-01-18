@@ -10,7 +10,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteCategory, getCategory } from "@/services/categoryService";
 import { toast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
-import Modal from "@/components/Common/Model";
 import { DialogBoxCategory } from "./DialogBoxCategory";
 import { createPortal } from "react-dom";
 import DeleteModal from "@/components/Common/DeleteModal";

@@ -15,7 +15,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { toast } from "../ui/use-toast";
 import { MdDeleteOutline } from "react-icons/md";
 import Loading from "../Common/Loading";
-import Modal from "../Common/Model";
 import { useNavigate } from "react-router-dom";
 import { Customers } from "@/lib/types";
 import DeleteModal from "../Common/DeleteModal";

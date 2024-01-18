@@ -13,7 +13,6 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
-import Modal from "@/components/Common/Model";
 import { DialogBoxInnerCategory } from "./DialogBoxInnerCategory";
 import { getSubCategoryall } from "@/services/subcategoryService";
 import DeleteModal from "@/components/Common/DeleteModal";
