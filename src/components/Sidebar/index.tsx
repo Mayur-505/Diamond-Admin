@@ -23,7 +23,7 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
       <div className="overflow-y-auto h-[calc(100%-47px)]">
         <div className="border-b-[1px] pb-[14px] mb-[14px] border-solid border-[#ffffff33]">
           <h2 className="text-[#ffffff99] uppercase font-Nunito pb-[14px] font-[700] text-[12px]">
-            <Link to={"/dashboard"}>Dashboards</Link>
+            <Link to={"/"}>Dashboards</Link>
           </h2>
           <ul>
             <Link
