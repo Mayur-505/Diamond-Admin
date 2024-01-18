@@ -20,7 +20,6 @@ const MyProfile = () => {
   });
   const { user } = useAppSelector((state) => state.auth);
   const [userdata, setUserData] = React.useState<any>(null);
-  const [imageUrl, setImageUrl] = useState("");
   const [userID, setUserId] = useState(user?.query?.id || "");
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
@@ -63,6 +62,7 @@ const MyProfile = () => {
     onError: (error) => {
       toast({
         title: "Reset Password",
+        variant: "error",
         description:
           (error as { data?: { message?: string } })?.data?.message || "",
       });
@@ -74,17 +74,16 @@ const MyProfile = () => {
     mutationFn: UpdateProfile,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["GET_ONEUSER"] });
-      setImageUrl("");
       setIsOpen(false);
       toast({
-        title: "profile image change",
-        description: "user profile image change successfully",
+        title: "profile update",
+        description: "user profile updated successfully",
       });
     },
     onError: (error) => {
       setIsOpen(false);
       toast({
-        title: "profile image change",
+        title: "profile update",
         description:
           (error as { data?: { message?: string } })?.data?.message || "",
       });
@@ -94,7 +93,7 @@ const MyProfile = () => {
   const { mutate: UploadImagedata, isPending } = useMutation({
     mutationFn: UploadImage,
     onSuccess: (res) => {
-      setImageUrl(res?.data?.data?.image);
+      setUserData((prev: any) => ({ ...prev, image: res?.data?.data?.image }));
     },
   });
 
@@ -107,13 +106,19 @@ const MyProfile = () => {
 
   const handaleChangeEvent = (e: any) => {
     const { name, value } = e.target;
-    setUserData((prev: any) => ({ ...prev, [name]: value }));
+    if (name == "mobile") {
+      if (value.length <= 10) {
+        setUserData((prev: any) => ({ ...prev, [name]: value }));
+      }
+    } else {
+      setUserData((prev: any) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handaleUpdateProfile = () => {
     let payload = {
       userid: userdata?.id,
-      image: imageUrl,
+      image: userdata?.image,
       firstname: userdata?.firstname,
       Address: userdata?.Address,
       lastname: userdata?.lastname,
@@ -149,7 +154,7 @@ const MyProfile = () => {
                 </div>
                 <div className="mt-[25px] max-w-[150px] h-[150px] rounded-full relative">
                   <img
-                    src={imageUrl || userdata?.image}
+                    src={userdata?.image}
                     alt="userImage"
                     className="w-full h-full rounded-full object-cover border-[1px] border-solid border-[#0000004D] "
                   />
@@ -242,6 +247,32 @@ const MyProfile = () => {
                   </div>
                 </div>
                 <div className="grid md:grid-cols-3 gap-4 py-8 border-b border-gray-200 dark:border-gray-600 items-center">
+                  <div className="font-semibold">Mobile Number</div>
+                  <div className="col-span-2">
+                    <div className="form-item vertical mb-0 max-w-[700px]">
+                      <label className="form-label"></label>
+                      <div className="">
+                        <span className="flex items-center gap-4">
+                          <div className="input-suffix-start font-[400] text-[16px]">
+                            {" "}
+                            +91{" "}
+                          </div>
+                          <input
+                            className="input input-md focus:ring-blue-600 focus-within:ring-blue-600 focus-within:border-blue-600 focus:border-blue-600"
+                            type="number"
+                            name="mobile"
+                            autoComplete="off"
+                            placeholder="mobile"
+                            maxLength={10}
+                            onChange={handaleChangeEvent}
+                            value={userdata?.mobile}
+                          />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-3 gap-4 py-8 border-b border-gray-200 dark:border-gray-600 items-center">
                   <div className="font-semibold">Address</div>
                   <div className="col-span-2">
                     <div className="form-item vertical mb-0 max-w-[700px]">
@@ -272,34 +303,6 @@ const MyProfile = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className="grid md:grid-cols-3 gap-4 py-8 border-b border-gray-200 dark:border-gray-600 items-center">
-                  <div className="font-semibold">Avatar</div>
-                  <div className="col-span-2">
-                    <div className="form-item vertical mb-0 max-w-[700px]">
-                      <label className="form-label"></label>
-                      <div className="">
-                        <div className="upload cursor-pointer">
-                          <input className="upload-input" type="file" />
-                          {imageUrl && (
-                            <img
-                              src={imageUrl}
-                              alt="imageUrl"
-                              className="w-[300px] h-[130px] mt-[10px]"
-                            />
-                          )}
-                          <span
-                            className="avatar avatar-circle border-2 border-white dark:border-gray-800 shadow-lg"
-                            style={{
-                              width: "60px",
-                              minWidth: "60px",
-                              fontSize: "30px",
-                            }}
-                          ></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
                 <div className="grid md:grid-cols-3 gap-4 py-8 items-center">
                   <div className="font-semibold">Comment</div>
                   <div className="col-span-2">
