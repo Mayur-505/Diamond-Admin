@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import Diamond from "../../assets/Image/dark-logo.svg";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { FieldValues } from "react-hook-form";
-import { ResendOtp, VerificationOtp } from "@/services/authService";
+import { VerificationOtp } from "@/services/authService";
 import { useToast } from "../ui/use-toast";
+import Loading from "../Common/Loading";
 
 const Verification = () => {
   const inputsRef = useRef<HTMLInputElement[]>([]);
@@ -44,7 +45,7 @@ const Verification = () => {
     };
   }, []);
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: FieldValues) => VerificationOtp(data),
     onSuccess: (response) => {
       localStorage.setItem(
@@ -64,16 +65,17 @@ const Verification = () => {
       });
     },
   });
-  const { mutate: resendOtp } = useMutation({
-    mutationFn: (data: FieldValues) => ResendOtp(data),
-    onSuccess: () => {},
-  });
+  // const { mutate: resendOtp } = useMutation({
+  //   mutationFn: (data: FieldValues) => ResendOtp(data),
+  //   onSuccess: () => {},
+  // });
 
-  const handleResentOtp = () => {
-    resendOtp({ email });
-  };
+  // const handleResentOtp = () => {
+  //   resendOtp({ email });
+  // };
   return (
     <>
+      {isPending && <Loading />}
       <img src={Diamond} alt="Diamond" className="h-[56px] [mt-21px]" />
       <div className="flex flex-col items-center gap-[21px]">
         <div className="mb-[14px]">
@@ -116,12 +118,9 @@ const Verification = () => {
       </div>
       <p className="m-0 text-[14px] font-normal font-Nunito text-[#495057]">
         A problem?{" "}
-        <span
-          className="text-[#2196F3] cursor-pointer"
-          onClick={handleResentOtp}
-        >
+        <Link className="text-[#2196F3] cursor-pointer" to={"#"}>
           Click here
-        </span>{" "}
+        </Link>{" "}
         and let us help you.
       </p>
     </>

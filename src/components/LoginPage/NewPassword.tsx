@@ -6,6 +6,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { newPassword } from "@/services/authService";
 import { useToast } from "../ui/use-toast";
+import Loading from "../Common/Loading";
 
 const NewPassword = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const NewPassword = () => {
     handleSubmit,
   } = useForm();
 
-  const { mutate: NewPass } = useMutation({
+  const { mutate: NewPass, isPending } = useMutation({
     mutationFn: (data: FieldValues) => newPassword(data),
     onSuccess: () => {
       toast({
@@ -44,6 +45,7 @@ const NewPassword = () => {
   };
   return (
     <>
+      {isPending && <Loading />}
       <img src={Diamond} alt="Diamond" className="h-[56px] [mt-21px]" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col items-center gap-[21px]">

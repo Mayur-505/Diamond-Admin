@@ -6,6 +6,7 @@ import { type FieldValues, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPassword } from "@/services/authService";
 import { useToast } from "../ui/use-toast";
+import Loading from "../Common/Loading";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -19,13 +20,14 @@ const ForgotPassword = () => {
 
   const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: FieldValues) => forgotPassword(data),
     onSuccess: () => {
       reset();
       toast({
         variant: "success",
-        title: "Forget Password Created Successfully",
+        title: "Email sent successfully",
+        description: "Please Check Your Email",
       });
       navigate("/auth/verification");
     },
@@ -44,6 +46,7 @@ const ForgotPassword = () => {
 
   return (
     <>
+      {isPending && <Loading />}
       <img src={Diamond} alt="Diamond" className="h-[56px] [mt-21px]" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col items-center gap-[21px]">

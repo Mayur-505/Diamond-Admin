@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import useActions from "@/hooks/use-actions";
 import { userLogin } from "@/services/authService";
 import { toast } from "../ui/use-toast";
+import Loading from "../Common/Loading";
 
 const Login = () => {
   const { setUserData } = useActions();
@@ -19,16 +20,29 @@ const Login = () => {
     handleSubmit,
   } = useForm();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: FieldValues) => userLogin(data),
     onSuccess: (response) => {
       setUserData(response.data.data);
       reset();
       if (response.data.data.qurey.role === 2) {
         navigate("/dashboard");
+        toast({
+          variant: "success",
+          title: "Login Successfully",
+        });
       } else {
-        toast({ description: "Invalid user role or email" });
+        toast({
+          variant: "error",
+          title: "Invalid user role or email",
+        });
       }
+    },
+    onError: (error) => {
+      toast({
+        variant: "error",
+        title: (error as { data?: { message?: string } })?.data?.message || "",
+      });
     },
   });
 
@@ -38,6 +52,7 @@ const Login = () => {
 
   return (
     <>
+      {isPending && <Loading />}
       <img src={Diamond} alt="Diamond" className="h-[56px] [mt-21px]" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col items-center gap-[21px]">
