@@ -28,7 +28,6 @@ const MyProfile = () => {
     setIsOpen(true);
   };
   const [isButtonDisabled, setButtonDisabled] = useState(true);
-  console.log("dataObject", dataObject);
 
   const deepEqual = (obj1: any, obj2: any) =>
     JSON.stringify(obj1) === JSON.stringify(obj2);
