@@ -27,6 +27,8 @@ const MyProfile = () => {
     changepass(dataObject);
     setIsOpen(true);
   };
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
+  console.log("dataObject", dataObject);
 
   const deepEqual = (obj1: any, obj2: any) =>
     JSON.stringify(obj1) === JSON.stringify(obj2);
@@ -35,6 +37,15 @@ const MyProfile = () => {
     if (user?.qurey?.id) setUserId(user?.qurey?.id);
   }, [user]);
 
+  useEffect(() => {
+    const isAnyFieldChanged =
+      dataObject.old_pass !== "" ||
+      dataObject.new_pass !== "" ||
+      dataObject.confirm_pass !== "";
+
+    // Enable or disable the button based on changes
+    setButtonDisabled(!isAnyFieldChanged);
+  }, [dataObject]);
   const { data: categoryData } = useQuery({
     queryKey: ["GET_ONEUSER", { userID }],
     queryFn: () => GetOneUser(userID),
@@ -445,6 +456,7 @@ const MyProfile = () => {
                     className="button bg-[#343A40] text-white radius-round h-11 px-8 py-2"
                     type="button"
                     onClick={() => handaleUpdate()}
+                    disabled={isButtonDisabled}
                   >
                     Update Password
                   </Button>
