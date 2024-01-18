@@ -27,7 +27,7 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
           </h2>
           <ul>
             <Link
-              to={"/dashboard"}
+              to={"/"}
               className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
             >
               <AiOutlineHome />

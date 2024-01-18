@@ -29,6 +29,9 @@ const MyProfile = () => {
     setIsOpen(true);
   };
 
+  const deepEqual = (obj1: any, obj2: any) =>
+    JSON.stringify(obj1) === JSON.stringify(obj2);
+
   useEffect(() => {
     if (user?.qurey?.id) setUserId(user?.qurey?.id);
   }, [user]);
@@ -344,6 +347,7 @@ const MyProfile = () => {
                   className="button bg-[#343A40] text-white radius-round h-11 px-8 py-2"
                   type="button"
                   onClick={() => handaleUpdateProfile()}
+                  disabled={deepEqual(userdata, categoryData?.data?.data)}
                 >
                   Update Profile
                 </Button>

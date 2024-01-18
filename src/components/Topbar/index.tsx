@@ -51,8 +51,10 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
           </div>
         </div>
         <h1 className="font-Nunito font-[600] text-[#6c757d] uppercase text-[14px]">
-          {path == "/dashboard"
+          {path == "/"
             ? "E-Commerce Dashboard"
+            : path == "/myprofile"
+            ? "MYPROFILE"
             : `${firstPart}  /  ${secondPart}`}
         </h1>
       </div>
