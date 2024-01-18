@@ -97,7 +97,7 @@ const Index = () => {
       queryClient.invalidateQueries({ queryKey: ["GET_SHAPE"] });
       toast({
         variant: "success",
-        title: "Shape add successfully",
+        title: "Shape Created successfully",
       });
       setIsOpen(false);
       setOpen(false);
