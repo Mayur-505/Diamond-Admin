@@ -17,13 +17,9 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
   const { user } = useAppSelector((state) => state.auth);
   const [userdata, setUserData] = useState({});
   const [userID, setUserId] = useState(user?.query?.id || "");
-
   const path = location.pathname;
-
   const cleanedPath = path.replace(/^\/|\/$/g, "").trim();
-
   const parts = cleanedPath.split("/");
-
   const firstPart = parts[0];
   const secondPart = parts[1];
 

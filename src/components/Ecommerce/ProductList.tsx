@@ -171,7 +171,7 @@ const ProductList = () => {
       cell: ({ row }) => {
         return (
           <img
-            src={row?.original?.productimage}
+            src={row?.original?.productimage[0]}
             className="w-[40px] h-[40px] object-cover rounded"
           />
         );
@@ -299,7 +299,7 @@ const ProductList = () => {
             <Button
               type="button"
               onClick={() => {
-                navigate(`/gems/new-product`, {
+                navigate(`/gems/edit-product/${row?.original?.id}`, {
                   state: { editdata: row.original },
                 });
               }}

@@ -15,10 +15,10 @@ import { getClarity } from "@/services/clarityService";
 import { getCut } from "@/services/cutServices";
 import { toast } from "../ui/use-toast";
 import { addProduct } from "@/services/newproductService";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Loading from "../Common/Loading";
 import { UploadImage } from "@/services/adminService";
-import { updateProduct } from "@/services/productService";
+import { getSingleProduct, updateProduct } from "@/services/productService";
 import { RiUploadCloud2Line } from "react-icons/ri";
 import { Label } from "../ui/label";
 
@@ -31,6 +31,7 @@ const NewProduct = () => {
   const [imageArray, setImageArray] = useState<any>(["", "", "", ""]);
   const [base64imageArray, setbase64imageArray] = useState(["", "", "", ""]);
   const navigate = useNavigate();
+  const { editId } = useParams();
   const [isopen, setIsOpen] = useState<boolean>(false);
   const { state } = useLocation();
   const [errors, setErrors] = useState<any>({});
@@ -41,6 +42,12 @@ const NewProduct = () => {
     cutimage: null,
     productimage: [],
   });
+  const { data: editdata } = useQuery({
+    queryKey: ["GET_SiNGLE_PRODUCT", { editId }],
+    queryFn: () => getSingleProduct(editId),
+  });
+
+  console.log("editdata", editdata?.data);
 
   const [formValues, setFormValues] = useState<any>({
     maintitle: "",
@@ -211,34 +218,34 @@ const NewProduct = () => {
   };
 
   useEffect(() => {
-    if (state?.editdata) {
+    if (editdata?.data) {
       setFormValues({
-        ...state?.editdata,
-        productId: state?.editdata.id,
-        categoryid: state?.editdata.categoryid?.id || "",
-        subcategoryid: state?.editdata.subcategoryid?.id || "",
-        innercategoryid: state?.editdata.innercategoryid?.id || "",
-        size: state?.editdata.diamond_size.size || "",
-        size_desc: state?.editdata.diamond_size.size_desc || "",
-        sizeimages: state?.editdata.diamond_size.sizeimages || "",
-        cut_desc: state?.editdata.diamond_cut.cut_desc || "",
-        cutimage: state?.editdata.diamond_cut.cutimage || "",
-        cut: state?.editdata.cut || "",
-        colour: state?.editdata.colour || "",
-        color_desc: state?.editdata.diamond_color.color_desc || "",
-        colorimage: state?.editdata.diamond_color.colorimage || "",
-        clarity: state?.editdata.clarity || "",
-        clarity_desc: state?.editdata.diamond_clarity.clarity_desc || "",
-        clarityimage: state?.editdata.diamond_clarity.clarityimage || "",
-        shape: state?.editdata.shape || "",
+        ...editdata?.data,
+        productId: editdata?.data.id,
+        categoryid: editdata?.data?.categoryid?.id || "",
+        subcategoryid: editdata?.data?.subcategoryid?.id || "",
+        innercategoryid: editdata?.data?.innercategoryid?.id || "",
+        size: editdata?.data?.diamond_size.size || "",
+        size_desc: editdata?.data?.diamond_size.size_desc || "",
+        sizeimages: editdata?.data?.diamond_size.sizeimages || "",
+        cut_desc: editdata?.data?.diamond_cut.cut_desc || "",
+        cutimage: editdata?.data?.diamond_cut.cutimage || "",
+        cut: editdata?.data?.cut || "",
+        colour: editdata?.data?.colour || "",
+        color_desc: editdata?.data?.diamond_color.color_desc || "",
+        colorimage: editdata?.data?.diamond_color.colorimage || "",
+        clarity: editdata?.data?.clarity || "",
+        clarity_desc: editdata?.data?.diamond_clarity.clarity_desc || "",
+        clarityimage: editdata?.data?.diamond_clarity.clarityimage || "",
+        shape: editdata?.data?.shape || "",
       });
-      imageArray[0] = state?.editdata?.productimage?.[0] || "";
-      imageArray[1] = state?.editdata?.productimage?.[1] || "";
-      imageArray[2] = state?.editdata?.productimage?.[2] || "";
-      imageArray[3] = state?.editdata?.productimage?.[3] || "";
+      imageArray[0] = editdata?.data?.productimage?.[0] || "";
+      imageArray[1] = editdata?.data?.productimage?.[1] || "";
+      imageArray[2] = editdata?.data?.productimage?.[2] || "";
+      imageArray[3] = editdata?.data?.productimage?.[3] || "";
       setImageArray([...imageArray]);
     }
-  }, [state]);
+  }, [editdata?.data]);
   let activePage = 1;
   const [imgUrl, setImgUrl] = useState("");
   const { data: categoryData } = useQuery({
@@ -333,7 +340,7 @@ const NewProduct = () => {
     : [];
 
   const handleChange = (name: string, value: any) => {
-    if (state?.editdata) {
+    if (editdata?.data) {
       if (name === "sizeimages") {
         setImgUrl(name);
         const payload = new FormData();
@@ -373,7 +380,7 @@ const NewProduct = () => {
   }
   const handleChangeImage = async (e: any, index: any) => {
     const { files } = e.target;
-    // if (state?.editdata) {
+    // if (editdata?.data) {
     //   const payload = new FormData();
     //   setIsOpen(true);
     //   payload.append("image", files[0]);
@@ -387,7 +394,7 @@ const NewProduct = () => {
 
     if (files) {
       if (files?.length) {
-        if (state?.editdata) {
+        if (editdata?.data) {
           setIsOpen(true);
           const payload = new FormData();
           payload.append("image", files[0]);
@@ -532,7 +539,7 @@ const NewProduct = () => {
   });
 
   const handleSubmit = () => {
-    if (state?.editdata) {
+    if (editdata?.data) {
       setIsOpen(true);
       updateproducts(formValues);
     } else {
@@ -588,9 +595,10 @@ const NewProduct = () => {
       cutimage: null,
       productimage: [],
     });
+    navigate("/gems/product-list");
   };
   const base64fuc = async (name: string, imageData: any) => {
-    if (state?.editdata) {
+    if (editdata?.data) {
       setPriviewImages((prev: any) => ({ ...prev, [name]: formValues[name] }));
     } else {
       if (name == "productimage") {
@@ -633,7 +641,7 @@ const NewProduct = () => {
       <div>
         <div className="mb-0 bg-[#ffffff] rounded-[4px] p-[17.5px]">
           <div className="mb-[21px] text-[#212121] font-bold text-[17.5px] font-Nunito">
-            {state?.editdata ? "Edit Product" : "Create Product"}
+            {editdata?.data ? "Edit Product" : "Create Product"}
           </div>
           <div className="grid grid-cols-12 gap-[14px] mx-0 mt-0">
             <div className="col-span-12 p-0 w-full">
@@ -1161,7 +1169,7 @@ const NewProduct = () => {
                   <div className="flex gap-[10px]">
                     {imageArray.map((item: any, ind: number) => {
                       return (
-                        <div className="w-full relative h-[200px]" key={item}>
+                        <div className="w-full relative h-[200px]">
                           <label className="flex flex-col text-[30px] items-center justify-center border border-dashed border-[#ced4da] h-full w-full textsm text-center">
                             <RiUploadCloud2Line />
                             <span className="text-[15px]"> Upload Image</span>
@@ -1172,9 +1180,9 @@ const NewProduct = () => {
                             onChange={(e) => handleChangeImage(e, ind)}
                           />
                           <div className="flex items-center justify-center h-full w-full gap-[10px] absolute z-[-1] top-0">
-                            {imageArray[ind] && (
+                            {item && (
                               <img
-                                src={imageArray[ind] || ""}
+                                src={item || ""}
                                 alt={"image"}
                                 className={`w-full h-full px-[14px] object-contain z-[-1] ${
                                   !formValues?.productimage?.length && "hidden"
@@ -1202,7 +1210,7 @@ const NewProduct = () => {
                       onClick={handleSubmit}
                     >
                       <span>
-                        {state?.editdata ? "Update Product" : "Create Product"}
+                        {editdata?.data ? "Update Product" : "Create Product"}
                       </span>
                     </Button>
                   </div>

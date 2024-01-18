@@ -105,6 +105,10 @@ const router = createBrowserRouter([
         element: <NewProduct />,
       },
       {
+        path: "edit-product/:editId",
+        element: <NewProduct />,
+      },
+      {
         path: "order-history",
         element: <OrderHistory />,
       },
