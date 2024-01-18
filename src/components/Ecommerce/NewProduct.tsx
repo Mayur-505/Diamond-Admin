@@ -755,7 +755,7 @@ const NewProduct = () => {
                   <InputWithLabel
                     id="polish"
                     label="Polish"
-                    type="number"
+                    type="text"
                     placeholder="polish"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     value={formValues.polish}
@@ -856,7 +856,7 @@ const NewProduct = () => {
                     id="depth"
                     placeholder="depth"
                     label="Depth"
-                    type="number"
+                    type="text"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     value={formValues.depth}
                     onChange={(e) => handleChange("depth", e.target.value)}
@@ -884,7 +884,7 @@ const NewProduct = () => {
                     id="pavilian_depth"
                     placeholder="pavilian depth"
                     label="Pavilian Depth"
-                    type="number"
+                    type="text"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     value={formValues.pavilian_depth}
                     onChange={(e) =>

@@ -25,9 +25,9 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import TypedCharts from "./TypedChart";
-import { useState } from "react";
-import PieChart from "./PieChart";
+// import TypedCharts from "./TypedChart";
+// import { useState } from "react";
+// import PieChart from "./PieChart";
 
 const invoices = [
   {
@@ -96,19 +96,19 @@ const invoices2 = [
 ];
 
 const Index = () => {
-  const [dataArray, setDataArray] = useState([2, 7, 20, 9, 16, 9, 5]);
-  const [color, setColor] = useState("#e3f2fd66");
-  const [bgColor, setBgColor] = useState("#9bddff");
+  // const [dataArray, setDataArray] = useState([2, 7, 20, 9, 16, 9, 5]);
+  // const [color, setColor] = useState("#e3f2fd66");
+  // const [bgColor, setBgColor] = useState("#9bddff");
 
-  const handelchangegraph = (
-    array: number[],
-    color: string,
-    bgcolor: string
-  ) => {
-    setDataArray(array);
-    setColor(color);
-    setBgColor(bgcolor);
-  };
+  // const handelchangegraph = (
+  //   array: number[],
+  //   color: string,
+  //   bgcolor: string
+  // ) => {
+  //   setDataArray(array);
+  //   setColor(color);
+  //   setBgColor(bgcolor);
+  // };
   return (
     <div className="custom_contener !px-[28px]">
       <div className="flex justify-center xl:flex-nowrap flex-wrap gap-[28px] mt-[28px] mb-[32px]">
@@ -240,16 +240,16 @@ const Index = () => {
               </span>
             </div>
           </div>
-          <div className="flex gap-[10px] mb-[42px]">
+          <div className="flex gap-[10px] mb-[42px] cursor-pointer">
             <div
               className="hover:shadow-md px-[7px]"
-              onClick={() =>
-                handelchangegraph(
-                  [2, 7, 20, 9, 16, 9, 5],
-                  "#e3f2fd66",
-                  "#9bddff"
-                )
-              }
+              // onClick={() =>
+              //   handelchangegraph(
+              //     [2, 7, 20, 9, 16, 9, 5],
+              //     "#e3f2fd66",
+              //     "#9bddff"
+              //   )
+              // }
             >
               <h2 className="flex text-[#495057] font-Nunito font-normal text-[14px] items-center gap-[7px] py-[17px]">
                 <FiPlusCircle />
@@ -259,13 +259,13 @@ const Index = () => {
             </div>
             <div
               className="hover:shadow-md px-[7px]"
-              onClick={() =>
-                handelchangegraph(
-                  [2, 4, 9, 20, 16, 12, 10],
-                  "#e8eaf633",
-                  "#c5cae9"
-                )
-              }
+              // onClick={() =>
+              //   handelchangegraph(
+              //     [2, 4, 9, 20, 16, 12, 10],
+              //     "#e8eaf633",
+              //     "#c5cae9"
+              //   )
+              // }
             >
               <h2 className="flex text-[#495057] font-Nunito font-normal text-[14px] items-center gap-[7px] py-[17px]">
                 <TfiCheckBox />
@@ -275,13 +275,13 @@ const Index = () => {
             </div>
             <div
               className="hover:shadow-md px-[7px]"
-              onClick={() =>
-                handelchangegraph(
-                  [2, 17, 7, 15, 4, 20, 8],
-                  "#b2dfdb33",
-                  "#b2dfdb"
-                )
-              }
+              // onClick={() =>
+              //   handelchangegraph(
+              //     [2, 17, 7, 15, 4, 20, 8],
+              //     "#b2dfdb33",
+              //     "#b2dfdb"
+              //   )
+              // }
             >
               <h2 className="flex text-[#495057] font-Nunito font-normal text-[14px] items-center gap-[7px] py-[17px]">
                 <MdRefresh />
@@ -291,13 +291,13 @@ const Index = () => {
             </div>
             <div
               className="hover:shadow-md px-[7px]"
-              onClick={() =>
-                handelchangegraph(
-                  [2, 2, 20, 4, 17, 16, 20],
-                  "#b2ebf233",
-                  "#b2ebf2"
-                )
-              }
+              // onClick={() =>
+              //   handelchangegraph(
+              //     [2, 2, 20, 4, 17, 16, 20],
+              //     "#b2ebf233",
+              //     "#b2ebf2"
+              //   )
+              // }
             >
               <h2 className="flex text-[#495057] font-Nunito font-normal text-[14px] items-center gap-[7px] py-[17px]">
                 <MdOutlineCancel />
@@ -306,7 +306,7 @@ const Index = () => {
               <img src={graphImg4} alt="graphImg4" />
             </div>
           </div>
-          <TypedCharts array={dataArray} border={color} bgColor={bgColor} />
+          {/* <TypedCharts array={dataArray} border={color} bgColor={bgColor} /> */}
         </div>
         <div className="max-w-[710px] w-full bg-[#FFF] cardShadow p-[17px]">
           <div>
@@ -438,9 +438,7 @@ const Index = () => {
                 Comparison of your revenue sources.
               </p>
             </div>
-            <div className="pt-[14px]">
-              <PieChart />{" "}
-            </div>
+            <div className="pt-[14px]">{/* <PieChart /> */}</div>
           </div>
           <div className="bg-[#FFF] cardShadow w-full p-[17px] mt-[28px]">
             <div>
