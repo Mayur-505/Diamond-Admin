@@ -3,7 +3,7 @@ import SelectMenu from "@/components/Common/SelectMenu";
 import TextAreaWithLabel from "@/components/Common/TextAreaWithLabel";
 import { AddSubCategory } from "@/services/subcategoryService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import Loading from "@/components/Common/Loading";
@@ -21,6 +21,7 @@ const AddCategory = () => {
   const { toast } = useToast();
   const [imageUrl, setImageUrl] = useState<string>("");
   const [isopen, setIsOpen] = useState<boolean>(false);
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
 
   const [formValues, setFormValues] = useState({
     name: "",
@@ -29,6 +30,16 @@ const AddCategory = () => {
     image: "",
   });
 
+  useEffect(() => {
+    const isAnyFieldChanged =
+      formValues.name !== "" ||
+      formValues.category !== "" ||
+      formValues.description !== "" ||
+      formValues.image !== "";
+
+    // Enable or disable the button based on changes
+    setButtonDisabled(!isAnyFieldChanged);
+  }, [formValues]);
   const { data: subcategoryData } = useQuery({
     queryKey: ["GET_SUBCATEGORY"],
     queryFn: allgetCategorydata,
@@ -174,6 +185,7 @@ const AddCategory = () => {
             <Button
               className="px-5 py-1.5 bg-[#2796ef] rounded-[4px] text-[#ffffff] border border-transparent font-Nunito font-[600]"
               type="button"
+              disabled={isButtonDisabled}
               onClick={handleSubmit}
             >
               Create Sub Category

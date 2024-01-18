@@ -8,7 +8,7 @@ import { UploadImage } from "@/services/adminService";
 import { addInnerCategory } from "@/services/innercateGoryService";
 import { getSubCategoryall } from "@/services/subcategoryService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface CustomError {
@@ -21,6 +21,7 @@ const AddInnerCategory = () => {
   const { toast } = useToast();
   const [imageUrl, setImageUrl] = useState<string>("");
   const [isopen, setIsOpen] = useState<boolean>(false);
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
 
   const [formValues, setFormValues] = useState({
     name: "",
@@ -28,6 +29,17 @@ const AddInnerCategory = () => {
     category: "",
     image: "",
   });
+
+  useEffect(() => {
+    const isAnyFieldChanged =
+      formValues.name !== "" ||
+      formValues.category !== "" ||
+      formValues.description !== "" ||
+      formValues.image !== "";
+
+    // Enable or disable the button based on changes
+    setButtonDisabled(!isAnyFieldChanged);
+  }, [formValues]);
 
   const { data: InnercategoryData } = useQuery({
     queryKey: ["GET_INNERCATEGORY"],
@@ -176,6 +188,7 @@ const AddInnerCategory = () => {
             <Button
               className="px-5 py-1.5 bg-[#2796ef] rounded-[4px] text-[#ffffff] border border-transparent font-Nunito font-[600]"
               type="button"
+              disabled={isButtonDisabled}
               onClick={handleSubmit}
             >
               Create Inner Category
