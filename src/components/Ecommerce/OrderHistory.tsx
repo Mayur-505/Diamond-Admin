@@ -264,12 +264,12 @@ const OrderHistory = () => {
     <div>
       {viewData?.productResponse?.length ? (
         <>
-          <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-4">
+          <h2 className="text-[22px] font-[700] text-[#343a40] font-Nunito mb-3">
             Order Details
           </h2>
           {viewData?.productResponse?.map((item: any) => {
             return (
-              <div className="flex w-full justify-between mb-[15px]">
+              <div className="flex w-full justify-between mb-[10px] border-[1px] px-[10px] py-[10px] rounded-[5px] border-solid border-[#00000057]">
                 <div className="flex items-center gap-[15px]">
                   <img
                     src={item?.product?.productimage?.[0]}
@@ -282,36 +282,40 @@ const OrderHistory = () => {
                       <span className="font-bold">Cert Number :</span>{" "}
                       {item?.product?.cert_number}
                     </p>
-                    {viewData?.mobile && (
-                      <p className="text-[14px]">
-                        <span className="font-bold">Mobile Number :</span> +91{" "}
-                        {viewData?.mobile}
-                      </p>
-                    )}
-                    {viewData?.Address && (
-                      <p className="text-[14px]">
-                        <span className="font-bold">Address :</span>{" "}
-                        {viewData?.Address}
-                      </p>
-                    )}
+                    <p className="text-[12px]">Qty : {item?.quantity}</p>
                   </div>
                 </div>
-                <p className="text-[12px]">Qty:{item?.quantity}</p>
               </div>
             );
           })}
-          <div className="flex items-center justify-end mt-[10px]">
-            <p>
-              <span className="text-[14px] font-bold">Total Quantity :</span>{" "}
+          <div className=" mt-[20px]">
+            <div className="pb-3">
+              <strong className="max-w-[150px] w-full inline-block">
+                Total Quantity :
+              </strong>{" "}
               {viewData?.productResponse?.reduce(
                 (acc: number, item: any) => acc + parseInt(item.quantity),
                 0
               )}
-            </p>
-            <p className="ml-[15px]">
-              <span className="text-[14px] font-bold">Total Price :</span>{" "}
+            </div>
+            <div className="pb-3">
+              <strong className="max-w-[150px] w-full inline-block">
+                Total Price :
+              </strong>{" "}
               {viewData?.totalprice}
-            </p>
+            </div>
+            <div className="pb-3">
+              <strong className="max-w-[150px] w-full inline-block">
+                Mobile Number :
+              </strong>{" "}
+              +91 {viewData?.mobile}
+            </div>
+            <div className="pb-3">
+              <strong className="max-w-[150px] w-full inline-block">
+                Address :
+              </strong>{" "}
+              {viewData?.Address}
+            </div>
           </div>
           <div className="flex justify-end gap-4 mt-5 ">
             <Button
