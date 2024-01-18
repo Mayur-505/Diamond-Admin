@@ -224,12 +224,12 @@ const Index = () => {
             <h3 className="font-Nunito font-[600] text-[#000] text-[21px]">
               Orders
             </h3>
-            <Button className="flex items-center gap-[7px] px-[14px] py-[7px]">
+            <div className="flex items-center gap-[7px] px-[14px] py-[7px] cursor-pointer">
               <IoSearchOutline />
               <span className="font-Nunito font-[600] text-[#495057] text-[12px]">
                 Show
               </span>
-            </Button>
+            </div>
           </div>
           <div className="flex gap-[10px] mb-[42px]">
             <div
