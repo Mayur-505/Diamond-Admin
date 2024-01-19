@@ -121,7 +121,7 @@ const OrderHistory = () => {
       ),
     },
     {
-      accessorKey: "title",
+      accessorKey: "id",
       header: ({ column }) => {
         return (
           <Button
@@ -129,14 +129,15 @@ const OrderHistory = () => {
             className="p-0"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Title
+            Order Id
             <RiArrowUpDownFill className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className="">
-          {row?.original?.productResponse?.[0]?.product?.title}
+          {/* {row?.original?.productResponse?.[0]?.product?.title} */}
+          {row?.original?.id}
         </div>
       ),
     },
@@ -404,7 +405,7 @@ const OrderHistory = () => {
           <DataTableDemo
             data={orderHistoryData?.data?.responceData || []}
             columns={columns}
-            filterName={"title"}
+            filterName={"id"}
             setActivePage={setActivePage}
             pageCount={orderHistoryData?.data?.total}
             customButton={
@@ -425,7 +426,7 @@ const OrderHistory = () => {
           <DataTableDemo
             data={orderHistoryData?.data?.responceData || []}
             columns={columns}
-            filterName={"title"}
+            filterName={"id"}
             setActivePage={setActivePage}
             pageCount={orderHistoryData?.data?.total}
             customButton={
@@ -448,7 +449,7 @@ const OrderHistory = () => {
             columns={columns}
             setActivePage={setActivePage}
             pageCount={orderHistoryData?.data?.total}
-            filterName={"title"}
+            filterName={"id"}
             customButton={
               <div className="flex justify-end gap-4">
                 <div className="flex flex-col text-center md:text-left">
