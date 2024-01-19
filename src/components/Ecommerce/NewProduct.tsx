@@ -47,8 +47,6 @@ const NewProduct = () => {
     queryFn: () => getSingleProduct(editId || ""),
   });
 
-  console.log("editdata", editdata?.data);
-
   const [formValues, setFormValues] = useState<any>({
     maintitle: "",
     title: "",
