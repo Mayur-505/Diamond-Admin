@@ -309,7 +309,7 @@ const OrderHistory = () => {
               <strong className="max-w-[150px] w-full inline-block">
                 Mobile Number :
               </strong>{" "}
-              +91 {viewData?.mobile}
+              {viewData?.mobile}
             </div>
             <div className="pb-3">
               <strong className="max-w-[150px] w-full inline-block">
