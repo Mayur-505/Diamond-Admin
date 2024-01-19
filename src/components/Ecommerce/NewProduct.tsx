@@ -928,6 +928,7 @@ const NewProduct = () => {
                     <InputWithLabel
                       id="size"
                       label="Size"
+                      type="number"
                       placeholder="size"
                       className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                       value={formValues.size}

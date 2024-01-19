@@ -338,9 +338,8 @@ const ProductList = () => {
       <div>
         <div className="lg:w-[100%] w-full">
           <div className="flex">
-            <div className="w-[16.6667%] flex gap-x-[16px] justify-between flex-col ">
+            <div className="w-[16.6667%] h-fit gap-[10px] flex gap-x-[16px] justify-between flex-col ">
               {[
-                singleProductData?.productimage,
                 singleProductData?.diamond_clarity?.clarityimage,
                 singleProductData?.diamond_color?.colorimage,
                 singleProductData?.diamond_cut?.cutimage,
