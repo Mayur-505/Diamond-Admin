@@ -151,7 +151,7 @@ const OrderHistory = () => {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Payment
-            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
+            {/* <RiArrowUpDownFill className="ml-2 h-4 w-4" /> */}
           </Button>
         );
       },
@@ -183,7 +183,7 @@ const OrderHistory = () => {
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Quantity
-            <RiArrowUpDownFill className="ml-2 h-4 w-4" />
+            {/* <RiArrowUpDownFill className="ml-2 h-4 w-4" /> */}
           </Button>
         );
       },
