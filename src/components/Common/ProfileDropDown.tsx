@@ -18,7 +18,7 @@ export function ProfileDropDown({ userdata }: any) {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
 
-  const { mutate: NewPass } = useMutation({
+  const { mutate: logout } = useMutation({
     mutationFn: (data: any) => LogOutAPI(data),
     onSuccess: (response) => {
       if (response.status === 200) {
@@ -40,7 +40,7 @@ export function ProfileDropDown({ userdata }: any) {
 
   const handaleLogout = () => {
     const data = { userid: user?.qurey?.id || "" };
-    NewPass(data);
+    logout(data);
   };
   return (
     <DropdownMenu>
