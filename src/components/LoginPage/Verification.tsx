@@ -18,13 +18,20 @@ const Verification = () => {
   useEffect(() => {
     const handleInput = (event: any, index: number) => {
       const inputs = inputsRef.current;
-      const numericValues = inputs
-        .map((input) => input.value)
-        .filter((value) => /^[0-9]$/.test(value));
-      setOtp(numericValues.join("").slice(0, 6));
-      console.log("error", event);
-      if (index !== inputs.length - 1 && inputs[index].value !== "") {
-        inputs[index + 1].focus();
+
+      if (event.inputType === "deleteContentBackward" && index !== 0) {
+        // If backspace is pressed and the input is not the first one, focus on the previous input
+        inputs[index - 1].focus();
+      } else {
+        const numericValues = inputs
+          .map((input) => input.value)
+          .filter((value) => /^[0-9]$/.test(value));
+
+        setOtp(numericValues.join("").slice(0, 6));
+
+        if (index !== inputs.length - 1 && inputs[index].value !== "") {
+          inputs[index + 1].focus();
+        }
       }
     };
 
