@@ -37,9 +37,9 @@ interface Column<T> {
 }
 
 const schema = yup.object({
-  title: yup.string().required(),
-  heading: yup.string().required(),
-  description: yup.string().required(),
+  title: yup.string().required("Field is required"),
+  heading: yup.string().required("Field is required"),
+  description: yup.string().required("Field is required"),
   images: yup
     .mixed()
     .test("fileSize", "The file is too large", (value: any) => {

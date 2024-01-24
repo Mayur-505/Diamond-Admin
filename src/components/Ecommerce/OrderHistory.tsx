@@ -44,8 +44,8 @@ const OrderHistory = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const schema = yup.object({
-    orderstatus: yup.string().required(),
-    orderid: yup.string().required(),
+    orderstatus: yup.string().required("Field is required"),
+    orderid: yup.string().required("Field is required"),
   });
 
   const methods = useForm({
