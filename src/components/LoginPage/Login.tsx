@@ -15,7 +15,7 @@ const Login = () => {
 
   const {
     register,
-    formState: {},
+    formState: { },
     reset,
     handleSubmit,
   } = useForm();
@@ -23,18 +23,19 @@ const Login = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FieldValues) => userLogin(data),
     onSuccess: (response) => {
-      setUserData(response.data.data);
-      reset();
       if (response.data.data.qurey.role === 2) {
+        setUserData(response.data.data);
+        reset();
         navigate("/");
         toast({
           variant: "success",
-          title: "Login Successfully",
+          title: "LogIn User",
+          description: "Login Successfully",
         });
       } else {
         toast({
           variant: "error",
-          title: "Invalid user role or email",
+          title: "Invalid user role or email"
         });
       }
     },

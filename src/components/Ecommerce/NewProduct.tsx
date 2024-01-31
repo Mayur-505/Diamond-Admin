@@ -21,6 +21,7 @@ import { UploadImage } from "@/services/adminService";
 import { getSingleProduct, updateProduct } from "@/services/productService";
 import { RiUploadCloud2Line } from "react-icons/ri";
 import { Label } from "../ui/label";
+import { Switch } from "@/components/ui/switch";
 
 interface CustomError {
   code?: number;
@@ -52,6 +53,12 @@ const NewProduct = () => {
     title: "",
     price: "",
     disccount_price: "",
+    rap: "",
+    rap_disccount: "",
+    location: "",
+    stock: "",
+    stone: "",
+    per_ct: "",
     subcategoryid: "",
     innercategoryid: "",
     categoryid: "",
@@ -63,14 +70,32 @@ const NewProduct = () => {
     cut: "",
     symmetry: "",
     flourescence: "",
+    flourescence_Color: "",
     measurements: "",
     cert_number: "",
     table: "",
+    table_inclusion: "",
+    side_inclusion: "",
+    feather_inclusion: "",
+    tinge: "",
+    eyeclean: "",
+    girdle: "",
+    girdle_con: "",
+    girdle_per: "",
+    culet: "",
     crown_height: "",
     depth: "",
+    report: "",
+    report_date: "",
+    laser_inscription: "",
+    lab: "",
+    star_length: "",
+    lower: "",
     crown_angle: "",
     pavilian_depth: "",
     pavilian_angle: "",
+    diamond_certificate: "",
+    customized: "",
     status: "",
     size: "",
     size_desc: "",
@@ -82,6 +107,7 @@ const NewProduct = () => {
     clarityimage: null,
     cutimage: null,
     productimage: [],
+    productvideo: null
   });
 
   const validateForm = () => {
@@ -223,18 +249,18 @@ const NewProduct = () => {
         categoryid: editdata?.data?.categoryid?.id || "",
         subcategoryid: editdata?.data?.subcategoryid?.id || "",
         innercategoryid: editdata?.data?.innercategoryid?.id || "",
-        size: editdata?.data?.diamond_size.size || "",
-        size_desc: editdata?.data?.diamond_size.size_desc || "",
-        sizeimages: editdata?.data?.diamond_size.sizeimages || "",
-        cut_desc: editdata?.data?.diamond_cut.cut_desc || "",
-        cutimage: editdata?.data?.diamond_cut.cutimage || "",
+        size: editdata?.data?.diamond_size?.size || "",
+        size_desc: editdata?.data?.diamond_size?.size_desc || "",
+        sizeimages: editdata?.data?.diamond_size?.sizeimages || "",
+        cut_desc: editdata?.data?.diamond_cut?.cut_desc || "",
+        cutimage: editdata?.data?.diamond_cut?.cutimage || "",
         cut: editdata?.data?.cut || "",
         colour: editdata?.data?.colour || "",
-        color_desc: editdata?.data?.diamond_color.color_desc || "",
-        colorimage: editdata?.data?.diamond_color.colorimage || "",
+        color_desc: editdata?.data?.diamond_color?.color_desc || "",
+        colorimage: editdata?.data?.diamond_color?.colorimage || "",
         clarity: editdata?.data?.clarity || "",
-        clarity_desc: editdata?.data?.diamond_clarity.clarity_desc || "",
-        clarityimage: editdata?.data?.diamond_clarity.clarityimage || "",
+        clarity_desc: editdata?.data?.diamond_clarity?.clarity_desc || "",
+        clarityimage: editdata?.data?.diamond_clarity?.clarityimage || "",
         shape: editdata?.data?.shape || "",
       });
       imageArray[0] = editdata?.data?.productimage?.[0] || "";
@@ -466,6 +492,12 @@ const NewProduct = () => {
         title: "",
         price: "",
         disccount_price: "",
+        rap: "",
+        rap_disccount: "",
+        location: "",
+        stock: "",
+        stone: "",
+        per_ct: "",
         subcategoryid: "",
         innercategoryid: "",
         categoryid: "",
@@ -477,14 +509,32 @@ const NewProduct = () => {
         cut: "",
         symmetry: "",
         flourescence: "",
+        flourescence_Color: "",
         measurements: "",
         cert_number: "",
         table: "",
+        table_inclusion: "",
+        side_inclusion: "",
+        feather_inclusion: "",
+        tinge: "",
+        eyeclean: "",
+        girdle: "",
+        girdle_con: "",
+        girdle_per: "",
+        culet: "",
         crown_height: "",
         depth: "",
+        report: "",
+        report_date: "",
+        laser_inscription: "",
+        lab: "",
+        star_length: "",
+        lower: "",
         crown_angle: "",
         pavilian_depth: "",
         pavilian_angle: "",
+        diamond_certificate: "",
+        customized: "",
         status: "",
         size: "",
         size_desc: "",
@@ -496,6 +546,7 @@ const NewProduct = () => {
         clarityimage: null,
         cutimage: null,
         productimage: [],
+        productvideo: null
       });
     },
     onError: (error) => {
@@ -558,6 +609,12 @@ const NewProduct = () => {
       title: "",
       price: "",
       disccount_price: "",
+      rap: "",
+      rap_disccount: "",
+      location: "",
+      stock: "",
+      stone: "",
+      per_ct: "",
       subcategoryid: "",
       innercategoryid: "",
       categoryid: "",
@@ -569,14 +626,32 @@ const NewProduct = () => {
       cut: "",
       symmetry: "",
       flourescence: "",
+      flourescence_Color: "",
       measurements: "",
       cert_number: "",
       table: "",
+      table_inclusion: "",
+      side_inclusion: "",
+      feather_inclusion: "",
+      tinge: "",
+      eyeclean: "",
+      girdle: "",
+      girdle_con: "",
+      girdle_per: "",
+      culet: "",
       crown_height: "",
       depth: "",
+      report: "",
+      report_date: "",
+      laser_inscription: "",
+      lab: "",
+      star_length: "",
+      lower: "",
       crown_angle: "",
       pavilian_depth: "",
       pavilian_angle: "",
+      diamond_certificate: "",
+      customized: "",
       status: "",
       size: "",
       size_desc: "",
@@ -588,6 +663,7 @@ const NewProduct = () => {
       clarityimage: null,
       cutimage: null,
       productimage: [],
+      productvideo: null
     });
     navigate("/gems/product-list");
   };
@@ -692,6 +768,245 @@ const NewProduct = () => {
                     {errors?.disccount_price}
                   </div>
                 </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="Rap"
+                    type="number"
+                    placeholder="rap"
+                    label="Rap"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.rap}
+                    onChange={(e) => handleChange("rap", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.rap}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="rap_disccount"
+                    type="number"
+                    label="Disccount Rap"
+                    placeholder="disccount rap"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.rap_disccount}
+                    onChange={(e) =>
+                      handleChange("rap_disccount", e.target.value)
+                    }
+                  />
+                  <div className="text-[red] text-[13px]">
+                    {errors?.rap_disccount}
+                  </div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="location"
+                    label="Location"
+                    placeholder="location"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.location}
+                    onChange={(e) => handleChange("location", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.location}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="stock"
+                    label="Stock"
+                    type="number"
+                    placeholder="stock"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.stock}
+                    onChange={(e) => handleChange("stock", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.stock}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="stone"
+                    label="Stone"
+                    placeholder="stone"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.title}
+                    onChange={(e) => handleChange("stone", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.stone}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="per_ct"
+                    label="Per ct"
+                    type="number"
+                    placeholder="per ct"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.stock}
+                    onChange={(e) => handleChange("per_ct", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.per_ct}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="flourescence_Color"
+                    label="Flourescence Color"
+                    placeholder="flourescence_Color"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.flourescence_Color}
+                    onChange={(e) => handleChange("flourescence_Color", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.flourescence_Color}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="tinge"
+                    label="Tinge"
+                    placeholder="tinge"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.tinge}
+                    onChange={(e) => handleChange("tinge", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.tinge}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="eyeclean"
+                    label="Eyeclean"
+                    placeholder="eyeclean"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.eyeclean}
+                    onChange={(e) => handleChange("eyeclean", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.eyeclean}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="girdle"
+                    label="Girdle"
+                    placeholder="girdle"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.girdle}
+                    onChange={(e) => handleChange("girdle", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.girdle}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="girdle_con"
+                    label="Girdle Con"
+                    placeholder="girdle con"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.girdle_con}
+                    onChange={(e) => handleChange("girdle_con", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.girdle_con}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="girdle_per"
+                    label="Girdle Per"
+                    placeholder="girdle_per"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.girdle_per}
+                    onChange={(e) => handleChange("girdle_per", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.girdle_per}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="culet"
+                    label="Culet"
+                    placeholder="culet"
+                    type="number"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.culet}
+                    onChange={(e) => handleChange("culet", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.culet}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="report"
+                    label="Report"
+                    placeholder="report"
+                    type="number"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.report}
+                    onChange={(e) => handleChange("report", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.report}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="report_date"
+                    label="Report Date"
+                    placeholder="report_date"
+                    type="date"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.report_date}
+                    onChange={(e) => handleChange("report_date", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.report_date}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="laser_inscription"
+                    label="Laser Inscription"
+                    placeholder="laser_inscription"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.laser_inscription}
+                    onChange={(e) => handleChange("laser_inscription", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.laser_inscription}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="lab"
+                    label="Lab"
+                    placeholder="lab"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.lab}
+                    onChange={(e) => handleChange("lab", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.lab}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="star_length"
+                    label="Star Length"
+                    placeholder="star_length"
+                    type="number"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.star_length}
+                    onChange={(e) => handleChange("star_length", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.star_length}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="lower"
+                    label="Lower"
+                    placeholder="lower"
+                    type="number"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.lower}
+                    onChange={(e) => handleChange("lower", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.lower}</div>
+                </div>
+                <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
+                  <InputWithLabel
+                    id="diamond_certificate"
+                    label="Diamond Certificate"
+                    placeholder="diamond_certificate"
+                    type="file"
+                    accept="application/pdf"
+                    className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
+                    value={formValues.diamond_certificate}
+                    onChange={(e) => handleChange("diamond_certificate", e.target.value)}
+                  />
+                  <div className="text-[red] text-[13px]">{errors?.diamond_certificate}</div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name">Customized</Label>
+              <Switch id="customized" checked={formValues.customized} onCheckedChange={(e) => handleChange("customized", e)} />
+            </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <SelectMenu
                     placeholder="Select Category"

@@ -138,7 +138,7 @@ const List = () => {
         return (
           <span
             className={`badge text-white px-1 py-0.5 text-[12px] rounded ${
-              row?.original?.status === "Active"
+              row?.original?.status === 1
                 ? "bg-[#28a745]"
                 : "bg-[#dc3545]"
             }`}
