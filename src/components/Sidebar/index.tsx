@@ -12,7 +12,7 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
     <div
       className={`max-w-[224px] fixed ${
         !collapsed ? "left-[-224px]" : "left-0"
-      } transition-all duration-[0.5s] lg:block hidden w-full bg-[#343a40] p-[14px] h-[100vh] z-50`}
+      } transition-all duration-500 lg:block hidden w-full bg-[#343a40] p-[14px] h-[100vh] z-50`}
     >
       <div className="flex gap-[7px] justify-center items-center border-b-[1px] mb-[14px] pb-[14px] border-solid border-[#ffffff33]">
         <img src={WhiteLogo} alt="WhiteLogo" className="max-w-[28px]" />

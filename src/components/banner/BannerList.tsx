@@ -47,8 +47,8 @@ interface SingleBlogData {
   total: string;
 }
 const schema = yup.object({
-  title: yup.string().required(),
-  description: yup.string().required(),
+  title: yup.string().required("Field is required"),
+  description: yup.string().required("Field is required"),
   images: yup
     .mixed()
     .test("fileSize", "The file is too large", (value: any) => {

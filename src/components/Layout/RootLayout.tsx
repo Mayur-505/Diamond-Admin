@@ -17,7 +17,7 @@ const RootLayout = () => {
     <div
       className={`${
         collapsed ? "flex" : "block"
-      } transition-all duration-[0.5s]`}
+      } transition-all duration-500`}
     >
       <Sidebar collapsed={collapsed} />
       <Toaster />
@@ -25,7 +25,7 @@ const RootLayout = () => {
       <div
         className={`relative ${
           collapsed ? "pl-[224px]" : "pl-0"
-        } h-[100vh] transition-all duration-[0.5s] overflow-y-auto pt-[54px] w-full `}
+        } h-[100vh] transition-all duration-500 overflow-y-auto pt-[54px] w-full `}
       >
         <TopBar collapsed={collapsed} setCollapsed={setCollapsed} />
         <Outlet />

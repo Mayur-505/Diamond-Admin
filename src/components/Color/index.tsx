@@ -37,7 +37,7 @@ interface data {
 }
 
 const schema = yup.object({
-  name: yup.string().required(),
+  name: yup.string().required("Field is required"),
 });
 
 const initialValues: data = {

@@ -39,7 +39,7 @@ const Index: FC<HeaderProps> = ({ setCollapsed, collapsed }) => {
     <div
       className={`${
         collapsed ? "w-[calc(100%-224px)]" : "w-full"
-      } transition-all duration-[0.5s] z-10 h-[56px] fixed right-0 top-0 flex items-center justify-between px-[28px] bg-[#FFF] border-[1px] border-solid border-[#dee2e6]`}
+      } transition-all duration-500 z-10 h-[56px] fixed right-0 top-0 flex items-center justify-between px-[28px] bg-[#FFF] border-[1px] border-solid border-[#dee2e6]`}
     >
       <div className="flex items-center gap-[14px]">
         <div className="border-[#dee2e6] border-r-[1px] border-solid">

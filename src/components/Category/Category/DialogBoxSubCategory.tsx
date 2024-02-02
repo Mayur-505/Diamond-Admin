@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
+import { Switch } from "@/components/ui/switch";
 import { UploadImage } from "@/services/adminService";
 import { allgetCategorydata } from "@/services/categoryService";
 import { EditSubCategory } from "@/services/subcategoryService";
@@ -25,11 +26,12 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }: any) {
     name: "",
     description: "",
     image: "",
-  });
+    status: false,
+  });  
   const [isopen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setFormValues({ ...item });
+    setFormValues({ name: item.name, description: item.description, image: item.image, status: item.status === 1 ? true : false });
   }, [item]);
   const queryClient = useQueryClient();
 
@@ -69,8 +71,8 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }: any) {
     payload.append("image", files[0]);
     UploadImagedata(payload);
   };
-  const handleChange = (name: string, value: string | number) => {
-    setFormValues((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (name: string, value: string | number | boolean) => {
+      setFormValues((prev) => ({ ...prev, [name]: value }));
   };
   const { data: subcategoryData } = useQuery({
     queryKey: ["GET_SUBCATEGORY"],
@@ -96,6 +98,7 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }: any) {
     if (formValues.description) {
       payload.append("description", formValues.description);
     }
+      payload.append("status", String(formValues.status ? 1 : 0));
     editSubCategory(payload);
     setIsOpen(true);
   };
@@ -141,6 +144,10 @@ export function DialogBoxSubCategory({ icon, mainTitle, item }: any) {
                 className="col-span-3 border-[#ccc] border-[1px] border-solid rounded-[5px]"
                 onChange={(e) => handleChange("description", e.target.value)}
               />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name">Status</Label>
+              <Switch id="status" checked={formValues.status} onCheckedChange={(e) => handleChange("status", e)} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="image">Image</Label>
