@@ -107,7 +107,7 @@ const NewProduct = () => {
     clarityimage: null,
     cutimage: null,
     productimage: [],
-    productvideo: null
+    productvideo: null,
   });
 
   const validateForm = () => {
@@ -546,7 +546,7 @@ const NewProduct = () => {
         clarityimage: null,
         cutimage: null,
         productimage: [],
-        productvideo: null
+        productvideo: null,
       });
     },
     onError: (error) => {
@@ -663,7 +663,7 @@ const NewProduct = () => {
       clarityimage: null,
       cutimage: null,
       productimage: [],
-      productvideo: null
+      productvideo: null,
     });
     navigate("/gems/product-list");
   };
@@ -805,7 +805,9 @@ const NewProduct = () => {
                     value={formValues.location}
                     onChange={(e) => handleChange("location", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.location}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.location}
+                  </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -849,9 +851,13 @@ const NewProduct = () => {
                     placeholder="flourescence_Color"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     value={formValues.flourescence_Color}
-                    onChange={(e) => handleChange("flourescence_Color", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("flourescence_Color", e.target.value)
+                    }
                   />
-                  <div className="text-[red] text-[13px]">{errors?.flourescence_Color}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.flourescence_Color}
+                  </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -873,7 +879,9 @@ const NewProduct = () => {
                     value={formValues.eyeclean}
                     onChange={(e) => handleChange("eyeclean", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.eyeclean}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.eyeclean}
+                  </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -895,7 +903,9 @@ const NewProduct = () => {
                     value={formValues.girdle_con}
                     onChange={(e) => handleChange("girdle_con", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.girdle_con}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.girdle_con}
+                  </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -906,7 +916,9 @@ const NewProduct = () => {
                     value={formValues.girdle_per}
                     onChange={(e) => handleChange("girdle_per", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.girdle_per}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.girdle_per}
+                  </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -940,9 +952,13 @@ const NewProduct = () => {
                     type="date"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     value={formValues.report_date}
-                    onChange={(e) => handleChange("report_date", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("report_date", e.target.value)
+                    }
                   />
-                  <div className="text-[red] text-[13px]">{errors?.report_date}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.report_date}
+                  </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -951,9 +967,13 @@ const NewProduct = () => {
                     placeholder="laser_inscription"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     value={formValues.laser_inscription}
-                    onChange={(e) => handleChange("laser_inscription", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("laser_inscription", e.target.value)
+                    }
                   />
-                  <div className="text-[red] text-[13px]">{errors?.laser_inscription}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.laser_inscription}
+                  </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -974,9 +994,13 @@ const NewProduct = () => {
                     type="number"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
                     value={formValues.star_length}
-                    onChange={(e) => handleChange("star_length", e.target.value)}
+                    onChange={(e) =>
+                      handleChange("star_length", e.target.value)
+                    }
                   />
-                  <div className="text-[red] text-[13px]">{errors?.star_length}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.star_length}
+                  </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -998,15 +1022,23 @@ const NewProduct = () => {
                     type="file"
                     accept="application/pdf"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    value={formValues.diamond_certificate}
-                    onChange={(e) => handleChange("diamond_certificate", e.target.value)}
+                    // value={formValues.diamond_certificate}
+                    onChange={(e) =>
+                      handleChange("diamond_certificate", e.target.value)
+                    }
                   />
-                  <div className="text-[red] text-[13px]">{errors?.diamond_certificate}</div>
+                  <div className="text-[red] text-[13px]">
+                    {errors?.diamond_certificate}
+                  </div>
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name">Customized</Label>
-              <Switch id="customized" checked={formValues.customized} onCheckedChange={(e) => handleChange("customized", e)} />
-            </div>
+                  <Label htmlFor="name">Customized</Label>
+                  <Switch
+                    id="customized"
+                    checked={formValues.customized}
+                    onCheckedChange={(e) => handleChange("customized", e)}
+                  />
+                </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <SelectMenu
                     placeholder="Select Category"
