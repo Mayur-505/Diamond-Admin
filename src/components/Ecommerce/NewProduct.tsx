@@ -125,114 +125,114 @@ const NewProduct = () => {
       formIsValid = false;
       newErrors.price = "price required";
     }
-    if (!formValues.disccount_price?.trim()) {
-      formIsValid = false;
-      newErrors.disccount_price = "disccount Price required";
-    }
+    // if (!formValues.disccount_price?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.disccount_price = "disccount Price required";
+    // }
     if (!formValues.categoryid?.trim()) {
       formIsValid = false;
       newErrors.categoryid = "category required";
     }
-    if (!formValues.shape?.trim()) {
-      formIsValid = false;
-      newErrors.shape = "shape required";
-    }
-    if (!formValues.colour?.trim()) {
-      formIsValid = false;
-      newErrors.colour = "colour required";
-    }
-    if (!formValues.clarity?.trim()) {
-      formIsValid = false;
-      newErrors.clarity = "clarity required";
-    }
-    if (!formValues.polish?.trim()) {
-      formIsValid = false;
-      newErrors.polish = "polish required";
-    }
-    if (!formValues.cut?.trim()) {
-      formIsValid = false;
-      newErrors.cut = "cut required";
-    }
-    if (!formValues.symmetry?.trim()) {
-      formIsValid = false;
-      newErrors.symmetry = "symmetry required";
-    }
-    if (!formValues.flourescence?.trim()) {
-      formIsValid = false;
-      newErrors.flourescence = "flourescence required";
-    }
-    if (!formValues.measurements?.trim()) {
-      formIsValid = false;
-      newErrors.measurements = "measurements required";
-    }
-    if (!formValues.cert_number?.trim()) {
-      formIsValid = false;
-      newErrors.cert_number = "cert number required";
-    }
-    if (!formValues.table?.trim()) {
-      formIsValid = false;
-      newErrors.table = "table number required";
-    }
-    if (!formValues.crown_height?.trim()) {
-      formIsValid = false;
-      newErrors.crown_height = "crown height required";
-    }
-    if (!formValues.depth?.trim()) {
-      formIsValid = false;
-      newErrors.depth = "depth required";
-    }
-    if (!formValues.crown_angle?.trim()) {
-      formIsValid = false;
-      newErrors.crown_angle = "crown angle required";
-    }
-    if (!formValues.pavilian_depth?.trim()) {
-      formIsValid = false;
-      newErrors.pavilian_depth = "pavilian depth required";
-    }
-    if (!formValues.pavilian_angle?.trim()) {
-      formIsValid = false;
-      newErrors.pavilian_angle = "pavilian angle required";
-    }
-    if (!formValues.status?.trim()) {
-      formIsValid = false;
-      newErrors.status = "status required";
-    }
-    if (!formValues.size?.trim()) {
-      formIsValid = false;
-      newErrors.size = "size required";
-    }
-    if (!formValues.size_desc?.trim()) {
-      formIsValid = false;
-      newErrors.size_desc = "size desc required";
-    }
-    if (!formValues.color_desc?.trim()) {
-      formIsValid = false;
-      newErrors.color_desc = "color desc required";
-    }
-    if (!formValues.clarity_desc?.trim()) {
-      formIsValid = false;
-      newErrors.clarity_desc = "clarity desc required";
-    }
-    if (!formValues.cut_desc?.trim()) {
-      formIsValid = false;
-      newErrors.cut_desc = "cut desc required";
-    }
-    if (!formValues.sizeimages) {
-      formIsValid = false;
-      newErrors.sizeimages = "size images required";
-    }
-    if (!formValues.colorimage) {
-      formIsValid = false;
-      newErrors.colorimage = "color image required";
-    }
-    if (!formValues.clarityimage) {
-      formIsValid = false;
-      newErrors.clarityimage = "clarity image required";
-    }
-    if (!formValues.cutimage) {
-      formIsValid = false;
-      newErrors.cutimage = "cut image required";
-    }
+    // if (!formValues.shape?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.shape = "shape required";
+    // }
+    // if (!formValues.colour?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.colour = "colour required";
+    // }
+    // if (!formValues.clarity?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.clarity = "clarity required";
+    // }
+    // if (!formValues.polish?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.polish = "polish required";
+    // }
+    // if (!formValues.cut?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.cut = "cut required";
+    // }
+    // if (!formValues.symmetry?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.symmetry = "symmetry required";
+    // }
+    // if (!formValues.flourescence?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.flourescence = "flourescence required";
+    // }
+    // if (!formValues.measurements?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.measurements = "measurements required";
+    // }
+    // if (!formValues.cert_number?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.cert_number = "cert number required";
+    // }
+    // if (!formValues.table?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.table = "table number required";
+    // }
+    // if (!formValues.crown_height?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.crown_height = "crown height required";
+    // }
+    // if (!formValues.depth?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.depth = "depth required";
+    // }
+    // if (!formValues.crown_angle?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.crown_angle = "crown angle required";
+    // }
+    // if (!formValues.pavilian_depth?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.pavilian_depth = "pavilian depth required";
+    // }
+    // if (!formValues.pavilian_angle?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.pavilian_angle = "pavilian angle required";
+    // }
+    // if (!formValues.status?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.status = "status required";
+    // }
+    // if (!formValues.size?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.size = "size required";
+    // }
+    // if (!formValues.size_desc?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.size_desc = "size desc required";
+    // }
+    // if (!formValues.color_desc?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.color_desc = "color desc required";
+    // }
+    // if (!formValues.clarity_desc?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.clarity_desc = "clarity desc required";
+    // }
+    // if (!formValues.cut_desc?.trim()) {
+    //   formIsValid = false;
+    //   newErrors.cut_desc = "cut desc required";
+    // }
+    // if (!formValues.sizeimages) {
+    //   formIsValid = false;
+    //   newErrors.sizeimages = "size images required";
+    // }
+    // if (!formValues.colorimage) {
+    //   formIsValid = false;
+    //   newErrors.colorimage = "color image required";
+    // }
+    // if (!formValues.clarityimage) {
+    //   formIsValid = false;
+    //   newErrors.clarityimage = "clarity image required";
+    // }
+    // if (!formValues.cutimage) {
+    //   formIsValid = false;
+    //   newErrors.cutimage = "cut image required";
+    // }
     if (!formValues?.productimage?.length) {
       formIsValid = false;
       newErrors.productimage = "product image required";
@@ -764,9 +764,9 @@ const NewProduct = () => {
                       handleChange("disccount_price", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.disccount_price}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -778,7 +778,7 @@ const NewProduct = () => {
                     value={formValues.rap}
                     onChange={(e) => handleChange("rap", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.rap}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.rap}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -792,9 +792,9 @@ const NewProduct = () => {
                       handleChange("rap_disccount", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.rap_disccount}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -805,9 +805,9 @@ const NewProduct = () => {
                     value={formValues.location}
                     onChange={(e) => handleChange("location", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.location}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -819,7 +819,7 @@ const NewProduct = () => {
                     value={formValues.stock}
                     onChange={(e) => handleChange("stock", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.stock}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.stock}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -827,10 +827,10 @@ const NewProduct = () => {
                     label="Stone"
                     placeholder="stone"
                     className="border border-[#ced4da] rounded-[4px] placeholder:opacity-[0.6]"
-                    value={formValues.title}
+                    value={formValues.stone}
                     onChange={(e) => handleChange("stone", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.stone}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.stone}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -842,7 +842,7 @@ const NewProduct = () => {
                     value={formValues.stock}
                     onChange={(e) => handleChange("per_ct", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.per_ct}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.per_ct}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -855,9 +855,9 @@ const NewProduct = () => {
                       handleChange("flourescence_Color", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.flourescence_Color}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -868,7 +868,7 @@ const NewProduct = () => {
                     value={formValues.tinge}
                     onChange={(e) => handleChange("tinge", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.tinge}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.tinge}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -879,9 +879,9 @@ const NewProduct = () => {
                     value={formValues.eyeclean}
                     onChange={(e) => handleChange("eyeclean", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.eyeclean}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -892,7 +892,7 @@ const NewProduct = () => {
                     value={formValues.girdle}
                     onChange={(e) => handleChange("girdle", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.girdle}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.girdle}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -903,9 +903,9 @@ const NewProduct = () => {
                     value={formValues.girdle_con}
                     onChange={(e) => handleChange("girdle_con", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.girdle_con}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -916,9 +916,9 @@ const NewProduct = () => {
                     value={formValues.girdle_per}
                     onChange={(e) => handleChange("girdle_per", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.girdle_per}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -930,7 +930,7 @@ const NewProduct = () => {
                     value={formValues.culet}
                     onChange={(e) => handleChange("culet", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.culet}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.culet}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -942,7 +942,7 @@ const NewProduct = () => {
                     value={formValues.report}
                     onChange={(e) => handleChange("report", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.report}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.report}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -956,9 +956,9 @@ const NewProduct = () => {
                       handleChange("report_date", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.report_date}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -971,9 +971,9 @@ const NewProduct = () => {
                       handleChange("laser_inscription", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.laser_inscription}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -984,7 +984,7 @@ const NewProduct = () => {
                     value={formValues.lab}
                     onChange={(e) => handleChange("lab", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.lab}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.lab}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -998,9 +998,9 @@ const NewProduct = () => {
                       handleChange("star_length", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.star_length}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1012,7 +1012,7 @@ const NewProduct = () => {
                     value={formValues.lower}
                     onChange={(e) => handleChange("lower", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.lower}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.lower}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1027,9 +1027,9 @@ const NewProduct = () => {
                       handleChange("diamond_certificate", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.diamond_certificate}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name">Customized</Label>
@@ -1081,7 +1081,7 @@ const NewProduct = () => {
                     value={formValues.shape}
                     onChange={(e) => handleChange("shape", e)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.shape}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.shape}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1093,7 +1093,7 @@ const NewProduct = () => {
                     value={formValues.carat}
                     onChange={(e) => handleChange("carat", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.carat}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.carat}</div> */}
                 </div>
 
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
@@ -1106,7 +1106,7 @@ const NewProduct = () => {
                     value={formValues.polish}
                     onChange={(e) => handleChange("polish", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.polish}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.polish}</div> */}
                 </div>
 
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
@@ -1118,9 +1118,9 @@ const NewProduct = () => {
                     value={formValues.symmetry}
                     onChange={(e) => handleChange("symmetry", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.symmetry}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1133,9 +1133,9 @@ const NewProduct = () => {
                       handleChange("flourescence", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.flourescence}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1148,9 +1148,9 @@ const NewProduct = () => {
                       handleChange("measurements", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.measurements}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1164,9 +1164,9 @@ const NewProduct = () => {
                       handleChange("cert_number", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.cert_number}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1178,7 +1178,7 @@ const NewProduct = () => {
                     value={formValues.table}
                     onChange={(e) => handleChange("table", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.table}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.table}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1192,9 +1192,9 @@ const NewProduct = () => {
                       handleChange("crown_height", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.crown_height}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1206,7 +1206,7 @@ const NewProduct = () => {
                     value={formValues.depth}
                     onChange={(e) => handleChange("depth", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.depth}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.depth}</div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1220,9 +1220,9 @@ const NewProduct = () => {
                       handleChange("crown_angle", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.crown_angle}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1236,9 +1236,9 @@ const NewProduct = () => {
                       handleChange("pavilian_depth", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.pavilian_depth}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1252,9 +1252,9 @@ const NewProduct = () => {
                       handleChange("pavilian_angle", e.target.value)
                     }
                   />
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.pavilian_angle}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[33.33%] w-full">
                   <InputWithLabel
@@ -1266,7 +1266,7 @@ const NewProduct = () => {
                     value={formValues.status}
                     onChange={(e) => handleChange("status", e.target.value)}
                   />
-                  <div className="text-[red] text-[13px]">{errors?.status}</div>
+                  {/* <div className="text-[red] text-[13px]">{errors?.status}</div> */}
                 </div>
                 <div className="w-full">
                   <div className="px-[14px] py-0 mb-[14px] w-[50%]">
@@ -1279,7 +1279,7 @@ const NewProduct = () => {
                       value={formValues.size}
                       onChange={(e) => handleChange("size", e.target.value)}
                     />
-                    <div className="text-[red] text-[13px]">{errors?.size}</div>
+                    {/* <div className="text-[red] text-[13px]">{errors?.size}</div> */}
                   </div>
                   <div className="p-[14px] py-0 mb-[14px] w-full">
                     <TextAreaWithLabel
@@ -1292,9 +1292,9 @@ const NewProduct = () => {
                         handleChange("size_desc", e.target.value)
                       }
                     />
-                    <div className="text-[red] text-[13px]">
+                    {/* <div className="text-[red] text-[13px]">
                       {errors?.size_desc}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="w-full">
@@ -1307,9 +1307,9 @@ const NewProduct = () => {
                       value={formValues.colour}
                       onChange={(e) => handleChange("colour", e)}
                     />
-                    <div className="text-[red] text-[13px]">
+                    {/* <div className="text-[red] text-[13px]">
                       {errors?.colour}
-                    </div>
+                    </div> */}
                   </div>
                   <div className="p-[14px] py-0 mb-[14px] w-full">
                     <TextAreaWithLabel
@@ -1322,9 +1322,9 @@ const NewProduct = () => {
                         handleChange("color_desc", e.target.value)
                       }
                     />
-                    <div className="text-[red] text-[13px]">
+                    {/* <div className="text-[red] text-[13px]">
                       {errors?.color_desc}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="w-full">
@@ -1337,9 +1337,9 @@ const NewProduct = () => {
                       value={formValues.clarity}
                       onChange={(e) => handleChange("clarity", e)}
                     />
-                    <div className="text-[red] text-[13px]">
+                    {/* <div className="text-[red] text-[13px]">
                       {errors?.clarity}
-                    </div>
+                    </div> */}
                   </div>
                   <div className="p-[14px] py-0 mb-[14px] w-full">
                     <TextAreaWithLabel
@@ -1352,9 +1352,9 @@ const NewProduct = () => {
                         handleChange("clarity_desc", e.target.value)
                       }
                     />
-                    <div className="text-[red] text-[13px]">
+                    {/* <div className="text-[red] text-[13px]">
                       {errors?.clarity_desc}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="w-full">
@@ -1367,7 +1367,7 @@ const NewProduct = () => {
                       value={formValues.cut}
                       onChange={(e) => handleChange("cut", e)}
                     />
-                    <div className="text-[red] text-[13px]">{errors?.cut}</div>
+                    {/* <div className="text-[red] text-[13px]">{errors?.cut}</div> */}
                   </div>
                   <div className="p-[14px] py-0 mb-[14px] w-full">
                     <TextAreaWithLabel
@@ -1378,9 +1378,9 @@ const NewProduct = () => {
                       className="md:col-span-2"
                       onChange={(e) => handleChange("cut_desc", e.target.value)}
                     />
-                    <div className="text-[red] text-[13px]">
+                    {/* <div className="text-[red] text-[13px]">
                       {errors?.cut_desc}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full relative z-[0]">
@@ -1409,9 +1409,9 @@ const NewProduct = () => {
                       className={`absolute top-0 h-[80%] mt-[30px] object-contain w-full px-[14px] left-0 z-[-1] `}
                     />
                   )}
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.sizeimages}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full relative z-[0]">
                   <Label className="font-ArboriaMedium text-xs font-[400] md:text-sm">
@@ -1440,9 +1440,9 @@ const NewProduct = () => {
                       className={`absolute top-0 h-[80%] mt-[30px] object-contain w-full px-[14px] left-0 z-[-1] `}
                     />
                   )}
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.colorimage}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full relative z-0">
                   <Label className="font-ArboriaMedium text-xs font-[400] md:text-sm">
@@ -1470,9 +1470,9 @@ const NewProduct = () => {
                       className={`absolute top-0 h-[80%] mt-[30px] object-contain w-full px-[14px] left-0 z-[-1] `}
                     />
                   )}
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.clarityimage}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 mb-[14px] lg:w-[50%] w-full relative z-0">
                   <Label className="font-ArboriaMedium text-xs font-[400] md:text-sm">
@@ -1500,9 +1500,9 @@ const NewProduct = () => {
                       className={`absolute top-0 h-[80%] mt-[30px] w-full object-contain px-[14px] left-0 z-[-1] `}
                     />
                   )}
-                  <div className="text-[red] text-[13px]">
+                  {/* <div className="text-[red] text-[13px]">
                     {errors?.cutimage}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="px-[14px] py-0 w-full relative z-0">
                   <Label className="font-ArboriaMedium text-xs font-[400] md:text-sm">
