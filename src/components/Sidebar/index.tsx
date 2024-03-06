@@ -1,18 +1,17 @@
-import WhiteLogo from "../../assets/Image/WhiteLogo.svg";
 import { AiOutlineHome } from "react-icons/ai";
-import { CiBandage, CiImageOn, CiKeyboard } from "react-icons/ci";
 import { BiCategory, BiCategoryAlt } from "react-icons/bi";
-import { FaListUl, FaRegUser } from "react-icons/fa6";
-import { FaPlus } from "react-icons/fa6";
+import { CiBandage, CiImageOn, CiKeyboard } from "react-icons/ci";
+import { FaListUl, FaPlus, FaRegUser } from "react-icons/fa6";
 import { LuHistory, LuUpload } from "react-icons/lu";
+import { MdCurrencyExchange } from "react-icons/md";
 import { Link } from "react-router-dom";
+import WhiteLogo from "../../assets/Image/WhiteLogo.svg";
 
 const Index = ({ collapsed }: { collapsed: boolean }) => {
   return (
     <div
-      className={`max-w-[224px] fixed ${
-        !collapsed ? "left-[-224px]" : "left-0"
-      } transition-all duration-500 lg:block hidden w-full bg-[#343a40] p-[14px] h-[100vh] z-50`}
+      className={`max-w-[224px] fixed ${!collapsed ? "left-[-224px]" : "left-0"
+        } transition-all duration-500 lg:block hidden w-full bg-[#343a40] p-[14px] h-[100vh] z-50`}
     >
       <div className="flex gap-[7px] justify-center items-center border-b-[1px] mb-[14px] pb-[14px] border-solid border-[#ffffff33]">
         <img src={WhiteLogo} alt="WhiteLogo" className="max-w-[28px]" />
@@ -172,6 +171,20 @@ const Index = ({ collapsed }: { collapsed: boolean }) => {
             >
               <FaRegUser />
               Admin
+            </Link>
+          </ul>
+        </div>
+        <div className="border-b-[1px] pb-[14px] mb-[14px] border-solid border-[#ffffff33]">
+          <h2 className="text-[#ffffff99] uppercase font-Nunito pb-[14px] font-[700] text-[12px]">
+            Currency Managment
+          </h2>
+          <ul>
+            <Link
+              to={"/currency-managment/currency"}
+              className="text-[#ffffffcc] flex gap-[7px] items-center p-[7px] font-Nunito font-normal text-[14px]"
+            >
+              <MdCurrencyExchange />
+              Currency
             </Link>
           </ul>
         </div>

@@ -1,34 +1,35 @@
-import "./App.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import RootLayout from "./components/Layout/RootLayout";
-import OrderHistory from "./components/Ecommerce/OrderHistory";
-import NewProduct from "./components/Ecommerce/NewProduct";
-import ProductList from "./components/Ecommerce/ProductList";
-import Dashboard from "./components/Dashboard";
-import Customers from "./components/Customers";
-import List from "./components/Category/ParentCategory/List";
-import AddParentCategory from "./components/Category/ParentCategory/AddParentCategory";
+import "./App.css";
+import BulkUpload from "./components/BulkUpload/BulkUpload";
 import AddCategory from "./components/Category/Category/AddCategory";
 import CategoryList from "./components/Category/Category/List";
-import Clarity from "./components/Clarity";
-import InnerCategoryList from "./components/Category/InnerCategory/InnerCategoryList";
 import AddInnerCategory from "./components/Category/InnerCategory/AddInnerCategory";
+import InnerCategoryList from "./components/Category/InnerCategory/InnerCategoryList";
+import AddParentCategory from "./components/Category/ParentCategory/AddParentCategory";
+import List from "./components/Category/ParentCategory/List";
+import Clarity from "./components/Clarity";
+import Color from "./components/Color/index";
+import Currency from "./components/Currency";
+import Customers from "./components/Customers";
+import Cut from "./components/Cut/index";
+import Dashboard from "./components/Dashboard";
+import NewProduct from "./components/Ecommerce/NewProduct";
+import OrderHistory from "./components/Ecommerce/OrderHistory";
+import ProductList from "./components/Ecommerce/ProductList";
 import AuthLayout from "./components/Layout/AuthLayout";
-import Login from "./components/LoginPage/Login";
+import RootLayout from "./components/Layout/RootLayout";
 import ForgotPassword from "./components/LoginPage/ForgotPassword";
+import Login from "./components/LoginPage/Login";
 import NewPassword from "./components/LoginPage/NewPassword";
 import Verification from "./components/LoginPage/Verification";
-import Cut from "./components/Cut/index";
-import Color from "./components/Color/index";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import MyProfile from "./components/MyProfile/MyProfile";
 import Shape from "./components/Shape";
-import { Toaster } from "./components/ui/toaster";
 import User from "./components/User";
 import AdminUser from "./components/User/AdminUser";
-import BlogList from "./components/blog/BlogList";
 import BannerList from "./components/banner/BannerList";
-import MyProfile from "./components/MyProfile/MyProfile";
-import BulkUpload from "./components/BulkUpload/BulkUpload";
+import BlogList from "./components/blog/BlogList";
+import { Toaster } from "./components/ui/toaster";
 
 const router = createBrowserRouter([
   {
@@ -172,6 +173,17 @@ const router = createBrowserRouter([
       {
         path: "admin",
         element: <AdminUser />,
+      },
+    ],
+  },
+  // Currency Routes
+  {
+    path: "/currency-managment",
+    element: <RootLayout />,
+    children: [
+      {
+        path: "currency",
+        element: <Currency />,
       },
     ],
   },
